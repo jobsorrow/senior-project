@@ -10,7 +10,7 @@ nthru = 1.2;
 a = l/(2*pi)/nthre/nthru;
 Jeq = m*l/(2*pi)+(JG+Jl)/a;
 k = 40000;  %N/m
-d = 2000;    %N*Sec/m
+d = 13600;    %N*Sec/m
 
 %--------------Electrical parameter----------------------------
 RL = 32.23;    %ohm
