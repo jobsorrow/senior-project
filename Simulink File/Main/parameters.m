@@ -5,11 +5,6 @@
 %Fundamental sample time
 SIM_TS = 1e-6;
 
-%% Hardware Related
-
-% Battery voltage
-HW_VBATT = 12;
-
 %% PWM Related
 
 %PWM switching frequency in Hz
@@ -20,10 +15,16 @@ PWM_PRD = 1/PWM_FS;
 PWM_CPU_CLK = 100e6;
 %Time base period in cpu clock cycle
 PWM_TIM_BASE_PRD = PWM_CPU_CLK/PWM_FS;
+
+%% Hardware Related
+
+% Battery voltage
+HW_VBATT = 12;
+HW_TS = PWM_PRD;
 %% HIL Related
 
 HIL_ENABLE = Simulink.Parameter(0);
-HIL_ALGORITHM_TS = PWM_PRD;
+
 
 %% Development Related
 
