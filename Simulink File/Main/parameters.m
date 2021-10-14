@@ -57,3 +57,7 @@ HIL_ENABLE = Simulink.Parameter(0);
 VSI_AMP = 6;
 % voltage source inverter command frequency in Hz
 VSI_FREQ = 50;
+% RL Load resistance in ohm
+RL_R = 32;
+% RL Load inductance in H
+RL_H = 1e-2;
