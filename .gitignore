@@ -1,7 +1,23 @@
 # List of untracked files to ignore
+
+# simulink
 *.mex*
 *_rtw
 *slprj*
 *.slxc
 *.autosave
 *.original
+
+# latex build artifacts
+*.aux
+*.bbl
+*.toc
+*.xdv
+*.synctex.gz
+*.blg
+*.fls
+*.fdb_latexmk
+
+*.log
+*.out
+
