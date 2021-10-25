@@ -1,0 +1,33 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\begin{document}
+\begin{figure}[!h]
+    \begin{tikzpicture}
+        \pgfplotsset{width=\textwidth,height=\textwidth/2}
+        \begin{axis}[
+            axis x line=middle,
+            axis y line=middle,
+            xlabel=$Time$,
+            xmax=0.7,
+            ymax=1,
+            ytick=\empty,
+            xtick=\empty,
+            xlabel near ticks,
+            xmin=0,
+            ymin=0,
+            every axis plot/.append style={thick}
+        ]
+        \addplot[color=red] coordinates {(0,0) (0.1,1) (0.2,0) (0.3,1) (0.4,0) (0.5,1) (0.6,0) (0.7,1)};
+        \addplot[color=blue,samples=100] {sin(x*2/3.1415*180)*0.6+0.2};
+        \draw (axis cs:0.215,0) rectangle (0.319,1);
+        \draw (axis cs:0.364,0) rectangle (0.437,1);
+        \draw ()
+        \end{axis}
+    \end{tikzpicture}
+    \label{spwm}
+    \caption{การมอดูเลตความกว้างพัลส์แบบไซน์}
+\end{figure}
+
+\end{document}
