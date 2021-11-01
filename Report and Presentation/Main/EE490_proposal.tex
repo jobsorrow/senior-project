@@ -17,6 +17,7 @@
 \usepackage{circuitikz}
 \usepackage{pgfplots}
 \usepackage{tikz}
+\usepackage{pdfpages}
 
 \def\figurename{รูปที่}
 \def\tablename{ตารางที่}
@@ -34,117 +35,9 @@
 
 %========== Thai Font ===========================
 \XeTeXlinebreaklocale "th_TH"
-\defaultfontfeatures{Scale=1.0, Mapping=tex-text} 
+\defaultfontfeatures{Scale=1.0, Mapping=tex-text}
 \setmainfont[Scale=1.2]{TH Sarabun New}
 %========== Thai Font ===========================
-
-\pgfdeclareshape{elmech}
-{
-    \savedanchor\northwest{
-        \pgf@y=\pgfkeysvalueof{/tikz/circuitikz/tripoles/elmech/height}\pgf@circ@Rlen
-        \pgf@y=.5\pgf@y
-        \pgf@x=-\pgfkeysvalueof{/tikz/circuitikz/tripoles/elmech/width}\pgf@circ@Rlen
-        \pgf@x=.5\pgf@x
-    }
-    \anchor{center}{
-        \pgfpointorigin
-    }
-    \anchor{text}{
-        \pgfpointorigin
-        \advance \pgf@x by -.5\wd\pgfnodeparttextbox
-        \advance \pgf@y by -.5\ht\pgfnodeparttextbox
-    }
-    \anchor{left}{%
-        \northwest
-        \pgf@y=0pt
-    }
-    \anchor{right}{%
-        \northwest
-        \pgf@y=0pt
-        \pgf@x=-\pgf@x
-    }
-    \anchor{top}{
-        \northwest
-        \pgf@x=0pt
-    }
-    \anchor{pathstart}{
-        \northwest
-        \pgf@x=0pt
-    }
-    \anchor{pathend}{
-        \northwest
-        \pgf@x=0pt
-        \pgf@y=-\pgf@y
-    }
-    \anchor{bottom}{
-        \northwest
-        \pgf@x=0pt
-        \pgf@y=-\pgf@y
-    }
-    \anchor{center}{
-        \pgf@y=0pt
-        \pgf@x=0pt
-    }
-    \anchor{east}{
-        \northwest
-        \pgf@y=0pt
-        \pgf@x=-\pgf@x
-    }
-    \anchor{west}{
-        \northwest
-        \pgf@y=0pt
-    }
-    \anchor{south}{
-        \northwest
-        \pgf@x=0pt
-        \pgf@y=-\pgf@y
-    }
-    \anchor{north}{
-        \northwest
-        \pgf@x=0pt
-    }
-    \anchor{south west}{ \northwest \pgf@y=-\pgf@y }
-    \anchor{north east}{ \northwest \pgf@x=-\pgf@x }
-    \anchor{north west}{ \northwest }
-    \anchor{south east}{ \northwest \pgf@x=-\pgf@x \pgf@y=-\pgf@y }
-    %%%% added for here
-    \anchorborder{%
-        \@tempdima=\pgf@x\@tempdimb=\pgf@y
-        \northwest\pgf@circ@res@other=-\pgf@x
-        \pgfpointborderellipse{\pgfqpoint{\@tempdima}{\@tempdimb}}{\pgfqpoint{\pgf@circ@res@other}{\pgf@circ@res@other}}
-    }
-    \anchor{block down right}{
-        \northwest
-        \pgf@y=-0.85\pgf@y % we should calculate this better, let's go for now
-        \pgf@x=-0.5\pgf@x
-    }
-    %%%%
-    \backgroundpath{
-        \pgfsetcolor{\pgfkeysvalueof{/tikz/circuitikz/color}}
-        \pgf@circ@res@step=\ctikzvalof{tripoles/elmech/width}\pgf@circ@Rlen
-        \pgf@circ@res@up=\ctikzvalof{tripoles/elmech/height}\pgf@circ@Rlen
-        \pgfscope
-            \pgfstartlinewidth=\pgflinewidth
-            \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuitikz/bipoles/thickness}\pgfstartlinewidth}
-            \pgfscope % clip the bar: whole size minus the circle
-                \pgfpathrectanglecorners{\pgfpoint{-.5\pgf@circ@res@step}{-.5\pgf@circ@res@up}}{\pgfpoint{.5\pgf@circ@res@step}{.5\pgf@circ@res@up}}
-                \pgfpathcircle{\pgfpoint{0}{0}} {0.5\pgf@circ@res@step}
-                \pgfseteorule
-                \pgfusepath{clip}
-                \pgfpathrectangle{\pgfpoint{-.25\pgf@circ@res@step}{-.5\pgf@circ@res@up}}{\pgfpoint{.5\pgf@circ@res@step}{\pgf@circ@res@up}}
-                \pgfsetfillcolor{black}
-                \pgfusepath{fill, draw}
-            \endpgfscope
-            \pgfpathcircle{\pgfpoint{0}{0}} {0.5\pgf@circ@res@step}
-            \ifx\tikz@fillcolor\pgfutil@empty
-                \pgfsetfillcolor{white}
-            \else
-                \pgfsetfillcolor{\tikz@fillcolor}
-            \fi
-            \pgfusepath{draw, fill}
-        \endpgfscope
-    }
-}
 
 \usetikzlibrary{math}
 
@@ -187,21 +80,8 @@
 แผ่นพื้นเก็บพลังงานนั้น ประกอบไปด้วยหลายส่วนที่สำคัญคือ ชิ้นส่วนเชิงกล บอร์ดอินเวอร์เตอร์ มอเตอร์ไฟฟ้า และระบบควบคุมที่อยู่ในระบบฝังตัว ดังที่แสดงไว้ในรูปที่ \ref{genpathtopology}
 \begin{figure}[!h]
     \centering
-    \begin{circuitikz}[>=latex'][american]
-        \tikzstyle{block} = [draw,rectangle,minimum height = 1.5cm]
-        \draw node[block] (microcontroller) {Microcontroller};
-        \draw node[block] (inverter) [right=of microcontroller] {Inverter Array};
-        \draw node[block] (battery) [below=of inverter] {Battery};
-        \draw node[block] (pmsm) [right=of inverter] {PMSM};
-        \draw node[block] (mechmodel) [right=of pmsm] {Mechanical Parts};
-        \draw node[block] (feet) [right=of mechmodel] {Input Force From Feet};
-        \draw (microcontroller.east) -- (inverter.west);
-        \draw (inverter.east) -- (pmsm.west);
-        \draw (pmsm.east) -- (mechmodel.west);
-        \draw (mechmodel.east) -- (feet.west);
-        \draw (battery.north) -- (inverter.south);
-    \end{circuitikz}
-    \caption{โทโพโลยีของระบบแผ่นพื้นเก็บพลังงาน}
+    \includegraphics[width=\textwidth]{genpath_topology.png}
+    \caption{ทอพอโลยีของระบบแผ่นพื้นเก็บพลังงาน}
     \label{genpathtopology}
 \end{figure}
 
@@ -265,22 +145,67 @@
 % ผลลัพธ์ของโครงงานในวิชา 2102499 จะต้องตรงกับที่เสนอไว้ในข้อเสนอโครงงานวิชา 2102490 ห้ามลดมาตรฐานลง ถ้าในระหว่างการสอบข้อเสนอโครงงาน คณะกรรมการได้มีความเห็นให้ปรับปรุงผลลัพธ์ของโครงงาน นิสิตก็จะต้องแก้ไขตามความเห็นของคณะกรรมการด้วย
 
 \section{หลักการและทฤษฎีที่เกี่ยวข้อง}
+
 \subsection{การลดกำลังสูญเสียในอินเวอร์เตอร์ ด้วยอัลกอริทึมการมอดูเลตแบบสองแขน และการติดตามการทำงานในจตุภาคที่หนึ่ง (Two Arm Modulation and First Quadrant Tracking Algorithm)}
+
+\subsubsection{การมอดูเลตแบบ SPWM และ อินเวอร์เตอร์โหมดแรงดันแบบสามเฟส}
+ในการขับเคลื่อนเครื่องจักรกลไฟฟ้าโดยทั่วไปนั้นอาศัยการสร้างสนามแม่เหล็กหมุน มาเหนี่ยวนำให้เกิดแรงบิด ซึ่งในกรณีของเครื่องจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรนั้นอาศัยการสร้างสนามแม่เหล็กหมุนโดยใช้ไฟฟ้ากระแสสลับ อินเวอร์เตอร์ จึงเป็นอุปกรณ์ที่จำเป็นต่อระบบขับเคลื่อนเครื่องจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรด้วยแหล่งจ่ายไฟฟ้ากระแสตรง ในโครงงานฉบับนี้ ได้นำเครื่องจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรสามเฟส มาเป็นเครื่องกำเนิดไฟฟ้า สำหรับระบบแผ่นพื้นเก็บพลังงาน โดยจะเก็บพลังงานที่ผลิตได้ไว้กับแบตเตอร์รี ในโครงงานฉบับนี้ จึงเลือกใช้อินเวอร์เตอร์สามเฟสที่มีทอพอโลยีดังรูปที่ \ref{3phaseinv}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{inverter_topology.png}
+    \caption{ทอพอโลยีของอินเวอร์เตอร์สามเฟส}
+    \label{3phaseinv}
+\end{figure}
+
+อินเวอร์เตอร์ทอพอโลยีที่ได้นำเสนอมาข้างต้น สามารถสร้างแรงดันออกที่แต่ละขั้วทั้งสามได้เพียงแค่ 2 ค่าเท่านั้นคือ
+\begin{equation}
+    V_t = \begin{cases}
+        V_{DC}, & \text{ถ้าสวิตช์ตัวบนปิด และสวิตช์ตัวล่างเปิด} \\
+        0,      & \text{ถ้าสวิตช์ตัวบนปิด และสวิตช์ตัวล่างเปิด}
+    \end{cases}
+\end{equation}
+โดยที่ $V_t$ เป็นแรงดันที่ขั้วออกของอินเวอร์เตอร์
+และถ้าหากพิจารณาให้กึ่งกลางบัสแรงดันไฟฟ้ากระแสตรงเป็นจุดอ้างอิงแรงดัน จะได้ว่า
+\begin{equation}
+    V_{t0} = \begin{cases}
+        V_{DC}/2,  & \text{ถ้าสวิตช์ตัวบนปิด และสวิตช์ตัวล่างเปิด} \\
+        -V_{DC}/2, & \text{ถ้าสวิตช์ตัวบนปิด และสวิตช์ตัวล่างเปิด}
+    \end{cases}
+\end{equation}
+
+เนื่องจากกระขับเคลื่อนเครื่องจักรกลไฟฟ้าซิงโครนัสสามเฟสประเภทแม่เหล็กถาวรนั้น จำเป็นต้องใช้ไฟฟ้ากระแสสลับคลื่นรูปไซน์ ดังนั้น เทคนิคการมอดูเลตความกว้างพัลส์แบบไซน์ (Sinusoidal Pulse Width Modulation; SPWM) จึงได้ถูกนำมาใช้ โดยการมอดูเลตความกว้างพัลส์แบบไซน์มีหลักการในการทำงานคือ นำสัญญาณพาห์รูปสามเหลี่ยม มาเปรียบเทียบกับสัญญาณคำสั่งรูปไซน์ โดยผลลัพธ์ของการเปรียบเทียบนั้น จะได้เป็นสัญญาณขับนำของสวิตช์ ดังรูปที่ \ref{spwmgraph} ซึ่งจะส่งผลให้ แรงดันที่ขั้วของอินเวอร์เตอร์ มีค่าเฉลี่ยเท่ากับแรงดันคำสั่ง
+
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{spwm.eps}
+    \label{spwmgraph}
+    \caption{การมอดูเลตความกว้างพัลส์แบบไซน์}
+\end{figure}
+
+จากรูปข้างต้น จะเห็นได้ว่าความกว้างพัลส์ของสัญญาณขับนำนั้น เปลี่ยนไปตามขนาดของสัญญาณ
+
 \subsubsection{กำลังสูญเสียในสวิตช์ของอินเวอร์เตอร์}
 กำลังสูญเสียในสวิตช์ของอินเวอร์เตอร์มีอยู่ด้วยกันสองประเภท คือ กำลังสูญเสียระหว่างสวิตช์ (Switching Loss) และกำลังสูญเสียระหว่างนำกระแส (Conduction Loss)
-\begin{equation*}
+\begin{equation}
     P_{loss} = P_{sw} + P_{cond}
-\end{equation*}
+\end{equation}
 
 \begin{figure}[h]
     \begin{center}
+        \includegraphics[width=0.25\textwidth]{vsw_isw.png}
+    \end{center}
+    \caption{นิยามของ $V_{SW}, I_{SW}$}
+    \label{vsw_isw_definition}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
         \begin{tikzpicture}
-            \pgfplotsset{width=\textwidth,height=\textwidth/2}
+            \pgfplotsset{width=\textwidth,height=\textwidth/3}
             \begin{axis}[
                     axis x line=middle,
                     axis y line=middle,
                     xlabel=$Time$,
-                    xmax=30,
+                    xmax=45,
                     ymax=25,
                     ytick=\empty,
                     xtick=\empty,
@@ -290,13 +215,15 @@
                     every axis plot/.append style={ultra thick}
                 ]
                 % Plots
-                \draw[fill=yellow,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
-                \node at (axis cs:6,22) {\small $Switching$ $Region$};
+                \draw[fill=pink,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
+                \node at (axis cs:6,22) {\tiny $Switch-On$ $Region$};
                 \draw[fill=green,opacity=0.2] (axis cs:10,0) rectangle (axis cs:25,25);
-                \node at (axis cs:18,22) {\small $Conduction$ $Region$};
-                \addplot[color=red] coordinates {(0,20) (5,20) (10,1) (25,1)};
-                \addplot[color=blue] coordinates {(0,0) (2,0) (8,15) (25,15)};
-                \legend{$v_{sw}$,$i_{sw}$}
+                \node at (axis cs:18,22) {\tiny $Conduction$ $Region$};
+                \draw[fill=pink,opacity=0.2] (axis cs:25,0) rectangle (axis cs:32,25);
+                \node at (axis cs:29,22) {\tiny $Switch-Off$ $Region$};
+                \addplot[color=red] coordinates {(0,20) (5,20) (10,1) (25,1) (30,20) (34,20)};
+                \addplot[color=blue] coordinates {(0,0) (2,0) (8,15) (28,15) (32,0) (34,0)};
+                \legend{\tiny $V_{SW}$,\tiny $I_{SW}$}
             \end{axis}
         \end{tikzpicture}
     \end{center}
@@ -305,80 +232,16 @@
 \end{figure}
 
 จากรูปที่ \ref{switchloss} จะเห็นได้ว่า ในขณะที่กำลังเปิดสวิตช์ กระแสในสวิตช์จะเพิ่มขึ้นก่อน และแรงดันตกคร่อมสวิตช์จะค่อยลดลงทีหลัง คุณลักษณะดังกล่าว ทำให้เกิดกำลังงานสูญเสียในขณะที่สวิตช์กำลังเปิด ซึ่งจะคำนวณได้จาก
-\begin{equation*}
+\begin{equation}
     P_{sw} = v_{sw}i_{sw}
-\end{equation*}
+\end{equation}
 แต่เมื่อพอสวิตช์เปิดเต็มที่แล้ว สวิตช์จะมีแรงดันตกคร่อมอยู่เล็กน้อย ทำให้เกิดกำลังสูญเสียในขณะนำกระแส
-\begin{equation*}
+\begin{equation}
     P_{cond} = v_{sw,(on)}i_{sw,(on)}
-\end{equation*}
+\end{equation}
 กำลังสูญเสียระหว่างสวิตช์นั้น ขึ้นอยู่กับคุณลักษณะสมบัติของสวิตช์ที่เลือกใช้ และจำนวนครั้งในการสวิตช์ นั้นคือ ถ้าหากสวิตช์ที่เลือกใช้มีคุณลักษณะสมบัติที่ทำให้อยู่ในย่านกำลังสวิตช์นาน หรือมีจำนวนครั้งในการสวิตช์มาก ก็จะทำให้กำลังสูญเสียขณะสวิตช์สูงตามไปด้วย
 
 กำลังสูญเสียขณะนำกระแสนั้น ขึ้นอยู่กับคุณลักษณะสมบัติของสวิตช์ที่เลือกใช้ ว่าในขณะนำกระแสนั้นมีแรงดันตกคร่อมสวิตช์มากแค่ไหน ถ้าหากแรงดันตกคร่อมสวิตช์มาก ก็จะทำให้กำลังสูญเสียขณะนำกระแสมากขึ้นตามมา
-\subsubsection{การมอดูเลตแบบ SPWM และ อินเวอร์เตอร์โหมดแรงดันแบบสามเฟส}
-ในการขับเคลื่อนเครื่องจักรกลไฟฟ้าโดยทั่วไปนั้นอาศัยการสร้างสนามแม่เหล็กหมุน มาเหนี่ยวนำให้เกิดแรงบิด ซึ่งในกรณีของเครื่องงจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรนั้นอาศัยการสร้างสนามแม่เหล็กหมุนโดยใช้ไฟฟ้ากระแสสลับ อินเวอร์เตอร์ จึงเป็นอุปกรณ์ที่จำเป็นต่อระบบขับเคลื่อนเครื่องจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรด้วยแหล่งจ่ายไฟฟ้ากระแสตรง ในโครงงานฉบับนี้ ได้นำเครื่องจักรกลไฟฟ้าซิงโครนัสแบบแม่เหล็กถาวรสามเฟส มาเป็นเครื่องกำเนิดไฟฟ้า สำหรับระบบแผ่นพื้นเก็บพลังงาน โดยจะเก็บพลังงานที่ผลิตได้ไว้กับแบตเตอร์รี ในโครงงานฉบับนี้ จึงเลือกใช้อินเวอร์เตอร์สามเฟสที่มีทอพอโลยีดังรูปที่ \ref{3phaseinv}
-\begin{figure}[!h]
-    \centering
-    \begin{circuitikz}[american,scale=1.2,/tikz/circuitikz/tripoles/Lnigbt/height=0.8,/tikz/circuitikz/tripoles/Lnigbt/width=0/5]
-        \tikzstyle{block} = [draw, rectangle, minimum height=1cm, minimum width=2cm]
-        \draw (2.0,1.5) node[nigbt](Q1){$Q_1$};\draw (Q1.D) to[short] (2.0,2.5);
-        \draw (Q1.S) to[short] (2.0,0.5) node[anchor=east] {$V_u$};
-        \draw (Q1.G) to[short] (1.0,1.5) node at ++(-0.25,0) {$S_1$};
-        \draw (2.0,-0.5) node[nigbt](Q2){$Q_2$};\draw (Q2.D) to[short] (2.0,0.5);
-        \draw (Q2.S) to[short] (2.0,-1.5);
-        \draw (Q2.G) to[short] (1.0,-0.5) node at ++(-0.25,0) {$S_2$};
-        \draw (4.0,1.5) node[nigbt](Q3){$Q_3$};\draw (Q3.D) to[short] (4.0,2.5);
-        \draw (Q3.S) to[short] (4.0,0.5) node[anchor=east] {$V_v$};
-        \draw (Q3.G) to[short] (3.0,1.5) node at ++(-0.25,0) {$S_3$};
-        \draw (4.0,-0.5) node[nigbt](Q4){$Q_4$};\draw (Q4.D) to[short] (4.0,0.5);
-        \draw (Q4.S) to[short] (4.0,-1.5);
-        \draw (Q4.G) to[short] (3.0,-0.5) node at ++(-0.25,0) {$S_4$};
-        \draw (6.0,1.5) node[nigbt](Q5){$Q_5$};\draw (Q5.D) to[short] (6.0,2.5);
-        \draw (Q5.S) to[short] (6.0,0.5) node[anchor=east] {$V_w$};
-        \draw (Q5.G) to[short] (5.0,1.5) node at ++(-0.25,0) {$S_5$};
-        \draw (6.0,-0.5) node[nigbt](Q6){$Q_6$};\draw (Q6.D) to[short] (6.0,0.5);
-        \draw (Q6.S) to[short] (6.0,-1.5);
-        \draw (Q6.G) to[short] (5.0,-0.5) node at ++(-0.25,0) {$S_6$};
-        \draw (0.0,2.5) to[short] (2.0,2.5);
-        \draw (0.0,-1.5) to[short] (2.0,-1.5);
-        \draw (2.0,-1.5) to[short] (6.0,-1.5);
-        \draw (2.0,2.5) to[short] (6.0,2.5);
-        \draw[densely dotted] (0.0,0.5) to[R] (0.0,2.5);
-        \draw[densely dotted] (0.0,-1.5) to[R] (0.0,0.5);
-        \draw (-1.0,-0.0) to[V,invert,l=$V_{DC}$] (-1.0,1.0);
-        \draw (0.0,2.5) to[short] (-1.0,2.5);
-        \draw (-1.0,1.0) to[short] (-1.0,2.5);
-        \draw (-1.0,0.25) to[short] (-1.0,-1.5);
-        \draw (-1.0,-1.5) to[short] (0.0,-1.5);
-        \draw[densely dotted] (0.5,0.25) node[ground]{};
-        \draw[densely dotted] (0.0,0.5) to[short] (0.5,0.5);
-        \draw[densely dotted] (0.5,0.5) to[short] (0.5,-0.0);
-    \end{circuitikz}
-    \caption{ทอพอโลยีของอินเวอร์เตอร์สามเฟส}
-    \label{3phaseinv}
-\end{figure}
-
-อินเวอร์เตอร์ทอพอโลยีที่ได้นำเสนอมาข้างต้น สามารถสร้างแรงดันออกที่แต่ละขั้วทั้งสามได้เพียงแค่ 2 ค่าเท่านั้นคือ
-\begin{equation*}
-    V_x = \begin{cases}
-        V_{DC}, & if \; S_u \;\& \;!S_l  \\
-        0,      & if \; ! S_u\; \&\; S_l
-    \end{cases}
-\end{equation*}
-และถ้าหากพิจารณาให้กึ่งกลางบัสแรงดันไฟฟ้ากระแสตรงเป็นจุดอ้างอิงแรงดัน จะได้ว่า
-\begin{equation*}
-    V_x = \begin{cases}
-        V_{DC}/2,  & if \; S_u \;\& \;!S_l  \\
-        -V_{DC}/2, & if \; ! S_u \;\& \;S_l
-    \end{cases}
-\end{equation*}
-แต่เนื่องจากกระขับเคลื่อนเครื่องจักรกลไฟฟ้าซิงโครนัสสามเฟสประเภทแม่เหล็กถาวรนั้น จำเป็นต้องใช้ไฟฟ้ากระแสสลับคลื่นรูปไซน์ ดังนั้น เทคนิคการมอดูเลตความกว้างพัลส์แบบไซน์ (Sinusoidal Pulse Width Modulation; SPWM) จึงได้ถูกนำมาใช้ โดยการมอดูเลตความกว้างพัลส์แบบไซน์มีหลักการในการทำงานคือ นำสัญญาณพาห์รูปสามเหลี่ยม มาเปรียบเทียบกับสัญญาณคำสั่ง โดยผลลัพธ์ของการเปรียบเทียบนั้น จะได้เป็นสัญญาณขับนำของสวิตช์ ดังรูปที่ \ref*{spwmgraph} ซึ่งจะส่งผลให้ แรงดันที่ขั้วของอินเวอร์เตอร์ มีค่าเฉลี่ยเท่ากับแรงดันคำสั่ง 
-\begin{figure}[!h]
-    \includegraphics[width=\textwidth]{spwm}
-    \label{spwmgraph}
-    \caption{การมอดูเลตความกว้างพัลส์แบบไซน์}
-\end{figure}
-จากรูปข้างต้น จะเห็นได้ว่าความกว้างพัลส์ของสัญญาณขับนำนั้น เปลี่ยนไปตามขนาดของสัญญาณ
 \subsubsection{การนำกระแสในจตุภาคที่ 3 ของทรานซิสเตอร์สนามไฟฟ้าแบบ GaN}
 \subsubsection{การลดกำลังสูญเสียในการมอดูเลตแบบ SPWM ด้วยการมอดูเลตแบบสองแขน}
 \subsubsection{การเพิ่มประสิทธิภาพให้กับการมอดูเลตแบบสองแขนด้วยการติดตามการทำงานในจตุภาคที่ 1}
