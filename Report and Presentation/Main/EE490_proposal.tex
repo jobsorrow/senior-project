@@ -19,9 +19,11 @@
 \usepackage{tikz}
 \usepackage{pdfpages}
 
+\usetikzlibrary{shapes.geometric,arrows}
+
 \def\figurename{รูปที่}
 \def\tablename{ตารางที่}
-\def\refname{เอกสารอ้างอิง}
+\def \refname{เอกสารอ้างอิง}
 \def\chaptername{บทที่}
 \def\abstractname{\large Abstract}
 \def\contentsname{สารบัญ}
@@ -40,7 +42,11 @@
 %========== Thai Font ===========================
 
 %=========== Flowchart ==========================
-% \tikzstyle(startstop) [rectangle,rounded corner, minimum width= 3cm]
+\tikzstyle{startstop} = [rectangle,rounded corners, minimum width= 3cm, minimum height =1cm, text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium,trapezium left angle = 70, trapezium right angle =110, minimum width = 3cm, minimum height=1cm, text centered, draw=black,fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 %=========== Flowchart ==========================
 
 \usetikzlibrary{math}
@@ -83,6 +89,7 @@
 การเก็บเกี่ยวพลังงานจากการเคลื่อนไหวของมนุษย์นั้น เป็นเรื่องที่น่าสนใจ สามารถนำมาทำให้เกิดขึ้นจริงได้ และได้มีการศึกษามาแล้วในหลายๆ ครั้ง \cite{biomech} \cite{GpH:01} ซึ่งในการศึกษาดังกล่าว ได้ค้นพบว่า พลังงานที่ได้ในแต่ละการเหยียบแต่ละครั้งนั้น มีค่าน้อยมาก นั่นคือประมาณ 1-5 จูล เท่านั้น ดังนั้น หัวใจในการเก็บเกี่ยวพลังงานจากระบบดังกล่าว คือการมีประสิทธิภาพที่ดี จึงจะสามารถเก็บพลังงานได้เพียงพอกับการใช้งานต่อไป ดังนั้น การศึกษาในโครงงานฉบับนี้ จึงได้มุ่งเน้นในการเพิ่มประสิทธิภาพให้กับระบบเก็บพลังงานเป็นหลัก
 
 แผ่นพื้นเก็บพลังงานนั้น ประกอบไปด้วยหลายส่วนที่สำคัญคือ ชิ้นส่วนเชิงกล บอร์ดอินเวอร์เตอร์ มอเตอร์ไฟฟ้า และระบบควบคุมที่อยู่ในระบบฝังตัว ดังที่แสดงไว้ในรูปที่ \ref{genpathtopology}
+
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{genpath_topology.png}
@@ -186,7 +193,7 @@
     \caption{การมอดูเลตความกว้างพัลส์โดยใช้สัญญาณพาหะ}
 \end{figure}
 
-จากรูปข้างต้น จะเห็นได้ว่าความกว้างพัลส์ของสัญญาณขับนำนั้น เปลี่ยนไปตามขนาดของสัญญาณคำสั่ง และสัญญาณที่จะนำมาเปรียบเทียบนั้น จะเป็นสัญญาณที่ถูกสุ่มตัวอย่างแล้วคงค่า (Sample and Hold) เพราะว่า อัลกอริทึมการมอดูเลตที่เลือกใช้ในโครงงานฉบับนี้นั้น เป็นการคำนวนบนระบบฝังตัว ซึ่งเป็นตัวประมวลผลในโดเมนดิจิทัล
+จากรูปข้างต้น จะเห็นได้ว่าความกว้างพัลส์ของสัญญาณขับนำนั้น เปลี่ยนไปตามขนาดของสัญญาณคำสั่ง และสัญญาณที่จะนำมาเปรียบเทียบนั้น จะเป็นสัญญาณที่ถูกสุ่มตัวอย่างแล้วคงค่า (Sample and Hold) เพราะว่า อัลกอริทึมการมอดูเลตที่เลือกใช้ในโครงงานฉบับนี้นั้น เป็นการคำนวนบนระบบฝังตัว ซึ่งเป็นการประมวลผลในโดเมนดิจิทัล
 
 \subsubsection{กำลังสูญเสียในสวิตช์ของอินเวอร์เตอร์}
 กำลังสูญเสียในสวิตช์ของอินเวอร์เตอร์มีอยู่ด้วยกันสองประเภท คือ กำลังสูญเสียระหว่างสวิตช์ (Switching Loss) และกำลังสูญเสียระหว่างนำกระแส (Conduction Loss)
@@ -195,69 +202,68 @@
 \end{equation}
 
 \begin{figure}[h]
-    \begin{center}
-        \includegraphics[width=0.25\textwidth]{vsw_isw.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.25\textwidth]{vsw_isw.png}
     \caption{นิยามของ $V_{SW}, I_{SW}$}
     \label{vsw_isw_definition}
 \end{figure}
 
 \begin{figure}[h!]
-    \begin{center}
-        \begin{tikzpicture}
-            \pgfplotsset{width=\textwidth,height=\textwidth/3}
-            \begin{axis}[
-                    axis x line=middle,
-                    axis y line=middle,
-                    xlabel=$Time$,
-                    xmax=45,
-                    ymax=25,
-                    ytick=\empty,
-                    xtick=\empty,
-                    xlabel near ticks,
-                    xmin=0,
-                    ymin=0,
-                    every axis plot/.append style={ultra thick}
-                ]
-                % Plots
-                \draw[fill=pink,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
-                \node at (axis cs:6,22) {\tiny $Switch-On$ $Region$};
-                \draw[fill=green,opacity=0.2] (axis cs:10,0) rectangle (axis cs:25,25);
-                \node at (axis cs:18,22) {\tiny $Conduction$ $Region$};
-                \draw[fill=pink,opacity=0.2] (axis cs:25,0) rectangle (axis cs:32,25);
-                \node at (axis cs:29,22) {\tiny $Switch-Off$ $Region$};
-                \addplot[color=red] coordinates {(0,20) (5,20) (10,1) (25,1) (30,20) (35,20)};
-                \addplot[color=blue] coordinates {(0,0) (2,0) (8,15) (27,15) (32,0) (35,0)};
-                \legend{\tiny $V_{SW}$,\tiny $I_{SW}$}
-            \end{axis}
-        \end{tikzpicture}
-        \begin{tikzpicture}
-            \pgfplotsset{width=\textwidth,height=\textwidth/3}
-            \begin{axis}[
-                    axis x line=middle,
-                    axis y line=middle,
-                    xlabel=$Time$,
-                    xmax=45,
-                    ymax=25,
-                    ytick=\empty,
-                    xtick=\empty,
-                    xlabel near ticks,
-                    xmin=0,
-                    ymin=0,
-                    every axis plot/.append style={ultra thick}
-                ]
-                % Plots
-                \draw[fill=pink,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
-                \node at (axis cs:6,22) {\tiny $Switch-On$ $Region$};
-                \draw[fill=green,opacity=0.2] (axis cs:10,0) rectangle (axis cs:25,25);
-                \node at (axis cs:18,22) {\tiny $Conduction$ $Region$};
-                \draw[fill=pink,opacity=0.2] (axis cs:25,0) rectangle (axis cs:32,25);
-                \node at (axis cs:29,22) {\tiny $Switch-Off$ $Region$};
-                \addplot[color=orange] coordinates {(5,0) (7.77,10) (8,8) (10,2) (25,2) (27,8) (27.33,10) (32,0)};
-                \legend{\tiny $P_{loss}$}
-            \end{axis}
-        \end{tikzpicture}
-    \end{center}
+    \centering
+    \begin{tikzpicture}
+        \pgfplotsset{width=\textwidth,height=\textwidth/3}
+        \begin{axis}[
+                axis x line=middle,
+                axis y line=middle,
+                xlabel=$Time$,
+                xmax=45,
+                ymax=25,
+                ytick=\empty,
+                xtick=\empty,
+                xlabel near ticks,
+                xmin=0,
+                ymin=0,
+                every axis plot/.append style={ultra thick}
+            ]
+            % Plots
+            \draw[fill=pink,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
+            \node at (axis cs:6,22) {\tiny $Switch-On$ $Region$};
+            \draw[fill=green,opacity=0.2] (axis cs:10,0) rectangle (axis cs:25,25);
+            \node at (axis cs:18,22) {\tiny $Conduction$ $Region$};
+            \draw[fill=pink,opacity=0.2] (axis cs:25,0) rectangle (axis cs:32,25);
+            \node at (axis cs:29,22) {\tiny $Switch-Off$ $Region$};
+            \addplot[color=red] coordinates {(0,20) (5,20) (10,1) (25,1) (30,20) (35,20)};
+            \addplot[color=blue] coordinates {(0,0) (2,0) (8,15) (27,15) (32,0) (35,0)};
+            \legend{\tiny $V_{SW}$,\tiny $I_{SW}$}
+        \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+        \pgfplotsset{width=\textwidth,height=\textwidth/3}
+        \begin{axis}[
+                axis x line=middle,
+                axis y line=middle,
+                xlabel=$Time$,
+                xmax=45,
+                ymax=25,
+                ytick=\empty,
+                xtick=\empty,
+                xlabel near ticks,
+                xmin=0,
+                ymin=0,
+                every axis plot/.append style={ultra thick}
+            ]
+            % Plots
+            \draw[fill=pink,opacity=0.2] (axis cs:2,0) rectangle (axis cs:10,25);
+            \node at (axis cs:6,22) {\tiny $Switch-On$ $Region$};
+            \draw[fill=green,opacity=0.2] (axis cs:10,0) rectangle (axis cs:25,25);
+            \node at (axis cs:18,22) {\tiny $Conduction$ $Region$};
+            \draw[fill=pink,opacity=0.2] (axis cs:25,0) rectangle (axis cs:32,25);
+            \node at (axis cs:29,22) {\tiny $Switch-Off$ $Region$};
+            \addplot[color=orange] coordinates {(5,0) (7.77,10) (8,8) (10,2) (25,2) (27,8) (27.33,10) (32,0)};
+            \legend{\tiny $P_{loss}$}
+        \end{axis}
+    \end{tikzpicture}
+
     \caption{แรงดันตกคร่อมสวิตช์ กระแสของสวิตช์ และกำลังสูญเสียในสวิตช์}
     \label{switchloss}
 \end{figure}
@@ -286,28 +292,26 @@
 เงื่อนไขที่จะทำให้ทรานซิสเตอร์แกนนำกระแสในทิศทางไปข้างหน้า (Forward) และย้อนกลับ (Reverse) คือ
 
 \begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=0.4\textwidth]{gan_on_condition.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.4\textwidth]{gan_on_condition.png}
     \caption{เงื่อนไขที่จะทำให้ทรานซิสเตอร์แกนนำกระแสในทิศทางไปข้างหน้า และย้อนกลับ}
     \label{gan_on_condition}
 \end{figure}
 
-ถ้าหากพิจารณาตัวอย่างที่เกิดขึ้นจริงในอินเวอร์เตอร์เพื่อให้เห็นภาพพจน์ชัดเจนขึ้นได้ดังนี้
+ถ้าหากพิจารณาตัวอย่างที่เกิดขึ้นจริงในอินเวอร์เตอร์เพื่อให้เห็นภาพพจน์ชัดเจนขึ้น ตามรูปวงจรของอินเวอร์เตอร์ ที่ตัดมาพิจารณาเฉพาะหนึ่งเฟส ตามรูปที่ \ref{inverter1p}
 
 \begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=0.7\textwidth]{first_third_inverter.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\textwidth]{first_third_inverter.png}
     \caption{กรณีตัวอย่างการนำกระแสที่เกิดขึ้นจริงในอินเวอร์เตอร์}
+    \label{inverter1p}
 \end{figure}
 
 เรากำหนดให้สวิตช์ $S_a$ เป็นสวิตช์ที่เราสนใจ โดยถ้าหากเราขับนำสวิตช์ให้สวิตช์นำกระแส (On) นั่นคือ เราขับนำสัญญาณขา $V_{gs} > V_{th}$ แล้วถ้าหากโหลดที่ต่ออยู่กับขาซอร์สของสวิตช์ $S_a$ ดึงกระแสออกไปจากอินเวอร์เตอร์ นั่นคือ $I_a > 0$ จะทำให้ แรงดันตกคร่อมขาเดรนซอร์สของสวิตช์ $S_a$ เป็นค่าบวก นั่นคือ $V_{ds} > 0$ เนื่องจากสวิตช์ $S_a$ กำลังนำกระแสอยู่ ดังนั้นสวิตช์ $\bar{S_a}$ ไม่สามารถนำกระแสพร้อมๆ กับสวิตช์ $S_a$ ได้ เพราะจะลัดวงจร ดังนั้น กระแส $I_a$ ทั้งหมด ก็จะไหลผ่านสวิตช์ $S_a$ ทำให้กระแส $I_{ds} = I_a > 0$ เนื่องจากกระแส $I_{ds} > 0$ และ $V_{ds} > 0$ ดังนั้น สวิตช์นํากระแสในทิศทางไปข้างหน้า จุดทำงานที่กล่าวถึงข้างต้นจะแสดงในรูป \ref{inverter_q1}
 
 \begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=0.7\textwidth]{inverter_q1.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\textwidth]{inverter_q1.png}
     \caption{กรณีตัวอย่างการนำกระแสในทิศทางไปข้างหน้า: $V_{gs} > V_{th}$, $I_{ds} > 0$}
     \label{inverter_q1}
 \end{figure}
@@ -315,9 +319,8 @@
 ถ้าหากพิจารณากรณีถัดไปคือการขับนำสวิตช์ในลักษณะเดิมคือ การขับสัญญาณขา $V_{gs} > V_{th}$ แต่มีสิ่งที่เปลี่ยนไปคือ ทิศทางการไหลของกระแส นั่นคือ ถ้าหากโหลดมีการดึงกระแสเข้าอินเวอร์เตอร์ $I_a = I_{sd} >0$ จะทำให้ แรงดันตกคร่อมขาเดรนซอร์สของสวิตช์เป็นค่าลบ นั่นคือ $V_{ds} <0; V_{sd} > 0$ เนื่องจาก $V_{gd} = V_{gs} + V_{sd} =($ ค่าที่มากกว่า $V_{th})+$ ค่าที่เป็นบวก ดังนั้น $V_{gd} > V_{th}$ และ $I_{ds} < 0$ ทำให้สวิตช์นำกระแสย้อนกลับ
 
 \begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=0.7\textwidth]{inverter_q3.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\textwidth]{inverter_q3.png}
     \caption{กรณีตัวอย่างการนำกระแสในทิศทางย้อนกลับ: $V_{gd} > V_{th}$, $I_{ds} < 0$}
     \label{inverter_q1}
 \end{figure}
@@ -339,9 +342,8 @@
 ในการนำกระแสย้อนกลับ ข้อมูลต่างๆ จะเป็นทวิลักษณ์ของข้อมูลในขณะนำกระแสไปข้างหน้าเลยคือ เมื่อแรงดันที่ขาเกตเทียบกับเดรน มากกว่าค่าแรงดันขีดแบ่ง และแรงดันที่ขาซอร์สเทียบกับเดรนเป็นบวก จะทำให้ทรานซิสเตอร์นำกระแสในจตุภาคที่สาม
 
 \begin{figure}[h]
-    \begin{center}
-        \includegraphics[width=0.4\textwidth]{gan_behavior.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.4\textwidth]{gan_behavior.png}
     \caption{พฤติกรรมการนำกระแสในจตุภาคที่หนึ่ง และจตุภาคที่สามของทรานซิสเตอร์แกน}
     \label{gan_behavior}
 \end{figure}
@@ -362,7 +364,7 @@
     v_{ca} &=& v_{c0} - v_{a0}
 \end{eqnarray}
 
-และถ้าหากเราเพิ่มแรงดันลำดับศูนย์ (Zero Sequence Offset) ให้กับแรงดันเฟสของอินเวอร์เตอร์
+และถ้าหากเราเพิ่มแรงดันลำดับศูนย์ (Zero-sequence Offset) ให้กับแรงดันเฟสของอินเวอร์เตอร์
 
 \begin{eqnarray}
     v_{a0}^* &=& v_{a0} + v_{N0} \\
@@ -387,9 +389,64 @@
     \end{cases}
 \end{equation}
 
+ในขณะที่ทรานซิสเตอร์ตัวบนกำลังเปิดตลอดเวลา ทรานซิสเตอร์ตัวล่าง ก็จะปิดตลอดเวลาด้วย การให้ทรานซิสเตอร์แขนใดแขนหนึ่งเปิด หรือปืดตลอดเวลา จะทำให้ลดจำนวนครั้งในการสวิตช์ได้หนึ่งในสามเท่า ก็จะช่วยลดกำลังสูญเสียในขณะสวิตช์ได้
+
 \subsubsection{การเพิ่มประสิทธิภาพให้กับการมอดูเลตแบบสองแขนด้วยการติดตามการทำงานในจตุภาคที่ 1}
 
-จากผลลัพธ์ที่ได้อภิปรายมาในส่วนที่แล้ว เราได้ทราบว่า เรามีอิสระในเลือกการมอดูเลตสองแขนได้สองประเภทคือ แบบทรานซิสเตอร์ตัวบน on ตลอด และทรานซิสเตอร์ตัวล่าง on ตลอด ดังนั้น เราจะใช้ข้อได้เปรียบนี้ ในการเลือกรูปแบบการมอดูเลตแบบสองแขนให้เกิดประสิทธิภาพสูงที่สุด นั่นคือ การหลีกเลี่ยงการทำงานในจตุภาคที่ 3 สำหรับทรานซิสเตอร์ตัวที่มีแรงดันมากที่สุด หรือน้อยที่สุดในขณะนั้น
+จากผลลัพธ์ที่ได้อภิปรายมาในส่วนที่แล้ว เราได้ทราบว่า เรามีอิสระในเลือกการมอดูเลตสองแขนได้สองประเภทคือ แบบทรานซิสเตอร์ตัวบนนำกระแสตลอด และทรานซิสเตอร์ตัวล่างนำกระแสตลอด ดังนั้น เราจะใช้ข้อได้เปรียบนี้ ในการเลือกรูปแบบการมอดูเลตแบบสองแขนให้เกิดประสิทธิภาพสูงที่สุด นั่นคือ การหลีกเลี่ยงการทำงานในจตุภาคที่ 3 สำหรับทรานซิสเตอร์ตัวที่จะนำกระแสตลอดเวลา โดยจะมีหลักการในการคำนวนค่าแรงดันเฟสลำดับศูนย์ที่จะบวกเข้าไป เพื่อให้ได้ผลลัพธ์ตามที่ต้องการ ตามผังงานในรูปที่ \ref{twoarmflowchart}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+        \node (start) [startstop] {เริ่มต้น};
+        \node (cir1) [circle, below of = start,draw = black] {};
+        \node (in1) [io,below of=cir1] {รับข้อมูลแรงดันคำสั่ง สุ่มตัวอย่างและคงค่ากระแสสาย};
+        \node (pro1) [process,below of=in1] {คำนวนหาเฟสที่มีแรงดันเฟสคำสั่งมากที่สุด};
+        \node (pro2) [process,right = 3cm of pro1] {คำนวนหาเฟสที่มีแรงดันเฟสคำสั่งน้อยที่สุด};
+        \node (dec1) [decision,below = 1cm of pro1, text width = 2cm]
+        {
+            ถ้ามอดูเลตแบบ
+            ทรานซิสเตอร์ตัวบน
+            นำกระแสตลอดเวลา
+            จะทำให้ทรานซิสเตอร์
+            นำกระแสในจตุภาคที่หนึ่ง?
+        };
+        \node (dec2) [decision,below = 1cm of pro2,text width = 2cm]
+        {
+            ถ้ามอดูเลตแบบ
+            ทรานซิสเตอร์ตัวล่าง
+            นำกระแสตลอดเวลา
+            จะทำให้ทรานซิสเตอร์
+            นำกระแสในจตุภาคที่หนึ่ง?
+        };
+        \node (cir2) [circle, below = 1cm of dec1, draw=black] {};
+        \node (cir4) [circle, below of = cir2, draw = black] {};
+        \node (out1) [io,below = 1cm of cir4,text width = 1.5cm] {มอดูเลตสองแขนแบบทรานซิสเตอร์ตัวบนนำกระแสตลอดเวลา};
+        \node (out2) [io,right = 1.5cm of out1,text width = 1.5cm] {มอดูเลตสองแขนแบบทรานซิสเตอร์ตัวล่างนำกระแสตลอดเวลา};
+        \node (out3) [io,right = 1.5cm of out2,text width = 2cm] {แบ่งภาระงาน (Load Balancing) ระหว่างทรานซิสเตอร์ตัวบน และตัวล่าง};
+        \node (cir3) [circle, below = 1cm of out1, draw = black] {};
+
+        \draw [arrow] (start) -- (cir1);
+        \draw [arrow] (cir1) -- (in1);
+        \draw [arrow] (in1) -- (pro1);
+        \draw [arrow] (in1) -| (pro2);
+        \draw [arrow] (pro1) -- (dec1);
+        \draw [arrow] (pro2) -- (dec2);
+        \draw [arrow] (dec1) -- (cir2);
+        \draw [arrow] (dec2) |- (cir2);
+        \draw [arrow] (cir2) -- (cir4);
+        \draw [arrow] (cir4) -- node[anchor = west] {(yes,no)} (out1);
+        \draw [arrow] (cir4) -| node[anchor = north west] {(no,yes)} (out2);
+        \draw [arrow] (cir4) -| node[anchor = north west] {else} (out3);
+        \draw [arrow] (out1) -- (cir3);
+        \draw [arrow] (out2) |- (cir3);
+        \draw [arrow] (out3) |- (cir3);
+        \draw [arrow] (cir3.west) -- +(-4.5cm,0) |- (cir1);
+    \end{tikzpicture}
+
+    \caption{ฝังงานของอัลกอริทึมในการคำนวณแรงดันลำดับศูนย์เพื่อติดตามการทำงานในจตุภาคที่หนึ่งของสวิตช์ที่ถูกมอดูเลตแบบสองแขน}
+    \label{twoarmflowchart}
+\end{figure}
 
 \subsection{การเพิ่มประสิทธิภาพของแผ่นพื้นเก็บพลังานด้วยอัลกอริทึมการติดตามจุดทำงานที่ให้กำลังสูงสุด (Maximum Power Point Tracking Algorithm; MPPT)}
 \subsubsection{ข้อมูลรายละเอียดและหลักการทำงานของแผ่นพื้นเก็บพลังงาน}
@@ -523,7 +580,7 @@ Analogy ของวงจรไฟฟ้าเป็นประโยชน์
 
 \newpage
 \section{ผลลัพธ์จากการดำเนินการเบื้องต้น}
-\begin{figure}[!htb]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{VSI_6V_50Hz_3Ohm_10mH.eps}
     \caption{50Hz}
@@ -552,7 +609,7 @@ Analogy ของวงจรไฟฟ้าเป็นประโยชน์
 % ในส่วนนี้ ให้นิสิตสรุปว่าได้ดำเนินการอะไรมาแล้วบ้างตั้งแต่ต้นจนถึงปัจจุบัน และจะดำเนินการอะไรต่อไป เพื่อให้โครงงานนี้เสร็จสมบูรณ์ ได้ผลลัพธ์ครบถ้วนตามวัตถุประสงค์และขอบเขตที่ได้กำหนดไว้
 
 \subsection{แผนการดำเนินงาน}
-ในรายงานฉบับนี้ มีแผนการดำเนินงานแยกเป็นของผู้จัดทำแต่ละคน คือ ของนายณัฐพล กาบแก้ว ซึ่งมีแผนการดำเนินงานดังแสดงในรูปที่ ~\ref{fig:ganttjob} และของนายสันติ ว่องประเสริฐ ซึ่งมีแผนการดำเนินงานดังแสดงในรูปที่ x
+ในรายงานฉบับนี้ มีแผนการดำเนินงานแยกเป็นของผู้จัดทำแต่ละคน คือ ของนายณัฐพล กาบแก้ว ซึ่งมีแผนการดำเนินงานดังแสดงในรูปที่  \ref{fig:ganttjob} และของนายสันติ ว่องประเสริฐ ซึ่งมีแผนการดำเนินงานดังแสดงในรูปที่ x
 \begin{figure}[h]
     \noindent\resizebox{0.9\textwidth}{!}{
         \begin{tikzpicture}
@@ -567,17 +624,21 @@ Analogy ของวงจรไฟฟ้าเป็นประโยชน์
                 \gantttitlecalendar{year, month=shortname}\\
                 \ganttbar[
                     bar/.append style={fill=black}
-                ]{Literature Review}{2015-08}{2015-10} \\
+                ]{ศึกษาความรู้ที่เกี่ยวข้องกับหัวข้อโครงงาน}{2015-08}{2015-10} \\
                 \ganttbar[
                     bar/.append style={fill=black}
-                ]{Exploration on given data}{2015-10}{2015-11}\\
+                ]{ศึกษาและจำลองระบบ Inverter 3 Phase บน Matlab/Simulink และทวนสอบด้วยวิธี Model in the loop}{2015-10}{2015-11}\\
                 \ganttbar[
                     bar/.append style={fill=black},
-                    progress=100]{Frequency domain analysis}{2015-11}{2015-12}\\
-                \ganttbar{Classification on generated data}{2016-01}{2016-02}\\
-                \ganttbar{Classification on real data}{2016-02}{2016-03}\\
-                \ganttbar{Improvement on the classification method}{2016-03}{2016-04}\\
-                \ganttbar{Report summary}{2016-04}{2016-05}
+                    progress=100]{ศึกษาชุดเครื่องมือ Embedded Coder และสร้าง C Code จากแบบจำลอง และทวนสอบด้วยวิธี Software in the loop}{2015-11}{2015-12}\\
+                \ganttbar{นำบอร์ด TI C2000 Launchpad มาผนวกรวมเข้ากับแบบจำลอง และทวนสอบด้วยวิธี Processor in the loop}{2016-01}{2016-02}\\
+                \ganttbar{ศึกษา Hardware ที่เกี่ยวข้องเพื่อนำมา
+                    ทดสอบใน Hardware ต่อไป
+                }{2016-02}{2016-03}\\
+                \ganttbar{วิเคราะห์และปรับปรุงส่วนต่าง ๆ
+                    เพื่อให้ได้ประสิทธิภาพที่ดีขึ้น
+                }{2016-03}{2016-04}\\
+                \ganttbar{เขียนรายงาน}{2016-04}{2016-05}
             \end{ganttchart}
         \end{tikzpicture}
     }
@@ -673,22 +734,29 @@ Analogy ของวงจรไฟฟ้าเป็นประโยชน์
 \bibliography{ref}
 \bibliographystyle{ieeetr}
 
-\section{ภาคผนวก (ถ้ามี)}
-% ภาคผนวกเป็นข้อความที่ไม่สามารถใส่ไว้ในเนื้อหาหลักได้ แต่สามารถทำให้ผู้อ่านเข้าใจรายละเอียดของโครงงานได้มากยิ่งขึ้น ในหัวข้อนี้ให้ใส่รายละเอียดหรือข้อมูลอื่นๆ ที่จำเป็น ซึ่งไม่สำคัญเท่ากับที่อยู่ในเนื้อหาหลัก เช่น
+\section{ภาคผนวก}
 
-% \begin{itemize}
-%     \item ทฤษฎีพื้นฐานเพิ่มเติม เพื่อให้ผู้อ่านเข้าใจวิธีการที่ใช้ในโครงงานได้ดีขึ้น แต่การไม่ใส่รายละเอียดนี้ต้องไม่ทำให้ผู้อ่านไม่สามารถติดตามหรือเข้าใจเนื้อหาหลักได้
-%     \item Data Sheet ของอุปกรณ์ที่เลือกใช้
-%     \item Specification ของฮาร์ดแวร์ต่างๆ
-%     \item Features ของซอฟต์แวร์ที่ใช้
-%     \item Source Code ของโปรแกรมที่ได้เขียนขึ้นมาเอง หรือดัดแปลงมา
-%     \item Device Characteristics ของชิ้นส่วนในโครงงาน
-% \end{itemize}
+\subsection{Simulink Model ในส่วนของการจำลองระบบพลวัติของระบบ}
 
-% ภาคผนวกอาจแบ่งออกเป็นหลายส่วน ตามหัวข้อเรื่อง เช่น
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{layer0.png}
+    \caption{ชั้นที่ 0: ภาพรวมของระบบพลวัติทั้งหมด}
+\end{figure}
 
-% \subsection{ภาคผนวก ก.}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{layer1.png}
+    \caption{ชั้นที่ 1: แบตเตอร์รี่ และ Solver Configuration}
+\end{figure}
 
-% \subsection{ภาคผนวก ข.}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{layer2-1.png}
+    \caption{ขั้นที่ 2-1: Variant Model ของแบตเตอร์รี}
+\end{figure}
+
+\subsection{Simulink Model ในส่วนของอัลกอริทึมที่ทำงานบนระบบฝังตัว}
+
 
 \end{document}
