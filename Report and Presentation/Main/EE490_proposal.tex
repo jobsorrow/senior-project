@@ -60,7 +60,7 @@
     }
     \vfill
     {\LARGE \bf นายณัฐพล กาบแก้ว เลขประจำตัว 6130176521}\\[2ex]
-    {\LARGE \bf นายสันติ ว่องประเสริฐ เลขประจำตัว 613XXXXX21}\\[2ex]
+    {\LARGE \bf นายสันติ ว่องประเสริฐ เลขประจำตัว 6130553421}\\[2ex]
     {\LARGE \bf อาจารย์ที่ปรึกษา รศ.ดร. สุรพงศ์ สุวรรณกวิน}
     \vfill
     {\LARGE \bf ภาควิชาวิศวกรรมไฟฟ้า คณะวิศวกรรมศาสตร์}\\[2ex]
@@ -392,6 +392,135 @@
 จากผลลัพธ์ที่ได้อภิปรายมาในส่วนที่แล้ว เราได้ทราบว่า เรามีอิสระในเลือกการมอดูเลตสองแขนได้สองประเภทคือ แบบทรานซิสเตอร์ตัวบน on ตลอด และทรานซิสเตอร์ตัวล่าง on ตลอด ดังนั้น เราจะใช้ข้อได้เปรียบนี้ ในการเลือกรูปแบบการมอดูเลตแบบสองแขนให้เกิดประสิทธิภาพสูงที่สุด นั่นคือ การหลีกเลี่ยงการทำงานในจตุภาคที่ 3 สำหรับทรานซิสเตอร์ตัวที่มีแรงดันมากที่สุด หรือน้อยที่สุดในขณะนั้น
 
 \subsection{การเพิ่มประสิทธิภาพของแผ่นพื้นเก็บพลังานด้วยอัลกอริทึมการติดตามจุดทำงานที่ให้กำลังสูงสุด (Maximum Power Point Tracking Algorithm; MPPT)}
+\subsubsection{ข้อมูลรายละเอียดและหลักการทำงานของแผ่นพื้นเก็บพลังงาน}
+เริ่มแรกต้องเข้าใจหลักการทำงานของแผ่นพื้นเก็บพลังงานเพื่อทราบความสัมพันธ์ของกลไกและสมการต่างๆของระบบทางกลของแผ่นพื้นเก็บพลังงาน จากนั้นจึงสามารถแปลงเป็นวงจรสมมูลทางไฟฟ้าได้ต่อไป
+
+แผ่นพื้นเก็บพลังงาน สามารถแปลงพลังงานจลน์จากการก้าวเดินของมนุษย์แปลงเป็นพลังงานไฟฟ้าจากเครื่องกำเนิดไฟฟ้าได้ หลักการทำงาน เริ่มจากการเหยียบของมนุษย์ลงบนแผ่นพื้นเก็บพลังงานทำให้เกิดการยุบตัวลงของแผ่นพื้น nut จะขยับขึ้นลงไปขับเกลียวนำ(lead screw) ซึ่งทำหน้าที่เปลี่ยนแนวการเคลื่อนที่เชิงเส้นไปยังการเคลื่อนที่เชิงหมุน ให้หมุนรอบแนวแกนตั้ง และ bevel gear ทำหน้าที่เปลี่ยนจากเคลื่อนที่เชิงหมุนแนวแกนตั้งจากเพลาเกลียวนำให้เปลี่ยนทิศทางการหมุนไป 90 องศา หมุนรอบแนวนอน เพื่อขับเครื่องกำเนิดไฟฟ้า ดังรูปที่ \ref{lead-screw_lx}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{lead-screw_lx.png}
+    \end{center}
+    \caption{กลไกเกลาตัวหนอน(lead screw) ภายใต้แผ่นเก็บพลังงาน}
+    \label{lead-screw_lx}
+\end{figure}
+
+จากแผนภาพของวัตถุของระบบทางกล lead และ screw ดังรูปที่ 2 สมการต่างๆ ได้มาจาก การเลื่อนที่ของ nut และ การเคลื่อนที่เชิงหมุนของ lead screw และ โรเตอร์ของเครื่องกำเนิดไฟฟ้า ตามลำดับ ได้แก่
+\newpage
+\begin{equation}
+    m\ddot{x} = F(t)-F_{a}-F_{s}
+\end{equation}
+
+\begin{equation}
+    J_{1}\ddot{\theta}_{1} = \frac{2\pi J_{1}}{l}\ddot{x} = T_{a}-T_{B}
+\end{equation}
+
+\begin{equation}
+    J_{G}\ddot{\theta}_{2} = \frac{2\pi J_{G}}{l}\ddot{x} = T_{B}-T_{G}
+\end{equation}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{free_body_lx.png}
+    \end{center}
+    \caption{แผนภาพของวัตถุของ lead screw}
+    \label{free_body_lx}
+\end{figure}
+
+โดยที่
+
+$m$ คือ มวลของแผ่นพื้น และ nut
+
+$J_{1}$ คือ โมเมนต์ความเฉื่อยของ lead screw 
+
+$J_{G}$ คือ โมเมนต์ความเฉื่อยของ bevel gear
+
+$x$ คือ ระยะกระจัดของแผ่นพื้น และ nut
+
+$l$ คือ ระยะห่างระหว่างเกลียวของ lead screw
+
+$\theta_{1}$  คือ ตำแหน่งเชิงมุมของ lead screw 
+
+$\theta_{2}$  คือ ตำแหน่งเชิงมุมของ bevel gear
+
+$F(t)$  คือ แรงกดลงบนแผ่นพื้นที่เวลาใดๆ
+
+$F_{s}$   คือ แรงสปริง
+
+$F_{a}$   คือ แรงเสียดทานระหว่าง nut และ lead screw
+
+$T_{B}$   คือ แรงบิดเสียดทานระหว่าง nut และ lead screw
+
+$T_{G}$   คือ แรงบิดแม่เหล็กไฟฟ้า (Electromagnetic torque)
+
+$T_{a}$   คือ แรงบิดส่งผ่านจาก nut และไปยัง lead screw ซึ่งเป็นสัดส่วนโดยตรงกับ $F_{a}$ ดังนี้
+
+\begin{equation}
+    T_{a} = aF_{a}
+\end{equation}
+
+ค่าคงที่ a = $\frac{l}{2\pi \eta_{tread} \eta_{thrust}}$ เมื่อ $\eta_{tread}$ คือ ประสิทธิภาพของตลับลูกปืนคลัตซ์ และ $\eta_{trhust}$ คือ ประสิทธิภาพของเกลียว
+
+\subsubsection{Electrical analogy}
+แบบจำลองทางไฟฟ้าที่ของระบบทางกลของแผ่นพื้นเก็บพลังงานสร้างโดยเริ่มจาก โดยใช้ electrical analogy เพื่อที่จะแปลงเป็นวงจรสมมูลทางไฟฟ้า
+
+Analogy ของวงจรไฟฟ้าเป็นประโยชน์อย่างมากเมื่อทำการวิเคราะห์ระบบทางกล ปัญหาทางกลบางอย่างสามารถแก้ไขได้ง่ายขึ้นผ่านการเปรียบเทียบทางไฟฟ้า analogy ที่ใช้งานทั่วไปมีเป็นสิ่งที่สัมพันธ์กันของปริมาณทางกลและทางไฟฟ้า ดังแสดงในตารางที่ 1 
+
+\begin{center} 
+    ตารางที่ 1 แสดงความสัมพันธ์ของปริมาณทางกลและไฟฟ้า
+    \end{center} 
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{analogy_lx.png}
+    \end{center}
+    \label{analogy_lx}
+\end{figure}
+เนื่องจากอัตราส่วนของเกียร์ของ gear train และ bevel gears ที่ใช้ในการส่งการเคลื่อนที่เชิงหมุนจาก lead screw ไป ยังโรเตอร์ของเครื่องกำเนิดไฟฟ้า มีอัตราส่วนเท่ากับ 1:1 จึงได้ความสัมพันธ์ 
+\begin{equation}
+    x = \frac{l\theta_{1}}{2\pi} = \frac{l\theta_{2}}{2\pi} 
+\end{equation}
+จากสมการที่ (18)-(20) ทำการเปลี่ยนแนวการเคลื่อนที่เชิงเส้นไปยังการเคลื่อนที่เชิงหมุน และใช้ความสัมพันธ์ของปริมาณทางกลและไฟฟ้าจากตารางที่ 1 
+\begin{equation}
+   \frac{aml}{2\pi}\ddot{\theta}_{1} + \frac{aDl}{2\pi}\dot{\theta}_{1} + \frac{akl}{2\pi}\theta_{1} + aF_{a} = aF_(t)
+\end{equation}
+\begin{equation}
+    J_{1}\ddot{\theta}_{1} + T_{B} = aF_{a}
+ \end{equation}
+ \begin{equation}
+    J_{G}\ddot{\theta}_{2} + T_{G} = T_{B}
+ \end{equation}
+ \begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{cir1lx.jpeg}
+    \end{center}
+    \caption{วงจรไฟฟ้าของการเลื่อนที่ของ nut}
+    \label{cir1lx}
+\end{figure}
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{cir2lx.jpg}
+    \end{center}
+    \caption{วงจรไฟฟ้าของการเคลื่อนที่เชิงหมุนของ lead screw }
+    \label{cir2_lx}
+\end{figure}
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{cir3lx.jpg}
+    \end{center}
+    \caption{วงจรไฟฟ้าของโรเตอร์ของเครื่องกำเนิดไฟฟ้า}
+    \label{cir3lx}
+\end{figure}
+จากรวมวงจรทั้งสามข้างบน จะได้ วงจรสมมูลทางไฟฟ้าระบบทางกลของแผ่นพื้นเก็บพลังงาน
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{cir4lx.jpg}
+    \end{center}
+    \caption{วงจรสมมูลทางไฟฟ้าของระบบทางกลของแผ่นพื้นเก็บพลังงาน}
+    \label{cir4lx}
+\end{figure}
+
+
+
 \newpage
 \section{ผลลัพธ์จากการดำเนินการเบื้องต้น}
 \begin{figure}[!htb]
