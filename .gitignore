@@ -7,6 +7,7 @@
 *.slxc
 *.autosave
 *.original
+*resources
 
 # latex build artifacts
 *.aux
@@ -20,6 +21,10 @@
 *.synctex(busy)
 *.log
 *.out
+
+# c source artifacts
+*.dwo
+*.hex
 
 # playground and unrelated
 playground.*
