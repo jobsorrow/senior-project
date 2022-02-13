@@ -2,12 +2,14 @@
 
 # simulink
 *.mex*
-*_rtw
 *slprj*
 *.slxc
 *.autosave
 *.original
 *resources
+
+# matlab executables
+*.mat
 
 # latex build artifacts
 *.aux
@@ -25,6 +27,8 @@
 # c source artifacts
 *.dwo
 *.hex
+*.dep
+*.obj
 
 # playground and unrelated
 playground.*
