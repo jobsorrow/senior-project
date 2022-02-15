@@ -7,13 +7,16 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.19
+ * Model version                  : 1.24
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Sun Feb 13 14:56:57 2022
+ * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
- * Code generation objectives: Unspecified
+ * Code generation objectives:
+ *    1. Execution efficiency
+ *    2. ROM efficiency
+ *    3. RAM efficiency
  * Validation result: Not run
  */
 
@@ -32,6 +35,7 @@ void rt_OneStep(void)
   /* Check base rate for overrun */
   if (isRateRunning[0]++) {
     IsrOverrun = 1;
+    executeOverrunService();
     isRateRunning[0]--;                /* allow future iterations to succeed*/
     return;
   }
@@ -54,6 +58,7 @@ void rt_OneStep(void)
   if (eventFlags[1]) {
     if (need2runFlags[1]++) {
       IsrOverrun = 1;
+      executeOverrunService();
       need2runFlags[1]--;              /* allow future iterations to succeed*/
       return;
     }
@@ -109,6 +114,7 @@ int main(void)
   ;
   rtmSetErrorStatus(datalogger_target_M, 0);
   datalogger_target_initialize();
+  initializeOverrunService();
   globalInterruptDisable();
   configureTimer0(modelBaseRate, systemClock);
   runModel =

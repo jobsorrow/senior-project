@@ -7,13 +7,16 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.19
+ * Model version                  : 1.24
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Sun Feb 13 14:56:57 2022
+ * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
- * Code generation objectives: Unspecified
+ * Code generation objectives:
+ *    1. Execution efficiency
+ *    2. ROM efficiency
+ *    3. RAM efficiency
  * Validation result: Not run
  */
 

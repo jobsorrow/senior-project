@@ -7,13 +7,16 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.19
+ * Model version                  : 1.24
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Sun Feb 13 14:56:57 2022
+ * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
- * Code generation objectives: Unspecified
+ * Code generation objectives:
+ *    1. Execution efficiency
+ *    2. ROM efficiency
+ *    3. RAM efficiency
  * Validation result: Not run
  */
 
@@ -70,22 +73,24 @@ preprocessor word size checks.
 #endif
 
 /* Skipping ulong_long/long_long check: insufficient preprocessor integer range. */
-void InitAdcA (void);
-void config_ADCA_SOC6 (void);
-void config_ADCA_SOC5 (void);
-void InitAdcC (void);
-void config_ADCC_SOC4 (void);
-void config_ADCC_SOC3 (void);
-void config_ADCC_SOC2 (void);
-void config_ADCC_SOC1 (void);
 void InitAdcB (void);
 void config_ADCB_SOC0 (void);
-extern uint16_T MW_adcAInitFlag;
-extern uint16_T MW_adcCInitFlag;
+void InitAdcC (void);
+void config_ADCC_SOC1 (void);
+void config_ADCC_SOC2 (void);
+void config_ADCC_SOC3 (void);
+void config_ADCC_SOC4 (void);
+void InitAdcA (void);
+void config_ADCA_SOC5 (void);
+void config_ADCA_SOC6 (void);
 extern uint16_T MW_adcBInitFlag;
+extern uint16_T MW_adcCInitFlag;
+extern uint16_T MW_adcAInitFlag;
 void isr_int1pie1_task_fcn(void);
 void isr_int9pie1_task_fcn(void);
 extern void configureGPIOExtInterrupt(void);
+extern void datalogge_IfActionSubsystem(uint16_T *rty_Out1,
+  P_IfActionSubsystem_datalogge_T *localP);
 void isr_int1pie1_task_fcn(void);
 
 #endif                             /* RTW_HEADER_datalogger_target_private_h_ */

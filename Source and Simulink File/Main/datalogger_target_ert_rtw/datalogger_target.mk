@@ -2,7 +2,7 @@
 ## Makefile generated for component 'datalogger_target'. 
 ## 
 ## Makefile     : datalogger_target.mk
-## Generated on : Sun Feb 13 14:57:01 2022
+## Generated on : Tue Feb 15 23:40:58 2022
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/datalogger_target.out
 ## Product type : executable
 ## 
@@ -218,7 +218,7 @@ DEFINES = $(DEFINES_) $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_csl.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_board.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_xbar.c $(START_DIR)/datalogger_target_ert_rtw/DSP28xx_SciUtil.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_adc.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_pwm.c $(START_DIR)/datalogger_target_ert_rtw/datalogger_target.c $(START_DIR)/datalogger_target_ert_rtw/datalogger_target_data.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/c28004xBoard_Realtime_Support.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/shared/supportpackages/tic2000/src/MW_c28xGlobalInterrupts.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_cputimers.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_defaultisr.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/headers/source/f28004x_globalvariabledefs.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_piectrl.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_pievect.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_sysctrl.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_usdelay.asm C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_codestartbranch.asm C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_gpio.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_adc.c C:/ti/c2000/C2000Ware_3_02_00_00/driverlib/f28004x/driverlib/sysctl.c C:/ti/c2000/C2000Ware_3_02_00_00/driverlib/f28004x/driverlib/dma.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/shared/supportpackages/tic2000/src/MW_c28xGPIO.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/profiler_Support.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/c28004xSchedulerTimer0.c
+SRCS = $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_csl.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_board.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_xbar.c $(START_DIR)/datalogger_target_ert_rtw/DSP28xx_SciUtil.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_adc.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_overrun.c $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_pwm.c $(START_DIR)/datalogger_target_ert_rtw/datalogger_target.c $(START_DIR)/datalogger_target_ert_rtw/datalogger_target_data.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/c28004xBoard_Realtime_Support.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/shared/supportpackages/tic2000/src/MW_c28xGlobalInterrupts.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_cputimers.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_defaultisr.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/headers/source/f28004x_globalvariabledefs.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_piectrl.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_pievect.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_sysctrl.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_usdelay.asm C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_codestartbranch.asm C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_gpio.c C:/ti/c2000/C2000Ware_3_02_00_00/device_support/f28004x/common/source/f28004x_adc.c C:/ti/c2000/C2000Ware_3_02_00_00/driverlib/f28004x/driverlib/sysctl.c C:/ti/c2000/C2000Ware_3_02_00_00/driverlib/f28004x/driverlib/dma.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/shared/supportpackages/tic2000/src/MW_c28xGPIO.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/profiler_Support.c C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/c28004xSchedulerTimer0.c
 
 MAIN_SRC = $(START_DIR)/datalogger_target_ert_rtw/ert_main.c
 
@@ -228,7 +228,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = MW_c28xx_csl.obj MW_c28xx_board.obj MW_c28xx_xbar.obj DSP28xx_SciUtil.obj MW_c28xx_adc.obj MW_c28xx_pwm.obj datalogger_target.obj datalogger_target_data.obj c28004xBoard_Realtime_Support.obj MW_c28xGlobalInterrupts.obj f28004x_cputimers.obj f28004x_defaultisr.obj f28004x_globalvariabledefs.obj f28004x_piectrl.obj f28004x_pievect.obj f28004x_sysctrl.obj f28004x_usdelay.obj f28004x_codestartbranch.obj f28004x_gpio.obj f28004x_adc.obj sysctl.obj dma.obj MW_c28xGPIO.obj profiler_Support.obj c28004xSchedulerTimer0.obj
+OBJS = MW_c28xx_csl.obj MW_c28xx_board.obj MW_c28xx_xbar.obj DSP28xx_SciUtil.obj MW_c28xx_adc.obj MW_c28xx_overrun.obj MW_c28xx_pwm.obj datalogger_target.obj datalogger_target_data.obj c28004xBoard_Realtime_Support.obj MW_c28xGlobalInterrupts.obj f28004x_cputimers.obj f28004x_defaultisr.obj f28004x_globalvariabledefs.obj f28004x_piectrl.obj f28004x_pievect.obj f28004x_sysctrl.obj f28004x_usdelay.obj f28004x_codestartbranch.obj f28004x_gpio.obj f28004x_adc.obj sysctl.obj dma.obj MW_c28xGPIO.obj profiler_Support.obj c28004xSchedulerTimer0.obj
 
 MAIN_OBJ = ert_main.obj
 
@@ -523,6 +523,10 @@ DSP28xx_SciUtil.obj : $(START_DIR)/datalogger_target_ert_rtw/DSP28xx_SciUtil.c
 
 
 MW_c28xx_adc.obj : $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_adc.c
+	$(CC) $(CFLAGS) --output_file="$@" "$<"
+
+
+MW_c28xx_overrun.obj : $(START_DIR)/datalogger_target_ert_rtw/MW_c28xx_overrun.c
 	$(CC) $(CFLAGS) --output_file="$@" "$<"
 
 

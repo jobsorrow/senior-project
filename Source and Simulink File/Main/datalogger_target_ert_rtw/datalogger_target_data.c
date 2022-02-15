@@ -7,13 +7,16 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.19
+ * Model version                  : 1.24
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Sun Feb 13 14:56:57 2022
+ * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
- * Code generation objectives: Unspecified
+ * Code generation objectives:
+ *    1. Execution efficiency
+ *    2. ROM efficiency
+ *    3. RAM efficiency
  * Validation result: Not run
  */
 
@@ -22,115 +25,90 @@
 
 /* Invariant block signals (default storage) */
 const ConstB_datalogger_target_T datalogger_target_ConstB = {
-  11U                                  /* '<S13>/Width' */
+  7U                                   /* '<S18>/Width' */
 };
 
 /* Block parameters (default storage) */
 P_datalogger_target_T datalogger_target_P = {
-  /* Variable: HW_BLDC_RS
-   * Referenced by: '<S1>/Gain1'
-   */
-  0.28,
-
-  /* Mask Parameter: DiscreteDerivative_ICPrevScaled
-   * Referenced by: '<S5>/UD'
-   */
-  0.0,
-
   /* Mask Parameter: CounterLimited_uplimit
-   * Referenced by: '<S36>/FixPt Switch'
-   */
-  19999U,
-
-  /* Mask Parameter: CounterLimited_uplimit_k
-   * Referenced by: '<S19>/FixPt Switch'
+   * Referenced by: '<S25>/FixPt Switch'
    */
   11999U,
-
-  /* Expression: 1/sqrt(3)
-   * Referenced by: '<S3>/one_by_sqrt3'
-   */
-  0.57735026918962584,
-
-  /* Expression: -1.65
-   * Referenced by: '<S1>/Bias'
-   */
-  -1.65,
-
-  /* Expression: -10
-   * Referenced by: '<S1>/Gain3'
-   */
-  -10.0,
-
-  /* Expression: Filter_constant
-   * Referenced by: '<S22>/Filter_Constant'
-   */
-  0.5,
-
-  /* Expression: 1 - Filter_constant
-   * Referenced by: '<S22>/One'
-   */
-  0.5,
-
-  /* Expression: 0
-   * Referenced by: '<S22>/Unit Delay'
-   */
-  0.0,
-
-  /* Computed Parameter: TSamp_WtEt
-   * Referenced by: '<S5>/TSamp'
-   */
-  10101.010101010103,
-
-  /* Expression: 1/2
-   * Referenced by: '<S7>/one_by_two'
-   */
-  0.5,
-
-  /* Expression: sqrt(3)/2
-   * Referenced by: '<S7>/sqrt3_by_two'
-   */
-  0.8660254037844386,
-
-  /* Expression: 0.5
-   * Referenced by: '<S12>/Bias'
-   */
-  0.5,
-
-  /* Expression: 5000
-   * Referenced by: '<S12>/Gain2'
-   */
-  5000.0,
 
   /* Expression: 1
    * Referenced by: '<Root>/Constant'
    */
   1.0,
 
-  /* Computed Parameter: Out1_Y0
-   * Referenced by: '<S25>/Out1'
+  /* Computed Parameter: Gain_Gain
+   * Referenced by: '<S34>/Gain'
    */
-  0.0F,
+  0.5F,
 
-  /* Computed Parameter: Constant_Value_e
-   * Referenced by: '<S32>/Constant'
+  /* Computed Parameter: Gain_Gain_f
+   * Referenced by: '<S33>/Gain'
    */
-  0.0F,
+  0.5F,
 
-  /* Computed Parameter: convert_pu_Gain
-   * Referenced by: '<S31>/convert_pu'
+  /* Computed Parameter: one_by_sqrt3_Gain
+   * Referenced by: '<S35>/one_by_sqrt3'
+   */
+  0.577350259F,
+
+  /* Computed Parameter: Bias_Bias
+   * Referenced by: '<S3>/Bias'
+   */
+  -1.65F,
+
+  /* Computed Parameter: Gain3_Gain
+   * Referenced by: '<S3>/Gain3'
+   */
+  -10.0F,
+
+  /* Computed Parameter: Gain1_Gain
+   * Referenced by: '<S7>/Gain1'
+   */
+  -0.28F,
+
+  /* Computed Parameter: one_by_two_Gain
+   * Referenced by: '<S36>/one_by_two'
+   */
+  0.5F,
+
+  /* Computed Parameter: sqrt3_by_two_Gain
+   * Referenced by: '<S36>/sqrt3_by_two'
+   */
+  0.866025388F,
+
+  /* Computed Parameter: AvoidDivisionByZero_UpperSat
+   * Referenced by: '<S29>/Avoid Division By Zero'
+   */
+  81.5F,
+
+  /* Computed Parameter: AvoidDivisionByZero_LowerSat
+   * Referenced by: '<S29>/Avoid Division By Zero'
+   */
+  0.1F,
+
+  /* Computed Parameter: Bias_Bias_a
+   * Referenced by: '<S29>/Bias'
+   */
+  0.5F,
+
+  /* Computed Parameter: Saturation_UpperSat
+   * Referenced by: '<S29>/Saturation'
    */
   1.0F,
 
-  /* Computed Parameter: AvoidDivisionByZero_UpperSat
-   * Referenced by: '<S12>/Avoid Division By Zero'
+  /* Computed Parameter: Saturation_LowerSat
+   * Referenced by: '<S29>/Saturation'
    */
-  24.0F,
+  0.0F,
 
-  /* Computed Parameter: AvoidDivisionByZero_LowerSat
-   * Referenced by: '<S12>/Avoid Division By Zero'
+  /* Computed Parameter: Gain2_Gain
+   * Referenced by: '<S29>/Gain2'
    */
-  0.1F,
+  5000.0F,
 
   /* Computed Parameter: CommandedValue_Y0
    * Referenced by: '<S2>/Commanded Value'
@@ -142,75 +120,79 @@ P_datalogger_target_T datalogger_target_P = {
    */
   0.0F,
 
-  /* Computed Parameter: DCBusVoltageConditioning_Gain
-   * Referenced by: '<S1>/DC Bus Voltage Conditioning'
+  /* Computed Parameter: PhaseCurrentADCGain_Gain
+   * Referenced by: '<S3>/Phase Current ADC Gain'
    */
-  41733U,
+  13U,
 
-  /* Computed Parameter: Gain2_Gain_o
-   * Referenced by: '<S1>/Gain2'
+  /* Computed Parameter: DCBusVoltageADCGain_Gain
+   * Referenced by: '<S3>/DC Bus Voltage ADC Gain'
    */
-  54067U,
-
-  /* Computed Parameter: Gain_Gain
-   * Referenced by: '<S11>/Gain'
-   */
-  53687U,
+  10U,
 
   /* Computed Parameter: Constant_Value_m
-   * Referenced by: '<S19>/Constant'
+   * Referenced by: '<S25>/Constant'
    */
   0U,
 
   /* Computed Parameter: End_Value
-   * Referenced by: '<S17>/End'
+   * Referenced by: '<S23>/End'
    */
-  65535U,
+  514U,
 
   /* Computed Parameter: Start_Value
-   * Referenced by: '<S17>/Start'
+   * Referenced by: '<S23>/Start'
    */
-  65278U,
+  257U,
 
   /* Computed Parameter: Bias_Bias_c
-   * Referenced by: '<S17>/Bias'
+   * Referenced by: '<S23>/Bias'
    */
   2U,
 
   /* Computed Parameter: Start_Value_i
-   * Referenced by: '<S16>/Start'
+   * Referenced by: '<S21>/Start'
    */
   0U,
 
   /* Computed Parameter: Start1_Value
-   * Referenced by: '<S16>/Start1'
-   */
-  0U,
-
-  /* Computed Parameter: Constant_Value_k
-   * Referenced by: '<S36>/Constant'
+   * Referenced by: '<S21>/Start1'
    */
   0U,
 
   /* Computed Parameter: Output_InitialCondition
-   * Referenced by: '<S24>/Output'
+   * Referenced by: '<S20>/Output'
    */
   0U,
 
   /* Computed Parameter: FixPtConstant_Value
-   * Referenced by: '<S35>/FixPt Constant'
+   * Referenced by: '<S24>/FixPt Constant'
    */
   1U,
 
-  /* Computed Parameter: Output_InitialCondition_a
-   * Referenced by: '<S15>/Output'
-   */
-  0U,
+  /* Start of '<S22>/CoreSubsys' */
+  {
+    /* Start of '<S22>/If Action Subsystem1' */
+    {
+      /* Computed Parameter: Constant_Value
+       * Referenced by: '<S27>/Constant'
+       */
+      515U
+    }
+    ,
 
-  /* Computed Parameter: FixPtConstant_Value_j
-   * Referenced by: '<S18>/FixPt Constant'
-   */
-  1U
+    /* End of '<S22>/If Action Subsystem1' */
+
+    /* Start of '<S22>/If Action Subsystem' */
+    {
+      /* Computed Parameter: Constant_Value
+       * Referenced by: '<S26>/Constant'
+       */
+      258U
+    }
+    /* End of '<S22>/If Action Subsystem' */
+  }
+  /* End of '<S22>/CoreSubsys' */
 };
 
 /*

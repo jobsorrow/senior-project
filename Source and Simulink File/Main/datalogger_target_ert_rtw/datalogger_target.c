@@ -7,13 +7,16 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.19
+ * Model version                  : 1.24
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Sun Feb 13 14:56:57 2022
+ * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
- * Code generation objectives: Unspecified
+ * Code generation objectives:
+ *    1. Execution efficiency
+ *    2. ROM efficiency
+ *    3. RAM efficiency
  * Validation result: Not run
  */
 
@@ -30,11 +33,11 @@ DW_datalogger_target_T datalogger_target_DW;
 static RT_MODEL_datalogger_target_T datalogger_target_M_;
 RT_MODEL_datalogger_target_T *const datalogger_target_M = &datalogger_target_M_;
 static void rate_monotonic_scheduler(void);
-uint16_T MW_adcAInitFlag = 0;
-uint16_T MW_adcCInitFlag = 0;
 uint16_T MW_adcBInitFlag = 0;
+uint16_T MW_adcCInitFlag = 0;
+uint16_T MW_adcAInitFlag = 0;
 
-/* Hardware Interrupt Block: '<Root>/C28x Hardware Interrupt ' */
+/* Hardware Interrupt Block: '<Root>/ReplicaOfSource' */
 void isr_int1pie1_task_fcn(void)
 {
   if (1 == runModel) {
@@ -51,418 +54,468 @@ void isr_int1pie1_task_fcn(void)
       datalogger_target_B.RateTransition[2] =
         datalogger_target_DW.RateTransition_Buffer[tmp + 2];
 
-      /* S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
+      /* S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' */
 
       /* Output and update for function-call system: '<Root>/ADC Interrupt Callback' */
       {
-        real_T rtb_Gain3[3];
-        real_T elapseTime;
-        real_T rtb_Sum_idx_0;
-        real_T rtb_TSamp_idx_0;
-        real_T rtb_add_b;
-        real_T rtb_add_c;
         real32_T rtb_AvoidDivisionByZero;
-        uint32_T ADCInterruptCallback_ELAPS_T;
-        int16_T s14_iter;
-        uint16_T rtb_Merge_h[13];
+        real32_T rtb_Gain1_idx_0;
+        real32_T rtb_Gain3_idx_0;
+        real32_T rtb_Gain3_idx_1;
+        real32_T rtb_add_c;
+        real32_T rtb_one_by_two;
+        int16_T ForEach_itr;
+        uint16_T rtb_Merge[9];
+        uint16_T rtb_ImpAsg_InsertedFor_Data_at_[7];
+        uint16_T rtb_TmpSignalConversionAtForEac[7];
+        uint16_T rtb_DataTypeConversion[3];
         uint16_T rtb_Add;
-        uint16_T rtb_Merge1;
+        uint16_T rtb_Merge_p;
 
-        /* Asynchronous task reads absolute time. Data (absolute time)
-           transfers from low priority task (base rate) to high priority
-           task (asynchronous rate). Double buffers are used to ensure
-           data integrity.
-           -- rtmL2HLastBufWr is the buffer index that is written last.
+        /* S-Function (c2802xadc): '<S15>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_o = (AdcbResultRegs.ADCRESULT0);
+        }
+
+        /* S-Function (c2802xadc): '<S16>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_b = (AdccResultRegs.ADCRESULT1);
+        }
+
+        /* S-Function (c2802xadc): '<S17>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_e = (AdccResultRegs.ADCRESULT2);
+        }
+
+        /* S-Function (c2802xadc): '<S12>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_d = (AdccResultRegs.ADCRESULT3);
+        }
+
+        /* S-Function (c2802xadc): '<S13>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_i = (AdccResultRegs.ADCRESULT4);
+        }
+
+        /* S-Function (c2802xadc): '<S14>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_dp = (AdcaResultRegs.ADCRESULT5);
+        }
+
+        /* S-Function (c2802xadc): '<S9>/ReplicaOfSource' */
+        {
+          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
+          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
+          datalogger_target_B.ReplicaOfSource_p = (AdcaResultRegs.ADCRESULT6);
+        }
+
+        /* SignalConversion generated from: '<S18>/For Each Subsystem' */
+        rtb_TmpSignalConversionAtForEac[0] =
+          datalogger_target_B.ReplicaOfSource_o;
+        rtb_TmpSignalConversionAtForEac[1] =
+          datalogger_target_B.ReplicaOfSource_b;
+        rtb_TmpSignalConversionAtForEac[2] =
+          datalogger_target_B.ReplicaOfSource_e;
+        rtb_TmpSignalConversionAtForEac[3] =
+          datalogger_target_B.ReplicaOfSource_d;
+        rtb_TmpSignalConversionAtForEac[4] =
+          datalogger_target_B.ReplicaOfSource_i;
+        rtb_TmpSignalConversionAtForEac[5] =
+          datalogger_target_B.ReplicaOfSource_dp;
+        rtb_TmpSignalConversionAtForEac[6] =
+          datalogger_target_B.ReplicaOfSource_p;
+
+        /* Outputs for Iterator SubSystem: '<S18>/For Each Subsystem' incorporates:
+         *  ForEach: '<S22>/For Each'
          */
-        datalogger_target_M->Timing.clockTick2 =
-          datalogger_target_M->Timing.rtmL2HDbBufClockTick
-          [datalogger_target_M->Timing.rtmL2HLastBufWr];
-        if (datalogger_target_DW.ADCInterruptCallback_RESET_ELAP) {
-          ADCInterruptCallback_ELAPS_T = 0UL;
-        } else {
-          ADCInterruptCallback_ELAPS_T = datalogger_target_M->Timing.clockTick2
-            - datalogger_target_DW.ADCInterruptCallback_PREV_T;
+        for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
+          /* ForEachSliceSelector generated from: '<S22>/Data Packet' */
+          rtb_Merge_p = rtb_TmpSignalConversionAtForEac[ForEach_itr];
+
+          /* If: '<S22>/If1' */
+          if (rtb_Merge_p == 257U) {
+            /* Outputs for IfAction SubSystem: '<S22>/If Action Subsystem' incorporates:
+             *  ActionPort: '<S26>/Action Port'
+             */
+            datalogge_IfActionSubsystem(&rtb_Merge_p,
+              &datalogger_target_P.CoreSubsys.IfActionSubsystem);
+
+            /* End of Outputs for SubSystem: '<S22>/If Action Subsystem' */
+          } else if (rtb_Merge_p == 514U) {
+            /* Outputs for IfAction SubSystem: '<S22>/If Action Subsystem1' incorporates:
+             *  ActionPort: '<S27>/Action Port'
+             */
+            datalogge_IfActionSubsystem(&rtb_Merge_p,
+              &datalogger_target_P.CoreSubsys.IfActionSubsystem1);
+
+            /* End of Outputs for SubSystem: '<S22>/If Action Subsystem1' */
+          }
+
+          /* End of If: '<S22>/If1' */
+
+          /* ForEachSliceAssignment generated from: '<S22>/Data' */
+          rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr] = rtb_Merge_p;
         }
 
-        datalogger_target_DW.ADCInterruptCallback_PREV_T =
-          datalogger_target_M->Timing.clockTick2;
-        datalogger_target_DW.ADCInterruptCallback_RESET_ELAP = false;
+        /* End of Outputs for SubSystem: '<S18>/For Each Subsystem' */
 
-        /* Sum: '<S35>/FixPt Sum1' incorporates:
-         *  Constant: '<S35>/FixPt Constant'
-         *  UnitDelay: '<S24>/Output'
+        /* If: '<S18>/If' incorporates:
+         *  Inport: '<S21>/Data_width'
+         *  UnitDelay: '<S20>/Output'
          */
-        datalogger_target_DW.Output_DSTATE +=
-          datalogger_target_P.FixPtConstant_Value;
-
-        /* S-Function (c2802xadc): '<S1>/DC Bus ADC' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.DCBusADC = (AdcaResultRegs.ADCRESULT6);
-        }
-
-        /* S-Function (c2802xadc): '<S8>/I_C' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.I_C = (AdcaResultRegs.ADCRESULT5);
-        }
-
-        /* S-Function (c2802xadc): '<S8>/I_B' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.I_B = (AdccResultRegs.ADCRESULT4);
-        }
-
-        /* S-Function (c2802xadc): '<S8>/I_A' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.I_A = (AdccResultRegs.ADCRESULT3);
-        }
-
-        /* S-Function (c2802xadc): '<S9>/V_C' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.V_C = (AdccResultRegs.ADCRESULT2);
-        }
-
-        /* S-Function (c2802xadc): '<S9>/V_B' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.V_B = (AdccResultRegs.ADCRESULT1);
-        }
-
-        /* S-Function (c2802xadc): '<S9>/V_A' */
-        {
-          /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
-          /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
-          datalogger_target_B.V_A = (AdcbResultRegs.ADCRESULT0);
-        }
-
-        /* If: '<S13>/If' incorporates:
-         *  Inport: '<S16>/Data_width'
-         *  UnitDelay: '<S15>/Output'
-         */
-        if (datalogger_target_DW.Output_DSTATE_e == 0U) {
-          /* Outputs for IfAction SubSystem: '<S13>/Start' incorporates:
-           *  ActionPort: '<S17>/Action Port'
+        if (datalogger_target_DW.Output_DSTATE == 0U) {
+          /* Outputs for IfAction SubSystem: '<S18>/Start' incorporates:
+           *  ActionPort: '<S23>/Action Port'
            */
-          /* SignalConversion generated from: '<S17>/Data_out' incorporates:
-           *  Constant: '<S17>/End'
-           *  Constant: '<S17>/Start'
-           *  Inport: '<S17>/Data'
+          /* SignalConversion generated from: '<S23>/Data_out' incorporates:
+           *  Constant: '<S23>/End'
+           *  Constant: '<S23>/Start'
+           *  Inport: '<S23>/Data'
            */
-          rtb_Merge_h[0] = datalogger_target_P.End_Value;
-          rtb_Merge_h[1] = datalogger_target_P.Start_Value;
-          rtb_Merge_h[2] = datalogger_target_B.V_A;
-          rtb_Merge_h[3] = datalogger_target_B.V_B;
-          rtb_Merge_h[4] = datalogger_target_B.V_C;
-          rtb_Merge_h[5] = datalogger_target_B.I_A;
-          rtb_Merge_h[6] = datalogger_target_B.I_B;
-          rtb_Merge_h[7] = datalogger_target_B.I_C;
-          rtb_Merge_h[8] = datalogger_target_B.DCBusADC;
-          rtb_Merge_h[9] = 0U;
-          rtb_Merge_h[10] = 0U;
-          rtb_Merge_h[11] = 0U;
-          rtb_Merge_h[12] = 0U;
+          rtb_Merge[0] = datalogger_target_P.End_Value;
+          rtb_Merge[1] = datalogger_target_P.Start_Value;
+          for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
+            rtb_Merge[ForEach_itr + 2] =
+              rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr];
+          }
 
-          /* Bias: '<S17>/Bias' */
-          rtb_Merge1 = datalogger_target_ConstB.Width +
+          /* End of SignalConversion generated from: '<S23>/Data_out' */
+
+          /* Bias: '<S23>/Bias' */
+          rtb_Merge_p = datalogger_target_ConstB.Width +
             datalogger_target_P.Bias_Bias_c;
 
-          /* End of Outputs for SubSystem: '<S13>/Start' */
+          /* End of Outputs for SubSystem: '<S18>/Start' */
         } else {
-          /* Outputs for IfAction SubSystem: '<S13>/Data' incorporates:
-           *  ActionPort: '<S16>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S18>/Data' incorporates:
+           *  ActionPort: '<S21>/Action Port'
            */
-          /* SignalConversion generated from: '<S16>/Data_out' incorporates:
-           *  Constant: '<S16>/Start'
-           *  Constant: '<S16>/Start1'
-           *  Inport: '<S16>/Data'
+          /* SignalConversion generated from: '<S21>/Data_out' incorporates:
+           *  Constant: '<S21>/Start'
+           *  Constant: '<S21>/Start1'
+           *  Inport: '<S21>/Data'
            */
-          rtb_Merge_h[0] = datalogger_target_B.V_A;
-          rtb_Merge_h[1] = datalogger_target_B.V_B;
-          rtb_Merge_h[2] = datalogger_target_B.V_C;
-          rtb_Merge_h[3] = datalogger_target_B.I_A;
-          rtb_Merge_h[4] = datalogger_target_B.I_B;
-          rtb_Merge_h[5] = datalogger_target_B.I_C;
-          rtb_Merge_h[6] = datalogger_target_B.DCBusADC;
-          rtb_Merge_h[7] = 0U;
-          rtb_Merge_h[8] = 0U;
-          rtb_Merge_h[9] = 0U;
-          rtb_Merge_h[10] = 0U;
-          rtb_Merge_h[11] = datalogger_target_P.Start_Value_i;
-          rtb_Merge_h[12] = datalogger_target_P.Start1_Value;
-          rtb_Merge1 = datalogger_target_ConstB.Width;
+          for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
+            rtb_Merge[ForEach_itr] = rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr];
+          }
 
-          /* End of Outputs for SubSystem: '<S13>/Data' */
+          rtb_Merge[7] = datalogger_target_P.Start_Value_i;
+          rtb_Merge[8] = datalogger_target_P.Start1_Value;
+
+          /* End of SignalConversion generated from: '<S21>/Data_out' */
+          rtb_Merge_p = datalogger_target_ConstB.Width;
+
+          /* End of Outputs for SubSystem: '<S18>/Data' */
         }
 
-        /* End of If: '<S13>/If' */
+        /* End of If: '<S18>/If' */
 
         /* Outputs for Iterator SubSystem: '<S4>/Serial Transmit' incorporates:
-         *  WhileIterator: '<S14>/While Data Available'
+         *  WhileIterator: '<S19>/While Data Available'
          */
-        /* MultiPortSwitch: '<S14>/Index Vector' */
-        s14_iter = 0;
+        /* MultiPortSwitch: '<S19>/Index Vector' */
+        ForEach_itr = 0;
         do {
-          datalogger_target_B.IndexVector = rtb_Merge_h[s14_iter];
+          datalogger_target_B.IndexVector = rtb_Merge[ForEach_itr];
 
           {
             scia_xmit((char*)&datalogger_target_B.IndexVector, 2, 2);
           }
 
-          rtb_Add = (rtb_Merge1 - s14_iter) - 1U;
-          s14_iter++;
+          rtb_Add = (rtb_Merge_p - ForEach_itr) - 1U;
+          ForEach_itr++;
         } while (rtb_Add != 0U);
 
         /* End of Outputs for SubSystem: '<S4>/Serial Transmit' */
 
-        /* Sum: '<S18>/FixPt Sum1' incorporates:
-         *  Constant: '<S18>/FixPt Constant'
-         *  UnitDelay: '<S15>/Output'
+        /* Sum: '<S24>/FixPt Sum1' incorporates:
+         *  Constant: '<S24>/FixPt Constant'
+         *  UnitDelay: '<S20>/Output'
          */
-        datalogger_target_DW.Output_DSTATE_e +=
-          datalogger_target_P.FixPtConstant_Value_j;
+        datalogger_target_DW.Output_DSTATE +=
+          datalogger_target_P.FixPtConstant_Value;
 
-        /* Gain: '<S1>/Gain2' */
-        rtb_TSamp_idx_0 = (real_T)datalogger_target_P.Gain2_Gain_o *
-          1.4901161193847656E-8;
+        /* Logic: '<S1>/NOT' */
+        datalogger_target_B.NOT = !(datalogger_target_B.RateTransition[2] !=
+          0.0F);
 
-        /* Gain: '<S1>/Gain3' incorporates:
-         *  Bias: '<S1>/Bias'
-         *  Gain: '<S1>/Gain2'
-         *  SignalConversion generated from: '<S1>/Gain2'
-         */
-        rtb_Gain3[0] = (rtb_TSamp_idx_0 * (real_T)datalogger_target_B.I_A +
-                        datalogger_target_P.Bias_Bias) *
-          datalogger_target_P.Gain3_Gain;
-        rtb_Gain3[1] = (rtb_TSamp_idx_0 * (real_T)datalogger_target_B.I_B +
-                        datalogger_target_P.Bias_Bias) *
-          datalogger_target_P.Gain3_Gain;
+        /* S-Function (c280xgpio_do): '<S6>/ReplicaOfSource' */
+        {
+          if (datalogger_target_B.NOT)
+            GpioDataRegs.GPBSET.bit.GPIO33 = 1;
+          else
+            GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;
+        }
 
-        /* Outputs for Atomic SubSystem: '<S1>/Clarke Transform' */
-        /* Gain: '<S3>/one_by_sqrt3' incorporates:
-         *  Sum: '<S3>/a_plus_2b'
-         */
-        rtb_add_b = ((rtb_Gain3[0] + rtb_Gain3[1]) + rtb_Gain3[1]) *
-          datalogger_target_P.one_by_sqrt3_Gain;
+        /* SignalConversion generated from: '<S3>/Phase Current ADC Gain' */
+        rtb_DataTypeConversion[0] = datalogger_target_B.ReplicaOfSource_d;
+        rtb_DataTypeConversion[1] = datalogger_target_B.ReplicaOfSource_i;
 
-        /* End of Outputs for SubSystem: '<S1>/Clarke Transform' */
-
-        /* SampleTimeMath: '<S5>/TSamp'
-         *
-         * About '<S5>/TSamp':
-         *  y = u * K where K = 1 / ( w * Ts )
-         */
-        elapseTime = (real_T)ADCInterruptCallback_ELAPS_T * 5.0E-5 *
-          datalogger_target_P.TSamp_WtEt;
-
-        /* Outputs for Atomic SubSystem: '<S1>/Clarke Transform' */
-        /* Sum: '<S22>/Add1' incorporates:
-         *  AlgorithmDescriptorDelegate generated from: '<S3>/a16'
-         *  Constant: '<S22>/Filter_Constant'
-         *  Constant: '<S22>/One'
-         *  Product: '<S22>/Product'
-         *  Product: '<S22>/Product1'
-         *  UnitDelay: '<S22>/Unit Delay'
-         */
-        datalogger_target_DW.UnitDelay_DSTATE[0] = rtb_Gain3[0] *
-          datalogger_target_P.Filter_Constant_Value +
-          datalogger_target_P.One_Value * datalogger_target_DW.UnitDelay_DSTATE
-          [0];
-
-        /* End of Outputs for SubSystem: '<S1>/Clarke Transform' */
-
-        /* SampleTimeMath: '<S5>/TSamp'
-         *
-         * About '<S5>/TSamp':
-         *  y = u * K where K = 1 / ( w * Ts )
-         */
-        rtb_TSamp_idx_0 = datalogger_target_DW.UnitDelay_DSTATE[0] / elapseTime;
-
-        /* Outputs for Atomic SubSystem: '<S1>/Clarke Transform' */
-        /* Sum: '<S22>/Add1' incorporates:
-         *  AlgorithmDescriptorDelegate generated from: '<S3>/a16'
-         *  Constant: '<S22>/Filter_Constant'
-         *  Constant: '<S22>/One'
-         *  Product: '<S22>/Product'
-         *  Product: '<S22>/Product1'
-         *  UnitDelay: '<S22>/Unit Delay'
-         */
-        datalogger_target_DW.UnitDelay_DSTATE[1] = rtb_add_b *
-          datalogger_target_P.Filter_Constant_Value +
-          datalogger_target_P.One_Value * datalogger_target_DW.UnitDelay_DSTATE
-          [1];
-
-        /* End of Outputs for SubSystem: '<S1>/Clarke Transform' */
-
-        /* SampleTimeMath: '<S5>/TSamp'
-         *
-         * About '<S5>/TSamp':
-         *  y = u * K where K = 1 / ( w * Ts )
-         */
-        elapseTime = datalogger_target_DW.UnitDelay_DSTATE[1] / elapseTime;
-
-        /* Outputs for Atomic SubSystem: '<S1>/Clarke Transform' */
-        /* Sum: '<S1>/Sum' incorporates:
-         *  AlgorithmDescriptorDelegate generated from: '<S3>/a16'
-         *  Gain: '<S1>/Gain1'
-         *  Sum: '<S5>/Diff'
-         *  UnitDelay: '<S5>/UD'
-         *
-         * Block description for '<S5>/Diff':
-         *
-         *  Add in CPU
-         *
-         * Block description for '<S5>/UD':
-         *
-         *  Store in Global RAM
-         */
-        rtb_Sum_idx_0 = -datalogger_target_P.HW_BLDC_RS * rtb_Gain3[0] +
-          (rtb_TSamp_idx_0 - datalogger_target_DW.UD_DSTATE[0]);
-
-        /* End of Outputs for SubSystem: '<S1>/Clarke Transform' */
-
-        /* Gain: '<S7>/one_by_two' */
-        rtb_add_c = datalogger_target_P.one_by_two_Gain * rtb_Sum_idx_0;
-
-        /* Outputs for Atomic SubSystem: '<S1>/Clarke Transform' */
-        /* Gain: '<S7>/sqrt3_by_two' incorporates:
-         *  AlgorithmDescriptorDelegate generated from: '<S3>/a16'
-         *  Gain: '<S1>/Gain1'
-         *  Sum: '<S1>/Sum'
-         *  Sum: '<S5>/Diff'
-         *  UnitDelay: '<S5>/UD'
-         *
-         * Block description for '<S5>/Diff':
-         *
-         *  Add in CPU
-         *
-         * Block description for '<S5>/UD':
-         *
-         *  Store in Global RAM
-         */
-        rtb_add_b = (-datalogger_target_P.HW_BLDC_RS * rtb_add_b + (elapseTime -
-          datalogger_target_DW.UD_DSTATE[1])) *
-          datalogger_target_P.sqrt3_by_two_Gain;
-
-        /* End of Outputs for SubSystem: '<S1>/Clarke Transform' */
-
-        /* Gain: '<S1>/DC Bus Voltage Conditioning' */
+        /* Gain: '<S3>/Phase Current ADC Gain' */
         rtb_AvoidDivisionByZero = (real32_T)
-          datalogger_target_P.DCBusVoltageConditioning_Gain * 4.76837158E-7F *
-          (real32_T)datalogger_target_B.DCBusADC;
+          datalogger_target_P.PhaseCurrentADCGain_Gain * 6.10351562E-5F;
 
-        /* Saturate: '<S12>/Avoid Division By Zero' */
-        if (rtb_AvoidDivisionByZero >
-            datalogger_target_P.AvoidDivisionByZero_UpperSat) {
+        /* Gain: '<S3>/Gain3' incorporates:
+         *  Bias: '<S3>/Bias'
+         *  Gain: '<S3>/Phase Current ADC Gain'
+         */
+        rtb_Gain3_idx_0 = (rtb_AvoidDivisionByZero * (real32_T)
+                           rtb_DataTypeConversion[0] +
+                           datalogger_target_P.Bias_Bias) *
+          datalogger_target_P.Gain3_Gain;
+        rtb_Gain3_idx_1 = (rtb_AvoidDivisionByZero * (real32_T)
+                           rtb_DataTypeConversion[1] +
+                           datalogger_target_P.Bias_Bias) *
+          datalogger_target_P.Gain3_Gain;
+
+        /* Outputs for Atomic SubSystem: '<S7>/Clarke Transform' */
+        /* Gain: '<S7>/Gain1' incorporates:
+         *  AlgorithmDescriptorDelegate generated from: '<S35>/a16'
+         */
+        rtb_Gain1_idx_0 = datalogger_target_P.Gain1_Gain * rtb_Gain3_idx_0;
+
+        /* End of Outputs for SubSystem: '<S7>/Clarke Transform' */
+
+        /* Gain: '<S36>/one_by_two' */
+        rtb_one_by_two = datalogger_target_P.one_by_two_Gain * rtb_Gain1_idx_0;
+
+        /* Outputs for Atomic SubSystem: '<S7>/Clarke Transform' */
+        /* Gain: '<S36>/sqrt3_by_two' incorporates:
+         *  Gain: '<S35>/one_by_sqrt3'
+         *  Gain: '<S7>/Gain1'
+         *  Sum: '<S35>/a_plus_2b'
+         */
+        rtb_AvoidDivisionByZero = ((rtb_Gain3_idx_0 + rtb_Gain3_idx_1) +
+          rtb_Gain3_idx_1) * datalogger_target_P.one_by_sqrt3_Gain *
+          datalogger_target_P.Gain1_Gain * datalogger_target_P.sqrt3_by_two_Gain;
+
+        /* End of Outputs for SubSystem: '<S7>/Clarke Transform' */
+
+        /* Sum: '<S36>/add_b' */
+        rtb_Gain3_idx_1 = rtb_AvoidDivisionByZero - rtb_one_by_two;
+
+        /* Sum: '<S36>/add_c' */
+        rtb_add_c = (0.0F - rtb_one_by_two) - rtb_AvoidDivisionByZero;
+
+        /* Gain: '<S3>/DC Bus Voltage ADC Gain' */
+        rtb_one_by_two = (real32_T)datalogger_target_P.DCBusVoltageADCGain_Gain *
+          0.001953125F * (real32_T)datalogger_target_B.ReplicaOfSource_p;
+
+        /* If: '<S30>/If Enable Two Arm Modulation' incorporates:
+         *  DataTypeConversion: '<S1>/Data Type Conversion'
+         */
+        if (datalogger_target_B.RateTransition[0] != 0.0F) {
+          /* Outputs for IfAction SubSystem: '<S30>/Compute Two Arm Modulation Offset' incorporates:
+           *  ActionPort: '<S31>/Action Port'
+           */
+          /* If: '<S31>/If' incorporates:
+           *  DataTypeConversion: '<S1>/Data Type Conversion1'
+           */
+          if (datalogger_target_B.RateTransition[1] != 0.0F) {
+            /* Outputs for IfAction SubSystem: '<S31>/If Upper Switch Always Conduct' incorporates:
+             *  ActionPort: '<S34>/Action Port'
+             */
+            /* Sum: '<S34>/Add' incorporates:
+             *  Gain: '<S34>/Gain'
+             *  MinMax: '<S34>/Max'
+             */
+            rtb_AvoidDivisionByZero = datalogger_target_P.Gain_Gain *
+              rtb_one_by_two - fmaxf(fmaxf(rtb_Gain1_idx_0, rtb_Gain3_idx_1),
+              rtb_add_c);
+
+            /* End of Outputs for SubSystem: '<S31>/If Upper Switch Always Conduct' */
+          } else {
+            /* Outputs for IfAction SubSystem: '<S31>/If Lower Switch Always Conduct' incorporates:
+             *  ActionPort: '<S33>/Action Port'
+             */
+            /* Sum: '<S33>/Add' incorporates:
+             *  Gain: '<S33>/Gain'
+             *  MinMax: '<S33>/Max'
+             */
+            rtb_AvoidDivisionByZero = (0.0F - fminf(fminf(rtb_Gain1_idx_0,
+              rtb_Gain3_idx_1), rtb_add_c)) - datalogger_target_P.Gain_Gain_f *
+              rtb_one_by_two;
+
+            /* End of Outputs for SubSystem: '<S31>/If Lower Switch Always Conduct' */
+          }
+
+          /* End of If: '<S31>/If' */
+          /* End of Outputs for SubSystem: '<S30>/Compute Two Arm Modulation Offset' */
+        } else {
+          /* Outputs for IfAction SubSystem: '<S30>/Zero Offset' incorporates:
+           *  ActionPort: '<S32>/Action Port'
+           */
+          /* SignalConversion generated from: '<S32>/Out1' */
+          rtb_AvoidDivisionByZero = 0.0F;
+
+          /* End of Outputs for SubSystem: '<S30>/Zero Offset' */
+        }
+
+        /* End of If: '<S30>/If Enable Two Arm Modulation' */
+
+        /* Sum: '<S30>/Add' */
+        rtb_Gain3_idx_0 = rtb_Gain1_idx_0 + rtb_AvoidDivisionByZero;
+        rtb_Gain3_idx_1 += rtb_AvoidDivisionByZero;
+        rtb_Gain1_idx_0 = rtb_add_c + rtb_AvoidDivisionByZero;
+
+        /* Saturate: '<S29>/Avoid Division By Zero' */
+        if (rtb_one_by_two > datalogger_target_P.AvoidDivisionByZero_UpperSat) {
           rtb_AvoidDivisionByZero =
             datalogger_target_P.AvoidDivisionByZero_UpperSat;
-        } else if (rtb_AvoidDivisionByZero <
+        } else if (rtb_one_by_two <
                    datalogger_target_P.AvoidDivisionByZero_LowerSat) {
           rtb_AvoidDivisionByZero =
             datalogger_target_P.AvoidDivisionByZero_LowerSat;
+        } else {
+          rtb_AvoidDivisionByZero = rtb_one_by_two;
         }
 
-        /* End of Saturate: '<S12>/Avoid Division By Zero' */
+        /* End of Saturate: '<S29>/Avoid Division By Zero' */
 
-        /* Product: '<S12>/Divide' incorporates:
-         *  Sum: '<S7>/add_b'
-         *  Sum: '<S7>/add_c'
+        /* Bias: '<S29>/Bias' incorporates:
+         *  Product: '<S29>/Divide'
          */
-        rtb_Gain3[0] = rtb_Sum_idx_0 / rtb_AvoidDivisionByZero;
-        rtb_Gain3[1] = (rtb_add_b - rtb_add_c) / rtb_AvoidDivisionByZero;
-        rtb_Gain3[2] = ((0.0 - rtb_add_c) - rtb_add_b) / rtb_AvoidDivisionByZero;
+        rtb_Gain3_idx_0 = rtb_Gain3_idx_0 / rtb_AvoidDivisionByZero +
+          datalogger_target_P.Bias_Bias_a;
 
-        /* Gain: '<S12>/Gain2' incorporates:
-         *  Bias: '<S12>/Bias'
+        /* Saturate: '<S29>/Saturation' */
+        if (rtb_Gain3_idx_0 > datalogger_target_P.Saturation_UpperSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_UpperSat;
+        } else if (rtb_Gain3_idx_0 < datalogger_target_P.Saturation_LowerSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_LowerSat;
+        }
+
+        /* DataTypeConversion: '<S29>/Data Type Conversion' incorporates:
+         *  Gain: '<S29>/Gain2'
          */
-        rtb_Gain3[0] = (rtb_Gain3[0] + datalogger_target_P.Bias_Bias_a) *
-          datalogger_target_P.Gain2_Gain;
-        rtb_Gain3[1] = (rtb_Gain3[1] + datalogger_target_P.Bias_Bias_a) *
-          datalogger_target_P.Gain2_Gain;
-        rtb_Gain3[2] = (rtb_Gain3[2] + datalogger_target_P.Bias_Bias_a) *
-          datalogger_target_P.Gain2_Gain;
+        rtb_Gain3_idx_0 *= datalogger_target_P.Gain2_Gain;
+        if (rtb_Gain3_idx_0 < 65536.0F) {
+          if (rtb_Gain3_idx_0 >= 0.0F) {
+            rtb_DataTypeConversion[0] = (uint16_T)rtb_Gain3_idx_0;
+          } else {
+            rtb_DataTypeConversion[0] = 0U;
+          }
+        } else {
+          rtb_DataTypeConversion[0] = MAX_uint16_T;
+        }
 
-        /* S-Function (c2802xpwm): '<S10>/ePWM' */
+        /* Bias: '<S29>/Bias' incorporates:
+         *  Product: '<S29>/Divide'
+         */
+        rtb_Gain3_idx_0 = rtb_Gain3_idx_1 / rtb_AvoidDivisionByZero +
+          datalogger_target_P.Bias_Bias_a;
+
+        /* Saturate: '<S29>/Saturation' */
+        if (rtb_Gain3_idx_0 > datalogger_target_P.Saturation_UpperSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_UpperSat;
+        } else if (rtb_Gain3_idx_0 < datalogger_target_P.Saturation_LowerSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_LowerSat;
+        }
+
+        /* DataTypeConversion: '<S29>/Data Type Conversion' incorporates:
+         *  Gain: '<S29>/Gain2'
+         */
+        rtb_Gain3_idx_0 *= datalogger_target_P.Gain2_Gain;
+        if (rtb_Gain3_idx_0 < 65536.0F) {
+          if (rtb_Gain3_idx_0 >= 0.0F) {
+            rtb_DataTypeConversion[1] = (uint16_T)rtb_Gain3_idx_0;
+          } else {
+            rtb_DataTypeConversion[1] = 0U;
+          }
+        } else {
+          rtb_DataTypeConversion[1] = MAX_uint16_T;
+        }
+
+        /* Bias: '<S29>/Bias' incorporates:
+         *  Product: '<S29>/Divide'
+         */
+        rtb_Gain3_idx_0 = rtb_Gain1_idx_0 / rtb_AvoidDivisionByZero +
+          datalogger_target_P.Bias_Bias_a;
+
+        /* Saturate: '<S29>/Saturation' */
+        if (rtb_Gain3_idx_0 > datalogger_target_P.Saturation_UpperSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_UpperSat;
+        } else if (rtb_Gain3_idx_0 < datalogger_target_P.Saturation_LowerSat) {
+          rtb_Gain3_idx_0 = datalogger_target_P.Saturation_LowerSat;
+        }
+
+        /* DataTypeConversion: '<S29>/Data Type Conversion' incorporates:
+         *  Gain: '<S29>/Gain2'
+         */
+        rtb_Gain3_idx_0 *= datalogger_target_P.Gain2_Gain;
+        if (rtb_Gain3_idx_0 < 65536.0F) {
+          if (rtb_Gain3_idx_0 >= 0.0F) {
+            rtb_DataTypeConversion[2] = (uint16_T)rtb_Gain3_idx_0;
+          } else {
+            rtb_DataTypeConversion[2] = 0U;
+          }
+        } else {
+          rtb_DataTypeConversion[2] = MAX_uint16_T;
+        }
+
+        /* S-Function (c2802xpwm): '<S37>/ReplicaOfSource' */
 
         /*-- Update CMPA value for ePWM1 --*/
         {
-          EPwm1Regs.CMPA.bit.CMPA = (uint16_T)(rtb_Gain3[0]);
+          EPwm1Regs.CMPA.bit.CMPA = (uint16_T)(rtb_DataTypeConversion[0]);
         }
 
-        /* S-Function (c2802xpwm): '<S10>/ePWM1' */
+        /* S-Function (c2802xpwm): '<S38>/ReplicaOfSource' */
 
         /*-- Update CMPA value for ePWM4 --*/
         {
-          EPwm4Regs.CMPA.bit.CMPA = (uint16_T)(rtb_Gain3[1]);
+          EPwm4Regs.CMPA.bit.CMPA = (uint16_T)(rtb_DataTypeConversion[1]);
         }
 
-        /* S-Function (c2802xpwm): '<S10>/ePWM2' */
+        /* S-Function (c2802xpwm): '<S39>/ReplicaOfSource' */
 
         /*-- Update CMPA value for ePWM2 --*/
         {
-          EPwm2Regs.CMPA.bit.CMPA = (uint16_T)(rtb_Gain3[2]);
+          EPwm2Regs.CMPA.bit.CMPA = (uint16_T)(rtb_DataTypeConversion[2]);
         }
 
-        /* Switch: '<S36>/FixPt Switch' */
+        /* Switch: '<S25>/FixPt Switch' */
         if (datalogger_target_DW.Output_DSTATE >
             datalogger_target_P.CounterLimited_uplimit) {
-          /* Sum: '<S35>/FixPt Sum1' incorporates:
-           *  Constant: '<S36>/Constant'
-           *  UnitDelay: '<S24>/Output'
+          /* Sum: '<S24>/FixPt Sum1' incorporates:
+           *  Constant: '<S25>/Constant'
+           *  UnitDelay: '<S20>/Output'
            */
           datalogger_target_DW.Output_DSTATE =
-            datalogger_target_P.Constant_Value_k;
-        }
-
-        /* End of Switch: '<S36>/FixPt Switch' */
-
-        /* Switch: '<S19>/FixPt Switch' */
-        if (datalogger_target_DW.Output_DSTATE_e >
-            datalogger_target_P.CounterLimited_uplimit_k) {
-          /* Sum: '<S18>/FixPt Sum1' incorporates:
-           *  Constant: '<S19>/Constant'
-           *  UnitDelay: '<S15>/Output'
-           */
-          datalogger_target_DW.Output_DSTATE_e =
             datalogger_target_P.Constant_Value_m;
         }
 
-        /* End of Switch: '<S19>/FixPt Switch' */
-
-        /* Update for UnitDelay: '<S5>/UD'
-         *
-         * Block description for '<S5>/UD':
-         *
-         *  Store in Global RAM
-         */
-        datalogger_target_DW.UD_DSTATE[0] = rtb_TSamp_idx_0;
-        datalogger_target_DW.UD_DSTATE[1] = elapseTime;
+        /* End of Switch: '<S25>/FixPt Switch' */
       }
 
-      /* End of Outputs for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
+      /* End of Outputs for S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' */
     }
   }
 }
 
-/* Hardware Interrupt Block: '<Root>/C28x Hardware Interrupt ' */
+/* Hardware Interrupt Block: '<Root>/ReplicaOfSource' */
 void isr_int9pie1_task_fcn(void)
 {
   if (1 == runModel) {
     /* Call the system: <Root>/SCI Receive Interrupt Callback */
     {
-      /* S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
+      /* S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' */
 
       /* Output and update for function-call system: '<Root>/SCI Receive Interrupt Callback' */
 
-      /* S-Function (c28xsci_rx): '<S2>/SCI Receive' */
+      /* S-Function (c28xsci_rx): '<S40>/ReplicaOfSource' */
       {
         int i;
         int errFlg = NOERROR;
@@ -513,34 +566,31 @@ void isr_int9pie1_task_fcn(void)
         }
 
         /* End of Getting Data Tail */
-        memcpy( &datalogger_target_B.SCIReceive[0], recbuff, 6);
+        memcpy( &datalogger_target_B.ReplicaOfSource[0], recbuff, 6);
        RXERRA:
         asm(" NOP");
       }
 
-      /* Logic: '<S2>/NOT' */
-      datalogger_target_B.NOT = !(datalogger_target_B.SCIReceive[2] != 0.0F);
+      /* DataTypeConversion: '<S40>/DTC_output_1' */
+      datalogger_target_B.DTC_output_1[0] = datalogger_target_B.ReplicaOfSource
+        [0];
+      datalogger_target_B.DTC_output_1[1] = datalogger_target_B.ReplicaOfSource
+        [1];
+      datalogger_target_B.DTC_output_1[2] = datalogger_target_B.ReplicaOfSource
+        [2];
 
-      /* S-Function (c280xgpio_do): '<S2>/Digital Output' */
-      {
-        if (datalogger_target_B.NOT)
-          GpioDataRegs.GPBSET.bit.GPIO33 = 1;
-        else
-          GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;
-      }
-
-      /* End of Outputs for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
+      /* End of Outputs for S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' */
 
       /* RateTransition: '<Root>/Rate Transition' */
       datalogger_target_DW.RateTransition_Buffer
         [(datalogger_target_DW.RateTransition_ActiveBufIdx == 0) * 3] =
-        datalogger_target_B.SCIReceive[0];
+        datalogger_target_B.DTC_output_1[0];
       datalogger_target_DW.RateTransition_Buffer[1 +
         (datalogger_target_DW.RateTransition_ActiveBufIdx == 0) * 3] =
-        datalogger_target_B.SCIReceive[1];
+        datalogger_target_B.DTC_output_1[1];
       datalogger_target_DW.RateTransition_Buffer[2 +
         (datalogger_target_DW.RateTransition_ActiveBufIdx == 0) * 3] =
-        datalogger_target_B.SCIReceive[2];
+        datalogger_target_B.DTC_output_1[2];
       datalogger_target_DW.RateTransition_ActiveBufIdx =
         (datalogger_target_DW.RateTransition_ActiveBufIdx == 0);
     }
@@ -579,39 +629,32 @@ static void rate_monotonic_scheduler(void)
   }
 }
 
+/*
+ * Output and update for action system:
+ *    '<S22>/If Action Subsystem'
+ *    '<S22>/If Action Subsystem1'
+ */
+void datalogge_IfActionSubsystem(uint16_T *rty_Out1,
+  P_IfActionSubsystem_datalogge_T *localP)
+{
+  /* SignalConversion generated from: '<S26>/Out1' incorporates:
+   *  Constant: '<S26>/Constant'
+   */
+  *rty_Out1 = localP->Constant_Value;
+}
+
 /* Model step function for TID0 */
 void datalogger_target_step0(void)     /* Sample time: [5.0E-5s, 0.0s] */
 {
   {                                    /* Sample time: [5.0E-5s, 0.0s] */
     rate_monotonic_scheduler();
   }
-
-  /* Update absolute time */
-  /* The "clockTick0" counts the number of times the code of this task has
-   * been executed. The resolution of this integer timer is 5.0E-5, which is the step size
-   * of the task. Size of "clockTick0" ensures timer will not overflow during the
-   * application lifespan selected.
-   */
-  datalogger_target_M->Timing.clockTick0++;
-
-  {
-    /* Base rate updates double buffers of absolute time for
-       asynchronous task. Double buffers are used to ensure
-       data integrity when asynchronous task reads absolute
-       time.
-       -- rtmL2HLastBufWr is the buffer index that is written last.
-     */
-    boolean_T bufIdx = !datalogger_target_M->Timing.rtmL2HLastBufWr;
-    datalogger_target_M->Timing.rtmL2HDbBufClockTick[bufIdx] =
-      datalogger_target_M->Timing.clockTick0;
-    datalogger_target_M->Timing.rtmL2HLastBufWr = bufIdx;
-  }
 }
 
 /* Model step function for TID1 */
 void datalogger_target_step1(void)     /* Sample time: [1.0s, 0.0s] */
 {
-  /* S-Function (c280xgpio_do): '<Root>/Red LED' incorporates:
+  /* S-Function (c280xgpio_do): '<Root>/ReplicaOfSource1' incorporates:
    *  Constant: '<Root>/Constant'
    */
   {
@@ -622,7 +665,7 @@ void datalogger_target_step1(void)     /* Sample time: [1.0s, 0.0s] */
 /* Model initialize function */
 void datalogger_target_initialize(void)
 {
-  /* Start for S-Function (c280xgpio_do): '<Root>/Red LED' incorporates:
+  /* Start for S-Function (c280xgpio_do): '<Root>/ReplicaOfSource1' incorporates:
    *  Constant: '<Root>/Constant'
    */
   EALLOW;
@@ -638,70 +681,12 @@ void datalogger_target_initialize(void)
   datalogger_target_DW.RateTransition_Buffer[2] =
     datalogger_target_P.RateTransition_InitialCondition;
 
-  /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' incorporates:
+  /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' incorporates:
    *  SubSystem: '<Root>/ADC Interrupt Callback'
    */
   /* System initialize for function-call system: '<Root>/ADC Interrupt Callback' */
 
-  /* Asynchronous task reads absolute time. Data (absolute time)
-     transfers from low priority task (base rate) to high priority
-     task (asynchronous rate). Double buffers are used to ensure
-     data integrity.
-     -- rtmL2HLastBufWr is the buffer index that is written last.
-   */
-  datalogger_target_M->Timing.clockTick2 =
-    datalogger_target_M->Timing.rtmL2HDbBufClockTick
-    [datalogger_target_M->Timing.rtmL2HLastBufWr];
-
-  /* Start for S-Function (c2802xadc): '<S1>/DC Bus ADC' */
-  if (MW_adcAInitFlag == 0) {
-    InitAdcA();
-    MW_adcAInitFlag = 1;
-  }
-
-  config_ADCA_SOC6 ();
-
-  /* Start for S-Function (c2802xadc): '<S8>/I_C' */
-  if (MW_adcAInitFlag == 0) {
-    InitAdcA();
-    MW_adcAInitFlag = 1;
-  }
-
-  config_ADCA_SOC5 ();
-
-  /* Start for S-Function (c2802xadc): '<S8>/I_B' */
-  if (MW_adcCInitFlag == 0) {
-    InitAdcC();
-    MW_adcCInitFlag = 1;
-  }
-
-  config_ADCC_SOC4 ();
-
-  /* Start for S-Function (c2802xadc): '<S8>/I_A' */
-  if (MW_adcCInitFlag == 0) {
-    InitAdcC();
-    MW_adcCInitFlag = 1;
-  }
-
-  config_ADCC_SOC3 ();
-
-  /* Start for S-Function (c2802xadc): '<S9>/V_C' */
-  if (MW_adcCInitFlag == 0) {
-    InitAdcC();
-    MW_adcCInitFlag = 1;
-  }
-
-  config_ADCC_SOC2 ();
-
-  /* Start for S-Function (c2802xadc): '<S9>/V_B' */
-  if (MW_adcCInitFlag == 0) {
-    InitAdcC();
-    MW_adcCInitFlag = 1;
-  }
-
-  config_ADCC_SOC1 ();
-
-  /* Start for S-Function (c2802xadc): '<S9>/V_A' */
+  /* Start for S-Function (c2802xadc): '<S15>/ReplicaOfSource' */
   if (MW_adcBInitFlag == 0) {
     InitAdcB();
     MW_adcBInitFlag = 1;
@@ -709,7 +694,61 @@ void datalogger_target_initialize(void)
 
   config_ADCB_SOC0 ();
 
-  /* Start for S-Function (c2802xpwm): '<S10>/ePWM' */
+  /* Start for S-Function (c2802xadc): '<S16>/ReplicaOfSource' */
+  if (MW_adcCInitFlag == 0) {
+    InitAdcC();
+    MW_adcCInitFlag = 1;
+  }
+
+  config_ADCC_SOC1 ();
+
+  /* Start for S-Function (c2802xadc): '<S17>/ReplicaOfSource' */
+  if (MW_adcCInitFlag == 0) {
+    InitAdcC();
+    MW_adcCInitFlag = 1;
+  }
+
+  config_ADCC_SOC2 ();
+
+  /* Start for S-Function (c2802xadc): '<S12>/ReplicaOfSource' */
+  if (MW_adcCInitFlag == 0) {
+    InitAdcC();
+    MW_adcCInitFlag = 1;
+  }
+
+  config_ADCC_SOC3 ();
+
+  /* Start for S-Function (c2802xadc): '<S13>/ReplicaOfSource' */
+  if (MW_adcCInitFlag == 0) {
+    InitAdcC();
+    MW_adcCInitFlag = 1;
+  }
+
+  config_ADCC_SOC4 ();
+
+  /* Start for S-Function (c2802xadc): '<S14>/ReplicaOfSource' */
+  if (MW_adcAInitFlag == 0) {
+    InitAdcA();
+    MW_adcAInitFlag = 1;
+  }
+
+  config_ADCA_SOC5 ();
+
+  /* Start for S-Function (c2802xadc): '<S9>/ReplicaOfSource' */
+  if (MW_adcAInitFlag == 0) {
+    InitAdcA();
+    MW_adcAInitFlag = 1;
+  }
+
+  config_ADCA_SOC6 ();
+
+  /* Start for S-Function (c280xgpio_do): '<S6>/ReplicaOfSource' */
+  EALLOW;
+  GpioCtrlRegs.GPBMUX1.all &= 0xFFFFFFF3;
+  GpioCtrlRegs.GPBDIR.all |= 0x2;
+  EDIS;
+
+  /* Start for S-Function (c2802xpwm): '<S37>/ReplicaOfSource' */
 
   /*** Initialize ePWM1 modules ***/
   {
@@ -931,7 +970,7 @@ void datalogger_target_initialize(void)
     EDIS;
   }
 
-  /* Start for S-Function (c2802xpwm): '<S10>/ePWM1' */
+  /* Start for S-Function (c2802xpwm): '<S38>/ReplicaOfSource' */
 
   /*** Initialize ePWM4 modules ***/
   {
@@ -1153,7 +1192,7 @@ void datalogger_target_initialize(void)
     EDIS;
   }
 
-  /* Start for S-Function (c2802xpwm): '<S10>/ePWM2' */
+  /* Start for S-Function (c2802xpwm): '<S39>/ReplicaOfSource' */
 
   /*** Initialize ePWM2 modules ***/
   {
@@ -1380,92 +1419,35 @@ void datalogger_target_initialize(void)
     EDIS;
   }
 
-  /* InitializeConditions for Sum: '<S35>/FixPt Sum1' incorporates:
-   *  UnitDelay: '<S24>/Output'
+  /* InitializeConditions for Sum: '<S24>/FixPt Sum1' incorporates:
+   *  UnitDelay: '<S20>/Output'
    */
   datalogger_target_DW.Output_DSTATE =
     datalogger_target_P.Output_InitialCondition;
 
-  /* InitializeConditions for Sum: '<S18>/FixPt Sum1' incorporates:
-   *  UnitDelay: '<S15>/Output'
-   */
-  datalogger_target_DW.Output_DSTATE_e =
-    datalogger_target_P.Output_InitialCondition_a;
-
-  /* InitializeConditions for UnitDelay: '<S22>/Unit Delay' */
-  datalogger_target_DW.UnitDelay_DSTATE[0] =
-    datalogger_target_P.UnitDelay_InitialCondition;
-
-  /* InitializeConditions for UnitDelay: '<S5>/UD'
-   *
-   * Block description for '<S5>/UD':
-   *
-   *  Store in Global RAM
-   */
-  datalogger_target_DW.UD_DSTATE[0] =
-    datalogger_target_P.DiscreteDerivative_ICPrevScaled;
-
-  /* InitializeConditions for UnitDelay: '<S22>/Unit Delay' */
-  datalogger_target_DW.UnitDelay_DSTATE[1] =
-    datalogger_target_P.UnitDelay_InitialCondition;
-
-  /* InitializeConditions for UnitDelay: '<S5>/UD'
-   *
-   * Block description for '<S5>/UD':
-   *
-   *  Store in Global RAM
-   */
-  datalogger_target_DW.UD_DSTATE[1] =
-    datalogger_target_P.DiscreteDerivative_ICPrevScaled;
-
-  /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' incorporates:
+  /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' incorporates:
    *  SubSystem: '<Root>/SCI Receive Interrupt Callback'
    */
 
   /* System initialize for function-call system: '<Root>/SCI Receive Interrupt Callback' */
 
-  /* Start for S-Function (c28xsci_rx): '<S2>/SCI Receive' */
+  /* Start for S-Function (c28xsci_rx): '<S40>/ReplicaOfSource' */
 
-  /* Initialize datalogger_target_B.SCIReceive[0] */
+  /* Initialize datalogger_target_B.ReplicaOfSource[0] */
   {
-    datalogger_target_B.SCIReceive[0] = (real32_T)0.0;
-    datalogger_target_B.SCIReceive[1] = (real32_T)0.0;
-    datalogger_target_B.SCIReceive[2] = (real32_T)0.0;
+    datalogger_target_B.ReplicaOfSource[0] = (real32_T)0.0;
+    datalogger_target_B.ReplicaOfSource[1] = (real32_T)0.0;
+    datalogger_target_B.ReplicaOfSource[2] = (real32_T)0.0;
   }
 
-  /* Start for S-Function (c280xgpio_do): '<S2>/Digital Output' */
-  EALLOW;
-  GpioCtrlRegs.GPBMUX1.all &= 0xFFFFFFF3;
-  GpioCtrlRegs.GPBDIR.all |= 0x2;
-  EDIS;
-
-  /* SystemInitialize for S-Function (c28xsci_rx): '<S2>/SCI Receive' incorporates:
+  /* SystemInitialize for DataTypeConversion: '<S40>/DTC_output_1' incorporates:
    *  Outport: '<S2>/Commanded Value'
    */
-  datalogger_target_B.SCIReceive[0] = datalogger_target_P.CommandedValue_Y0;
-  datalogger_target_B.SCIReceive[1] = datalogger_target_P.CommandedValue_Y0;
-  datalogger_target_B.SCIReceive[2] = datalogger_target_P.CommandedValue_Y0;
+  datalogger_target_B.DTC_output_1[0] = datalogger_target_P.CommandedValue_Y0;
+  datalogger_target_B.DTC_output_1[1] = datalogger_target_P.CommandedValue_Y0;
+  datalogger_target_B.DTC_output_1[2] = datalogger_target_P.CommandedValue_Y0;
 
-  /* End of SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
-
-  /* Enable for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' incorporates:
-   *  SubSystem: '<Root>/ADC Interrupt Callback'
-   */
-
-  /* Enable for function-call system: '<Root>/ADC Interrupt Callback' */
-
-  /* Asynchronous task reads absolute time. Data (absolute time)
-     transfers from low priority task (base rate) to high priority
-     task (asynchronous rate). Double buffers are used to ensure
-     data integrity.
-     -- rtmL2HLastBufWr is the buffer index that is written last.
-   */
-  datalogger_target_M->Timing.clockTick2 =
-    datalogger_target_M->Timing.rtmL2HDbBufClockTick
-    [datalogger_target_M->Timing.rtmL2HLastBufWr];
-  datalogger_target_DW.ADCInterruptCallback_RESET_ELAP = true;
-
-  /* End of Enable for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt ' */
+  /* End of SystemInitialize for S-Function (c28xisr_c2000): '<Root>/ReplicaOfSource' */
 }
 
 /* Model terminate function */
