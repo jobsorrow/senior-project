@@ -29,6 +29,8 @@
 *.hex
 *.dep
 *.obj
+*.d
+*.asm
 
 # playground and unrelated
 playground.*

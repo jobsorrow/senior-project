@@ -7,26 +7,6 @@
 #include "datalogger_target_private.h"
 #include "MW_c28xAnalogSubsystem.h"
 
-void config_ADCA_SOC6()
-{
-  EALLOW;
-  AdcaRegs.ADCSOC6CTL.bit.CHSEL = 6;   /* Set SOC6 channel select to ADCIN6*/
-  AdcaRegs.ADCSOC6CTL.bit.TRIGSEL = 5;
-  AdcaRegs.ADCSOC6CTL.bit.ACQPS = 7.0;
-                                /* Set SOC6 S/H Window to 8.0 ADC Clock Cycles*/
-  AdcaRegs.ADCINTSEL1N2.bit.INT1E = 1; /* Enabled/Disable ADCINT1 interrupt*/
-  AdcaRegs.ADCINTSEL1N2.bit.INT1SEL = 6;/* Setup EOC6 to trigger ADCINT1*/
-  AdcaRegs.ADCINTSEL1N2.bit.INT1CONT = 1;
-                                     /* Enable/Disable ADCINT1 Continuous mode*/
-  AdcaRegs.ADCINTSOCSEL1.bit.SOC6 = 0;
-                                   /* SOCx No ADCINT Interrupt Trigger Select.*/
-  AdcaRegs.ADCOFFTRIM.bit.OFFTRIM = AdcaRegs.ADCOFFTRIM.bit.OFFTRIM;/* Set Offset Error Correctino Value*/
-  AdcaRegs.ADCCTL1.bit.INTPULSEPOS = 1;
-                                /* Late interrupt pulse trips AdcResults latch*/
-  AdcaRegs.ADCSOCPRICTL.bit.SOCPRIORITY = 0;/* All in round robin mode SOC Priority*/
-  EDIS;
-}
-
 void config_ADCC_SOC3()
 {
   EALLOW;
@@ -120,6 +100,26 @@ void config_ADCC_SOC2()
   AdccRegs.ADCCTL1.bit.INTPULSEPOS = 1;
                                 /* Late interrupt pulse trips AdcResults latch*/
   AdccRegs.ADCSOCPRICTL.bit.SOCPRIORITY = 0;/* All in round robin mode SOC Priority*/
+  EDIS;
+}
+
+void config_ADCA_SOC6()
+{
+  EALLOW;
+  AdcaRegs.ADCSOC6CTL.bit.CHSEL = 6;   /* Set SOC6 channel select to ADCIN6*/
+  AdcaRegs.ADCSOC6CTL.bit.TRIGSEL = 5;
+  AdcaRegs.ADCSOC6CTL.bit.ACQPS = 7.0;
+                                /* Set SOC6 S/H Window to 8.0 ADC Clock Cycles*/
+  AdcaRegs.ADCINTSEL1N2.bit.INT1E = 1; /* Enabled/Disable ADCINT1 interrupt*/
+  AdcaRegs.ADCINTSEL1N2.bit.INT1SEL = 6;/* Setup EOC6 to trigger ADCINT1*/
+  AdcaRegs.ADCINTSEL1N2.bit.INT1CONT = 1;
+                                     /* Enable/Disable ADCINT1 Continuous mode*/
+  AdcaRegs.ADCINTSOCSEL1.bit.SOC6 = 0;
+                                   /* SOCx No ADCINT Interrupt Trigger Select.*/
+  AdcaRegs.ADCOFFTRIM.bit.OFFTRIM = AdcaRegs.ADCOFFTRIM.bit.OFFTRIM;/* Set Offset Error Correctino Value*/
+  AdcaRegs.ADCCTL1.bit.INTPULSEPOS = 1;
+                                /* Late interrupt pulse trips AdcResults latch*/
+  AdcaRegs.ADCSOCPRICTL.bit.SOCPRIORITY = 0;/* All in round robin mode SOC Priority*/
   EDIS;
 }
 

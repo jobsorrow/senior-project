@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.25
+ * Model version                  : 1.28
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 12:58:16 2022
+ * C/C++ source code generated on : Wed Feb 16 20:09:56 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -26,10 +26,10 @@
 
 /* Model Code Variants */
 
-/* Parameters for system: '<S22>/If Action Subsystem' */
+/* Parameters for system: '<S26>/If Action Subsystem' */
 typedef struct P_IfActionSubsystem_datalogge_T_ P_IfActionSubsystem_datalogge_T;
 
-/* Parameters for system: '<S18>/For Each Subsystem' */
+/* Parameters for system: '<S22>/For Each Subsystem' */
 typedef struct P_CoreSubsys_datalogger_targe_T_ P_CoreSubsys_datalogger_targe_T;
 
 /* Parameters (default storage) */
