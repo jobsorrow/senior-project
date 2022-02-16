@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.24
+ * Model version                  : 1.25
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
+ * C/C++ source code generated on : Wed Feb 16 12:58:16 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -37,6 +37,7 @@
 
 #include "datalogger_target_types.h"
 #include "MW_target_hardware_resources.h"
+#include "mw_C28x_s16.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
@@ -73,11 +74,11 @@ typedef struct {
   uint16_T ReplicaOfSource_o;          /* '<S15>/ReplicaOfSource' */
   uint16_T ReplicaOfSource_b;          /* '<S16>/ReplicaOfSource' */
   uint16_T ReplicaOfSource_e;          /* '<S17>/ReplicaOfSource' */
-  uint16_T ReplicaOfSource_d;          /* '<S12>/ReplicaOfSource' */
-  uint16_T ReplicaOfSource_i;          /* '<S13>/ReplicaOfSource' */
-  uint16_T ReplicaOfSource_dp;         /* '<S14>/ReplicaOfSource' */
   uint16_T ReplicaOfSource_p;          /* '<S9>/ReplicaOfSource' */
   uint16_T IndexVector;                /* '<S19>/Index Vector' */
+  int16_T ReplicaOfSource_d;           /* '<S12>/ReplicaOfSource' */
+  int16_T ReplicaOfSource_i;           /* '<S13>/ReplicaOfSource' */
+  int16_T ReplicaOfSource_dp;          /* '<S14>/ReplicaOfSource' */
   boolean_T NOT;                       /* '<S1>/NOT' */
 } B_datalogger_target_T;
 
@@ -165,6 +166,15 @@ struct P_datalogger_target_T_ {
                           /* Computed Parameter: RateTransition_InitialCondition
                            * Referenced by: '<Root>/Rate Transition'
                            */
+  int16_T Bias_Bias_p;                 /* Computed Parameter: Bias_Bias_p
+                                        * Referenced by: '<S12>/Bias'
+                                        */
+  int16_T Bias_Bias_g;                 /* Computed Parameter: Bias_Bias_g
+                                        * Referenced by: '<S13>/Bias'
+                                        */
+  int16_T Bias_Bias_c;                 /* Computed Parameter: Bias_Bias_c
+                                        * Referenced by: '<S14>/Bias'
+                                        */
   uint16_T PhaseCurrentADCGain_Gain;
                                  /* Computed Parameter: PhaseCurrentADCGain_Gain
                                   * Referenced by: '<S3>/Phase Current ADC Gain'
@@ -182,7 +192,7 @@ struct P_datalogger_target_T_ {
   uint16_T Start_Value;                /* Computed Parameter: Start_Value
                                         * Referenced by: '<S23>/Start'
                                         */
-  uint16_T Bias_Bias_c;                /* Computed Parameter: Bias_Bias_c
+  uint16_T Bias_Bias_cx;               /* Computed Parameter: Bias_Bias_cx
                                         * Referenced by: '<S23>/Bias'
                                         */
   uint16_T Start_Value_i;              /* Computed Parameter: Start_Value_i
@@ -253,9 +263,6 @@ extern volatile boolean_T runModel;
  * Block '<S35>/Data Type Duplicate' : Unused code path elimination
  * Block '<S36>/Data Type Duplicate' : Unused code path elimination
  * Block '<S9>/DTC_output_1' : Eliminate redundant data type conversion
- * Block '<S12>/DTC_output_1' : Eliminate redundant data type conversion
- * Block '<S13>/DTC_output_1' : Eliminate redundant data type conversion
- * Block '<S14>/DTC_output_1' : Eliminate redundant data type conversion
  * Block '<S15>/DTC_output_1' : Eliminate redundant data type conversion
  * Block '<S16>/DTC_output_1' : Eliminate redundant data type conversion
  * Block '<S17>/DTC_output_1' : Eliminate redundant data type conversion

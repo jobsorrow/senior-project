@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.24
+ * Model version                  : 1.25
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
+ * C/C++ source code generated on : Wed Feb 16 12:58:16 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -70,6 +70,8 @@ void isr_int1pie1_task_fcn(void)
         uint16_T rtb_TmpSignalConversionAtForEac[7];
         uint16_T rtb_DataTypeConversion[3];
         uint16_T rtb_Add;
+        uint16_T rtb_DTC_output_1;
+        uint16_T rtb_DTC_output_1_a;
         uint16_T rtb_Merge_p;
 
         /* S-Function (c2802xadc): '<S15>/ReplicaOfSource' */
@@ -100,12 +102,26 @@ void isr_int1pie1_task_fcn(void)
           datalogger_target_B.ReplicaOfSource_d = (AdccResultRegs.ADCRESULT3);
         }
 
+        /* DataTypeConversion: '<S12>/DTC_output_1' incorporates:
+         *  Bias: '<S12>/Bias'
+         */
+        rtb_DTC_output_1 = (uint16_T)c28x_add_s16_s16_s16_sat
+          (datalogger_target_B.ReplicaOfSource_d,
+           datalogger_target_P.Bias_Bias_p);
+
         /* S-Function (c2802xadc): '<S13>/ReplicaOfSource' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           datalogger_target_B.ReplicaOfSource_i = (AdccResultRegs.ADCRESULT4);
         }
+
+        /* DataTypeConversion: '<S13>/DTC_output_1' incorporates:
+         *  Bias: '<S13>/Bias'
+         */
+        rtb_DTC_output_1_a = (uint16_T)c28x_add_s16_s16_s16_sat
+          (datalogger_target_B.ReplicaOfSource_i,
+           datalogger_target_P.Bias_Bias_g);
 
         /* S-Function (c2802xadc): '<S14>/ReplicaOfSource' */
         {
@@ -121,19 +137,21 @@ void isr_int1pie1_task_fcn(void)
           datalogger_target_B.ReplicaOfSource_p = (AdcaResultRegs.ADCRESULT6);
         }
 
-        /* SignalConversion generated from: '<S18>/For Each Subsystem' */
+        /* SignalConversion generated from: '<S18>/For Each Subsystem' incorporates:
+         *  Bias: '<S14>/Bias'
+         *  DataTypeConversion: '<S14>/DTC_output_1'
+         */
         rtb_TmpSignalConversionAtForEac[0] =
           datalogger_target_B.ReplicaOfSource_o;
         rtb_TmpSignalConversionAtForEac[1] =
           datalogger_target_B.ReplicaOfSource_b;
         rtb_TmpSignalConversionAtForEac[2] =
           datalogger_target_B.ReplicaOfSource_e;
-        rtb_TmpSignalConversionAtForEac[3] =
-          datalogger_target_B.ReplicaOfSource_d;
-        rtb_TmpSignalConversionAtForEac[4] =
-          datalogger_target_B.ReplicaOfSource_i;
-        rtb_TmpSignalConversionAtForEac[5] =
-          datalogger_target_B.ReplicaOfSource_dp;
+        rtb_TmpSignalConversionAtForEac[3] = rtb_DTC_output_1;
+        rtb_TmpSignalConversionAtForEac[4] = rtb_DTC_output_1_a;
+        rtb_TmpSignalConversionAtForEac[5] = (uint16_T)c28x_add_s16_s16_s16_sat
+          (datalogger_target_B.ReplicaOfSource_dp,
+           datalogger_target_P.Bias_Bias_c);
         rtb_TmpSignalConversionAtForEac[6] =
           datalogger_target_B.ReplicaOfSource_p;
 
@@ -195,7 +213,7 @@ void isr_int1pie1_task_fcn(void)
 
           /* Bias: '<S23>/Bias' */
           rtb_Merge_p = datalogger_target_ConstB.Width +
-            datalogger_target_P.Bias_Bias_c;
+            datalogger_target_P.Bias_Bias_cx;
 
           /* End of Outputs for SubSystem: '<S18>/Start' */
         } else {
@@ -260,8 +278,8 @@ void isr_int1pie1_task_fcn(void)
         }
 
         /* SignalConversion generated from: '<S3>/Phase Current ADC Gain' */
-        rtb_DataTypeConversion[0] = datalogger_target_B.ReplicaOfSource_d;
-        rtb_DataTypeConversion[1] = datalogger_target_B.ReplicaOfSource_i;
+        rtb_DataTypeConversion[0] = rtb_DTC_output_1;
+        rtb_DataTypeConversion[1] = rtb_DTC_output_1_a;
 
         /* Gain: '<S3>/Phase Current ADC Gain' */
         rtb_AvoidDivisionByZero = (real32_T)

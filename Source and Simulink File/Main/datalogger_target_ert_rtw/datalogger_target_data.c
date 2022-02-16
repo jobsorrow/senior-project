@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'datalogger_target'.
  *
- * Model version                  : 1.24
+ * Model version                  : 1.25
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 00:19:56 2022
+ * C/C++ source code generated on : Wed Feb 16 12:58:16 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -120,6 +120,21 @@ P_datalogger_target_T datalogger_target_P = {
    */
   0.0F,
 
+  /* Computed Parameter: Bias_Bias_p
+   * Referenced by: '<S12>/Bias'
+   */
+  5,
+
+  /* Computed Parameter: Bias_Bias_g
+   * Referenced by: '<S13>/Bias'
+   */
+  5,
+
+  /* Computed Parameter: Bias_Bias_c
+   * Referenced by: '<S14>/Bias'
+   */
+  5,
+
   /* Computed Parameter: PhaseCurrentADCGain_Gain
    * Referenced by: '<S3>/Phase Current ADC Gain'
    */
@@ -145,7 +160,7 @@ P_datalogger_target_T datalogger_target_P = {
    */
   257U,
 
-  /* Computed Parameter: Bias_Bias_c
+  /* Computed Parameter: Bias_Bias_cx
    * Referenced by: '<S23>/Bias'
    */
   2U,
