@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.34
+ * Model version                  : 1.38
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 21:40:03 2022
+ * C/C++ source code generated on : Fri Feb 25 00:38:17 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -26,11 +26,8 @@
 
 /* Model Code Variants */
 
-/* Parameters for system: '<S24>/If Action Subsystem' */
-typedef struct P_IfActionSubsystem_genpath_f_T_ P_IfActionSubsystem_genpath_f_T;
-
-/* Parameters for system: '<S22>/Avoid Header and Terminator Collision' */
-typedef struct P_CoreSubsys_genpath_firmware_T_ P_CoreSubsys_genpath_firmware_T;
+/* Parameters for system: '<S32>/Upper Always On' */
+typedef struct P_UpperAlwaysOn_genpath_firmw_T_ P_UpperAlwaysOn_genpath_firmw_T;
 
 /* Parameters (default storage) */
 typedef struct P_genpath_firmware_T_ P_genpath_firmware_T;

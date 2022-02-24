@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.34
+ * Model version                  : 1.38
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Feb 16 21:40:03 2022
+ * C/C++ source code generated on : Fri Feb 25 00:38:17 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -73,24 +73,24 @@ preprocessor word size checks.
 #endif
 
 /* Skipping ulong_long/long_long check: insufficient preprocessor integer range. */
+void InitAdcA (void);
+void config_ADCA_SOC6 (void);
+void config_ADCA_SOC5 (void);
+void InitAdcC (void);
+void config_ADCC_SOC4 (void);
+void config_ADCC_SOC3 (void);
+void config_ADCC_SOC2 (void);
+void config_ADCC_SOC1 (void);
 void InitAdcB (void);
 void config_ADCB_SOC0 (void);
-void InitAdcC (void);
-void config_ADCC_SOC1 (void);
-void config_ADCC_SOC2 (void);
-void config_ADCC_SOC3 (void);
-void config_ADCC_SOC4 (void);
-void InitAdcA (void);
-void config_ADCA_SOC5 (void);
-void config_ADCA_SOC6 (void);
-extern uint16_T MW_adcBInitFlag;
-extern uint16_T MW_adcCInitFlag;
 extern uint16_T MW_adcAInitFlag;
+extern uint16_T MW_adcCInitFlag;
+extern uint16_T MW_adcBInitFlag;
 void isr_int1pie1_task_fcn(void);
 void isr_int9pie1_task_fcn(void);
 extern void configureGPIOExtInterrupt(void);
-extern void genpath_f_IfActionSubsystem(uint16_T *rty_Out1,
-  P_IfActionSubsystem_genpath_f_T *localP);
+extern void genpath_firmw_UpperAlwaysOn(boolean_T *rty_Out1,
+  P_UpperAlwaysOn_genpath_firmw_T *localP);
 void isr_int1pie1_task_fcn(void);
 
 #endif                              /* RTW_HEADER_genpath_firmware_private_h_ */

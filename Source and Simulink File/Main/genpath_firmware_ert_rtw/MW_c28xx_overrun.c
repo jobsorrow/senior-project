@@ -19,5 +19,5 @@ void initializeOverrunService()
 
 void executeOverrunService()
 {
-  GPIO_WritePin(34, 1);
+  GPIO_TogglePin(34);
 }
