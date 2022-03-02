@@ -1,2 +1,0 @@
-  sldrtex_streamio.c
-
