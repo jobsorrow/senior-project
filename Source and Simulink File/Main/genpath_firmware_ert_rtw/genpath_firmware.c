@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.40
+ * Model version                  : 1.46
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Mar  2 20:58:00 2022
+ * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -60,80 +60,82 @@ void isr_int1pie1_task_fcn(void)
       {
         real32_T Findmaxphasevoltageindex_Valdat;
         real32_T Findminphasevoltageindex_Valdat;
-        real32_T rtb_Gain1_idx_0;
-        real32_T rtb_Gain1_idx_1;
-        real32_T rtb_Gain1_idx_2;
-        int16_T ForEach_itr;
+        real32_T rtb_Gain2;
+        real32_T rtb_Gain2_idx_0;
+        real32_T rtb_Gain2_idx_1;
+        real32_T rtb_Sum_idx_0;
+        real32_T rtb_Sum_idx_1;
+        real32_T rtb_Sum_idx_2;
+        int16_T rtb_Findmaxphasevoltageindex;
         int16_T rtb_Findminphasevoltageindex;
-        uint16_T rtb_Merge[9];
-        uint16_T rtb_ImpAsg_InsertedFor_Data_at_[7];
-        uint16_T rtb_TmpSignalConversionAtAvoidH[7];
+        uint16_T rtb_Merge[18];
+        uint16_T rtb_ImpAsg_InsertedFor_Data_at_[16];
+        uint16_T rtb_TmpSignalConversionAtAvoidH[16];
         uint16_T rtb_PreventPWMCounterOverrun[3];
         uint16_T qY;
-        uint16_T qY_e;
-        uint16_T qY_p;
         uint16_T rtb_Add_p;
         uint16_T rtb_Merge_p;
+        uint16_T rtb_PreventPWMCounterOverrun_i;
         boolean_T rtb_Ifthecurrentisnegative;
         boolean_T rtb_Ifthecurrentispositive;
 
-        /* S-Function (c2802xadc): '<S11>/V_A' */
+        /* S-Function (c2802xadc): '<S13>/V_A' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.V_A = (AdcbResultRegs.ADCRESULT0);
         }
 
-        /* S-Function (c2802xadc): '<S11>/V_B' */
+        /* S-Function (c2802xadc): '<S13>/V_B' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.V_B = (AdccResultRegs.ADCRESULT1);
         }
 
-        /* S-Function (c2802xadc): '<S11>/V_C' */
+        /* S-Function (c2802xadc): '<S13>/V_C' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.V_C = (AdccResultRegs.ADCRESULT2);
         }
 
-        /* S-Function (c2802xadc): '<S9>/I_A' */
+        /* S-Function (c2802xadc): '<S11>/I_A' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.I_A = (AdccResultRegs.ADCRESULT3);
         }
 
-        /* Bias: '<S9>/Bias' */
-        qY_e = genpath_firmware_B.I_A + /*MW:OvSatOk*/
+        /* Bias: '<S11>/Bias' */
+        rtb_Merge_p = genpath_firmware_B.I_A + /*MW:OvSatOk*/
           genpath_firmware_P.Bias_Bias_p;
-        if (qY_e < genpath_firmware_B.I_A) {
-          qY_e = MAX_uint16_T;
+        if (rtb_Merge_p < genpath_firmware_B.I_A) {
+          rtb_Merge_p = MAX_uint16_T;
         }
 
-        /* S-Function (c2802xadc): '<S9>/I_B' */
+        /* S-Function (c2802xadc): '<S11>/I_B' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.I_B = (AdccResultRegs.ADCRESULT4);
         }
 
-        /* Bias: '<S9>/Bias1' */
-        qY_p = genpath_firmware_B.I_B + /*MW:OvSatOk*/
+        /* Bias: '<S11>/Bias1' */
+        rtb_Add_p = genpath_firmware_B.I_B + /*MW:OvSatOk*/
           genpath_firmware_P.Bias1_Bias;
-        if (qY_p < genpath_firmware_B.I_B) {
-          qY_p = MAX_uint16_T;
+        if (rtb_Add_p < genpath_firmware_B.I_B) {
+          rtb_Add_p = MAX_uint16_T;
         }
 
-        /* S-Function (c2802xadc): '<S9>/I_C' */
+        /* S-Function (c2802xadc): '<S11>/I_C' */
         {
           /*  Internal Reference Voltage : Fixed scale 0 to 3.3 V range.  */
           /*  External Reference Voltage : Allowable ranges of VREFHI(ADCINA0) = 3.3 and VREFLO(tied to ground) = 0  */
           genpath_firmware_B.I_C = (AdcaResultRegs.ADCRESULT5);
         }
 
-        /* Bias: '<S9>/Bias2' */
+        /* Bias: '<S11>/Bias2' */
         qY = genpath_firmware_B.I_C + /*MW:OvSatOk*/
           genpath_firmware_P.Bias2_Bias;
         if (qY < genpath_firmware_B.I_C) {
@@ -147,151 +149,28 @@ void isr_int1pie1_task_fcn(void)
           genpath_firmware_B.DCBusVoltageADC = (AdcaResultRegs.ADCRESULT6);
         }
 
-        /* SignalConversion generated from: '<S22>/Avoid Header and Terminator Collision' incorporates:
-         *  Bias: '<S9>/Bias'
-         *  Bias: '<S9>/Bias1'
-         *  Bias: '<S9>/Bias2'
-         */
-        rtb_TmpSignalConversionAtAvoidH[0] = genpath_firmware_B.V_A;
-        rtb_TmpSignalConversionAtAvoidH[1] = genpath_firmware_B.V_B;
-        rtb_TmpSignalConversionAtAvoidH[2] = genpath_firmware_B.V_C;
-        rtb_TmpSignalConversionAtAvoidH[3] = qY_e;
-        rtb_TmpSignalConversionAtAvoidH[4] = qY_p;
-        rtb_TmpSignalConversionAtAvoidH[5] = qY;
-        rtb_TmpSignalConversionAtAvoidH[6] = genpath_firmware_B.DCBusVoltageADC;
-
-        /* Outputs for Iterator SubSystem: '<S22>/Avoid Header and Terminator Collision' incorporates:
-         *  ForEach: '<S24>/For Each'
-         */
-        for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
-          /* ForEachSliceSelector generated from: '<S24>/Data Packet' */
-          rtb_Merge_p = rtb_TmpSignalConversionAtAvoidH[ForEach_itr];
-
-          /* If: '<S24>/If1' */
-          if (rtb_Merge_p == 61166U) {
-            /* Outputs for IfAction SubSystem: '<S24>/If Action Subsystem' incorporates:
-             *  ActionPort: '<S28>/Action Port'
-             */
-            genpath_f_IfActionSubsystem(&rtb_Merge_p,
-              &genpath_firmware_P.CoreSubsys.IfActionSubsystem);
-
-            /* End of Outputs for SubSystem: '<S24>/If Action Subsystem' */
-          } else if (rtb_Merge_p == MAX_uint16_T) {
-            /* Outputs for IfAction SubSystem: '<S24>/If Action Subsystem1' incorporates:
-             *  ActionPort: '<S29>/Action Port'
-             */
-            genpath_f_IfActionSubsystem(&rtb_Merge_p,
-              &genpath_firmware_P.CoreSubsys.IfActionSubsystem1);
-
-            /* End of Outputs for SubSystem: '<S24>/If Action Subsystem1' */
-          }
-
-          /* End of If: '<S24>/If1' */
-
-          /* ForEachSliceAssignment generated from: '<S24>/Data' */
-          rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr] = rtb_Merge_p;
-        }
-
-        /* End of Outputs for SubSystem: '<S22>/Avoid Header and Terminator Collision' */
-
-        /* If: '<S22>/If' incorporates:
-         *  Inport: '<S26>/Data_width'
-         *  UnitDelay: '<S25>/Output'
-         */
-        if (genpath_firmware_DW.Output_DSTATE == 0U) {
-          /* Outputs for IfAction SubSystem: '<S22>/Start' incorporates:
-           *  ActionPort: '<S27>/Action Port'
-           */
-          /* SignalConversion generated from: '<S27>/Data_out' incorporates:
-           *  Constant: '<S27>/End'
-           *  Constant: '<S27>/Start'
-           *  Inport: '<S27>/Data'
-           */
-          rtb_Merge[0] = genpath_firmware_P.End_Value;
-          rtb_Merge[1] = genpath_firmware_P.Start_Value;
-          for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
-            rtb_Merge[ForEach_itr + 2] =
-              rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr];
-          }
-
-          /* End of SignalConversion generated from: '<S27>/Data_out' */
-
-          /* Bias: '<S27>/Bias' */
-          rtb_Merge_p = genpath_firmware_ConstB.Width +
-            genpath_firmware_P.Bias_Bias_c;
-
-          /* End of Outputs for SubSystem: '<S22>/Start' */
-        } else {
-          /* Outputs for IfAction SubSystem: '<S22>/Data' incorporates:
-           *  ActionPort: '<S26>/Action Port'
-           */
-          /* SignalConversion generated from: '<S26>/Data_out' incorporates:
-           *  Constant: '<S26>/Start'
-           *  Constant: '<S26>/Start1'
-           *  Inport: '<S26>/Data'
-           */
-          for (ForEach_itr = 0; ForEach_itr < 7; ForEach_itr++) {
-            rtb_Merge[ForEach_itr] = rtb_ImpAsg_InsertedFor_Data_at_[ForEach_itr];
-          }
-
-          rtb_Merge[7] = genpath_firmware_P.Start_Value_i;
-          rtb_Merge[8] = genpath_firmware_P.Start1_Value;
-
-          /* End of SignalConversion generated from: '<S26>/Data_out' */
-          rtb_Merge_p = genpath_firmware_ConstB.Width;
-
-          /* End of Outputs for SubSystem: '<S22>/Data' */
-        }
-
-        /* End of If: '<S22>/If' */
-
-        /* Outputs for Iterator SubSystem: '<S5>/Serial Transmit' incorporates:
-         *  WhileIterator: '<S23>/While Data Available'
-         */
-        /* MultiPortSwitch: '<S23>/Index Vector' */
-        ForEach_itr = 0;
-        do {
-          genpath_firmware_B.IndexVector = rtb_Merge[ForEach_itr];
-
-          {
-            scia_xmit((char*)&genpath_firmware_B.IndexVector, 2, 2);
-          }
-
-          rtb_Add_p = (rtb_Merge_p - ForEach_itr) - 1U;
-          ForEach_itr++;
-        } while (rtb_Add_p != 0U);
-
-        /* End of Outputs for SubSystem: '<S5>/Serial Transmit' */
-
-        /* Sum: '<S31>/FixPt Sum1' incorporates:
-         *  Constant: '<S31>/FixPt Constant'
-         *  UnitDelay: '<S25>/Output'
-         */
-        genpath_firmware_DW.Output_DSTATE +=
-          genpath_firmware_P.FixPtConstant_Value_j;
-
         /* SignalConversion generated from: '<S3>/Phase Current ADC Gain' incorporates:
-         *  Bias: '<S9>/Bias'
-         *  Bias: '<S9>/Bias1'
-         *  Bias: '<S9>/Bias2'
+         *  Bias: '<S11>/Bias'
+         *  Bias: '<S11>/Bias1'
+         *  Bias: '<S11>/Bias2'
          */
-        rtb_PreventPWMCounterOverrun[0] = qY_e;
-        rtb_PreventPWMCounterOverrun[1] = qY_p;
+        rtb_PreventPWMCounterOverrun[0] = rtb_Merge_p;
+        rtb_PreventPWMCounterOverrun[1] = rtb_Add_p;
         rtb_PreventPWMCounterOverrun[2] = qY;
 
         /* Gain: '<S3>/Phase Current ADC Gain' */
         Findmaxphasevoltageindex_Valdat = (real32_T)
           genpath_firmware_P.PhaseCurrentADCGain_Gain * 1.49011612E-8F;
 
-        /* Sum: '<S18>/Add1' incorporates:
+        /* Sum: '<S20>/Add1' incorporates:
          *  Bias: '<S3>/Bias'
-         *  Constant: '<S18>/Filter_Constant'
-         *  Constant: '<S18>/One'
+         *  Constant: '<S20>/Filter_Constant'
+         *  Constant: '<S20>/One'
          *  Gain: '<S3>/Gain3'
          *  Gain: '<S3>/Phase Current ADC Gain'
-         *  Product: '<S18>/Product'
-         *  Product: '<S18>/Product1'
-         *  UnitDelay: '<S18>/Unit Delay'
+         *  Product: '<S20>/Product'
+         *  Product: '<S20>/Product1'
+         *  UnitDelay: '<S20>/Unit Delay'
          */
         genpath_firmware_DW.UnitDelay_DSTATE[0] =
           (Findmaxphasevoltageindex_Valdat * (real32_T)
@@ -300,19 +179,46 @@ void isr_int1pie1_task_fcn(void)
           genpath_firmware_P.Filter_Constant_Value +
           genpath_firmware_P.One_Value * genpath_firmware_DW.UnitDelay_DSTATE[0];
 
-        /* Gain: '<S7>/Gain1' */
-        rtb_Gain1_idx_0 = genpath_firmware_P.Gain1_Gain *
+        /* Gain: '<S6>/Gain2' */
+        rtb_Gain2 = genpath_firmware_P.HW_BLDC_LQ *
           genpath_firmware_DW.UnitDelay_DSTATE[0];
 
-        /* Sum: '<S18>/Add1' incorporates:
+        /* Sum: '<S42>/Add1' incorporates:
+         *  Constant: '<S42>/Filter_Constant'
+         *  Constant: '<S42>/One'
+         *  Gain: '<S38>/Gain'
+         *  Product: '<S42>/Product'
+         *  Product: '<S42>/Product1'
+         *  Sum: '<S38>/Subtract'
+         *  UnitDelay: '<S38>/Unit Delay'
+         *  UnitDelay: '<S42>/Unit Delay'
+         */
+        genpath_firmware_DW.UnitDelay_DSTATE_m[0] = (rtb_Gain2 -
+          genpath_firmware_DW.UnitDelay_DSTATE_g[0]) *
+          genpath_firmware_P.Gain_Gain_a *
+          genpath_firmware_P.Filter_Constant_Value_c +
+          genpath_firmware_P.One_Value_f *
+          genpath_firmware_DW.UnitDelay_DSTATE_m[0];
+
+        /* Sum: '<S6>/Sum' incorporates:
+         *  Gain: '<S6>/Gain1'
+         */
+        rtb_Sum_idx_0 = genpath_firmware_P.Gain1_Gain *
+          genpath_firmware_DW.UnitDelay_DSTATE[0] +
+          genpath_firmware_DW.UnitDelay_DSTATE_m[0];
+
+        /* Gain: '<S6>/Gain2' */
+        rtb_Gain2_idx_0 = rtb_Gain2;
+
+        /* Sum: '<S20>/Add1' incorporates:
          *  Bias: '<S3>/Bias'
-         *  Constant: '<S18>/Filter_Constant'
-         *  Constant: '<S18>/One'
+         *  Constant: '<S20>/Filter_Constant'
+         *  Constant: '<S20>/One'
          *  Gain: '<S3>/Gain3'
          *  Gain: '<S3>/Phase Current ADC Gain'
-         *  Product: '<S18>/Product'
-         *  Product: '<S18>/Product1'
-         *  UnitDelay: '<S18>/Unit Delay'
+         *  Product: '<S20>/Product'
+         *  Product: '<S20>/Product1'
+         *  UnitDelay: '<S20>/Unit Delay'
          */
         genpath_firmware_DW.UnitDelay_DSTATE[1] =
           (Findmaxphasevoltageindex_Valdat * (real32_T)
@@ -321,19 +227,46 @@ void isr_int1pie1_task_fcn(void)
           genpath_firmware_P.Filter_Constant_Value +
           genpath_firmware_P.One_Value * genpath_firmware_DW.UnitDelay_DSTATE[1];
 
-        /* Gain: '<S7>/Gain1' */
-        rtb_Gain1_idx_1 = genpath_firmware_P.Gain1_Gain *
+        /* Gain: '<S6>/Gain2' */
+        rtb_Gain2 = genpath_firmware_P.HW_BLDC_LQ *
           genpath_firmware_DW.UnitDelay_DSTATE[1];
 
-        /* Sum: '<S18>/Add1' incorporates:
+        /* Sum: '<S42>/Add1' incorporates:
+         *  Constant: '<S42>/Filter_Constant'
+         *  Constant: '<S42>/One'
+         *  Gain: '<S38>/Gain'
+         *  Product: '<S42>/Product'
+         *  Product: '<S42>/Product1'
+         *  Sum: '<S38>/Subtract'
+         *  UnitDelay: '<S38>/Unit Delay'
+         *  UnitDelay: '<S42>/Unit Delay'
+         */
+        genpath_firmware_DW.UnitDelay_DSTATE_m[1] = (rtb_Gain2 -
+          genpath_firmware_DW.UnitDelay_DSTATE_g[1]) *
+          genpath_firmware_P.Gain_Gain_a *
+          genpath_firmware_P.Filter_Constant_Value_c +
+          genpath_firmware_P.One_Value_f *
+          genpath_firmware_DW.UnitDelay_DSTATE_m[1];
+
+        /* Sum: '<S6>/Sum' incorporates:
+         *  Gain: '<S6>/Gain1'
+         */
+        rtb_Sum_idx_1 = genpath_firmware_P.Gain1_Gain *
+          genpath_firmware_DW.UnitDelay_DSTATE[1] +
+          genpath_firmware_DW.UnitDelay_DSTATE_m[1];
+
+        /* Gain: '<S6>/Gain2' */
+        rtb_Gain2_idx_1 = rtb_Gain2;
+
+        /* Sum: '<S20>/Add1' incorporates:
          *  Bias: '<S3>/Bias'
-         *  Constant: '<S18>/Filter_Constant'
-         *  Constant: '<S18>/One'
+         *  Constant: '<S20>/Filter_Constant'
+         *  Constant: '<S20>/One'
          *  Gain: '<S3>/Gain3'
          *  Gain: '<S3>/Phase Current ADC Gain'
-         *  Product: '<S18>/Product'
-         *  Product: '<S18>/Product1'
-         *  UnitDelay: '<S18>/Unit Delay'
+         *  Product: '<S20>/Product'
+         *  Product: '<S20>/Product1'
+         *  UnitDelay: '<S20>/Unit Delay'
          */
         genpath_firmware_DW.UnitDelay_DSTATE[2] =
           (Findmaxphasevoltageindex_Valdat * (real32_T)
@@ -342,17 +275,41 @@ void isr_int1pie1_task_fcn(void)
           genpath_firmware_P.Filter_Constant_Value +
           genpath_firmware_P.One_Value * genpath_firmware_DW.UnitDelay_DSTATE[2];
 
-        /* Gain: '<S7>/Gain1' */
-        rtb_Gain1_idx_2 = genpath_firmware_P.Gain1_Gain *
+        /* Gain: '<S6>/Gain2' */
+        rtb_Gain2 = genpath_firmware_P.HW_BLDC_LQ *
           genpath_firmware_DW.UnitDelay_DSTATE[2];
 
-        /* Sum: '<S15>/Add1' incorporates:
-         *  Constant: '<S15>/Filter_Constant'
-         *  Constant: '<S15>/One'
+        /* Sum: '<S42>/Add1' incorporates:
+         *  Constant: '<S42>/Filter_Constant'
+         *  Constant: '<S42>/One'
+         *  Gain: '<S38>/Gain'
+         *  Product: '<S42>/Product'
+         *  Product: '<S42>/Product1'
+         *  Sum: '<S38>/Subtract'
+         *  UnitDelay: '<S38>/Unit Delay'
+         *  UnitDelay: '<S42>/Unit Delay'
+         */
+        genpath_firmware_DW.UnitDelay_DSTATE_m[2] = (rtb_Gain2 -
+          genpath_firmware_DW.UnitDelay_DSTATE_g[2]) *
+          genpath_firmware_P.Gain_Gain_a *
+          genpath_firmware_P.Filter_Constant_Value_c +
+          genpath_firmware_P.One_Value_f *
+          genpath_firmware_DW.UnitDelay_DSTATE_m[2];
+
+        /* Sum: '<S6>/Sum' incorporates:
+         *  Gain: '<S6>/Gain1'
+         */
+        rtb_Sum_idx_2 = genpath_firmware_P.Gain1_Gain *
+          genpath_firmware_DW.UnitDelay_DSTATE[2] +
+          genpath_firmware_DW.UnitDelay_DSTATE_m[2];
+
+        /* Sum: '<S17>/Add1' incorporates:
+         *  Constant: '<S17>/Filter_Constant'
+         *  Constant: '<S17>/One'
          *  Gain: '<S3>/DC Bus Voltage ADC Gain'
-         *  Product: '<S15>/Product'
-         *  Product: '<S15>/Product1'
-         *  UnitDelay: '<S15>/Unit Delay'
+         *  Product: '<S17>/Product'
+         *  Product: '<S17>/Product1'
+         *  UnitDelay: '<S17>/Unit Delay'
          */
         genpath_firmware_DW.UnitDelay_DSTATE_k = (real32_T)
           genpath_firmware_P.DCBusVoltageADCGain_Gain * 4.76837158E-7F *
@@ -361,166 +318,194 @@ void isr_int1pie1_task_fcn(void)
           genpath_firmware_P.One_Value_o *
           genpath_firmware_DW.UnitDelay_DSTATE_k;
 
-        /* S-Function (sdspstatminmax): '<S36>/Find max phase voltage index' */
-        Findmaxphasevoltageindex_Valdat = rtb_Gain1_idx_0;
-        ForEach_itr = 0;
+        /* S-Function (sdspstatminmax): '<S26>/Find max phase voltage index' */
+        Findmaxphasevoltageindex_Valdat = rtb_Sum_idx_0;
+        rtb_Findmaxphasevoltageindex = 0;
 
-        /* S-Function (sdspstatminmax): '<S36>/Find min phase voltage index' */
-        Findminphasevoltageindex_Valdat = rtb_Gain1_idx_0;
+        /* S-Function (sdspstatminmax): '<S26>/Find min phase voltage index' */
+        Findminphasevoltageindex_Valdat = rtb_Sum_idx_0;
         rtb_Findminphasevoltageindex = 0;
 
-        /* S-Function (sdspstatminmax): '<S36>/Find max phase voltage index' */
-        if (rtb_Gain1_idx_1 > rtb_Gain1_idx_0) {
-          Findmaxphasevoltageindex_Valdat = rtb_Gain1_idx_1;
-          ForEach_itr = 1;
+        /* S-Function (sdspstatminmax): '<S26>/Find max phase voltage index' */
+        if (rtb_Sum_idx_1 > rtb_Sum_idx_0) {
+          Findmaxphasevoltageindex_Valdat = rtb_Sum_idx_1;
+          rtb_Findmaxphasevoltageindex = 1;
         }
 
-        /* S-Function (sdspstatminmax): '<S36>/Find min phase voltage index' */
-        if (rtb_Gain1_idx_1 < rtb_Gain1_idx_0) {
-          Findminphasevoltageindex_Valdat = rtb_Gain1_idx_1;
+        /* S-Function (sdspstatminmax): '<S26>/Find min phase voltage index' */
+        if (rtb_Sum_idx_1 < rtb_Sum_idx_0) {
+          Findminphasevoltageindex_Valdat = rtb_Sum_idx_1;
           rtb_Findminphasevoltageindex = 1;
         }
 
-        /* S-Function (sdspstatminmax): '<S36>/Find max phase voltage index' */
-        if (rtb_Gain1_idx_2 > Findmaxphasevoltageindex_Valdat) {
-          ForEach_itr = 2;
+        /* S-Function (sdspstatminmax): '<S26>/Find max phase voltage index' */
+        if (rtb_Sum_idx_2 > Findmaxphasevoltageindex_Valdat) {
+          rtb_Findmaxphasevoltageindex = 2;
         }
 
-        /* S-Function (sdspstatminmax): '<S36>/Find min phase voltage index' */
-        if (rtb_Gain1_idx_2 < Findminphasevoltageindex_Valdat) {
+        /* S-Function (sdspstatminmax): '<S26>/Find min phase voltage index' */
+        if (rtb_Sum_idx_2 < Findminphasevoltageindex_Valdat) {
           rtb_Findminphasevoltageindex = 2;
         }
 
-        /* RelationalOperator: '<S36>/If the current is positive' incorporates:
-         *  Constant: '<S36>/Constant1'
-         *  MultiPortSwitch: '<S36>/Find Phase Current at Max Voltage '
-         */
-        rtb_Ifthecurrentispositive = (genpath_firmware_DW.UnitDelay_DSTATE
-          [(uint32_T)ForEach_itr] >= genpath_firmware_P.Constant1_Value);
+        /* MultiPortSwitch: '<S26>/Find Phase Current at Max Voltage ' */
+        Findmaxphasevoltageindex_Valdat = genpath_firmware_DW.UnitDelay_DSTATE
+          [(uint32_T)rtb_Findmaxphasevoltageindex];
 
-        /* RelationalOperator: '<S36>/If the current is negative' incorporates:
-         *  Constant: '<S36>/Constant1'
-         *  MultiPortSwitch: '<S36>/Find Phase Current at Min Voltage'
-         */
-        rtb_Ifthecurrentisnegative = (genpath_firmware_DW.UnitDelay_DSTATE
-          [(uint32_T)rtb_Findminphasevoltageindex] <
-          genpath_firmware_P.Constant1_Value);
+        /* Relay: '<S26>/If the current is positive ' */
+        genpath_firmware_DW.Ifthecurrentispositive_Mode =
+          ((Findmaxphasevoltageindex_Valdat >=
+            genpath_firmware_P.Ifthecurrentispositive_OnVal) ||
+           ((!(Findmaxphasevoltageindex_Valdat <=
+               genpath_firmware_P.Ifthecurrentispositive_OffVal)) &&
+            genpath_firmware_DW.Ifthecurrentispositive_Mode));
+        if (genpath_firmware_DW.Ifthecurrentispositive_Mode) {
+          rtb_Ifthecurrentispositive =
+            genpath_firmware_P.Ifthecurrentispositive_YOn;
+        } else {
+          rtb_Ifthecurrentispositive =
+            genpath_firmware_P.Ifthecurrentispositive_YOff;
+        }
 
-        /* If: '<S36>/If' incorporates:
+        /* End of Relay: '<S26>/If the current is positive ' */
+
+        /* MultiPortSwitch: '<S26>/Find Phase Current at Min Voltage' */
+        Findmaxphasevoltageindex_Valdat = genpath_firmware_DW.UnitDelay_DSTATE
+          [(uint32_T)rtb_Findminphasevoltageindex];
+
+        /* Relay: '<S26>/If the current is negative' */
+        genpath_firmware_DW.Ifthecurrentisnegative_Mode =
+          ((Findmaxphasevoltageindex_Valdat >=
+            genpath_firmware_P.Ifthecurrentisnegative_OnVal) ||
+           ((!(Findmaxphasevoltageindex_Valdat <=
+               genpath_firmware_P.Ifthecurrentisnegative_OffVal)) &&
+            genpath_firmware_DW.Ifthecurrentisnegative_Mode));
+        if (genpath_firmware_DW.Ifthecurrentisnegative_Mode) {
+          rtb_Ifthecurrentisnegative =
+            genpath_firmware_P.Ifthecurrentisnegative_YOn;
+        } else {
+          rtb_Ifthecurrentisnegative =
+            genpath_firmware_P.Ifthecurrentisnegative_YOff;
+        }
+
+        /* End of Relay: '<S26>/If the current is negative' */
+
+        /* If: '<S26>/If' incorporates:
          *  DataTypeConversion: '<S4>/Data Type Conversion1'
          */
         if ((rtb_Ifthecurrentispositive == rtb_Ifthecurrentisnegative) ||
             (!(genpath_firmware_B.RateTransitionSCIADC[1] != 0.0F))) {
-          /* Outputs for IfAction SubSystem: '<S36>/Load Balancing' incorporates:
-           *  ActionPort: '<S38>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S26>/Load Balancing' incorporates:
+           *  ActionPort: '<S28>/Action Port'
            */
-          /* Merge: '<S36>/Merge' incorporates:
-           *  Constant: '<S38>/Constant'
-           *  RelationalOperator: '<S38>/Equal'
-           *  UnitDelay: '<S41>/Output'
+          /* Merge: '<S26>/Merge' incorporates:
+           *  Constant: '<S28>/Constant'
+           *  RelationalOperator: '<S28>/Equal'
+           *  UnitDelay: '<S31>/Output'
            */
           genpath_firmware_B.Merge = (genpath_firmware_DW.Output_DSTATE_d >=
             genpath_firmware_P.Constant_Value_n);
 
-          /* Sum: '<S42>/FixPt Sum1' incorporates:
-           *  Constant: '<S42>/FixPt Constant'
-           *  UnitDelay: '<S41>/Output'
+          /* Sum: '<S32>/FixPt Sum1' incorporates:
+           *  Constant: '<S32>/FixPt Constant'
+           *  UnitDelay: '<S31>/Output'
            */
           genpath_firmware_DW.Output_DSTATE_d +=
             genpath_firmware_P.FixPtConstant_Value;
 
-          /* Switch: '<S43>/FixPt Switch' */
+          /* Switch: '<S33>/FixPt Switch' */
           if (genpath_firmware_DW.Output_DSTATE_d >
               genpath_firmware_P.CounterLimited_uplimit) {
-            /* Sum: '<S42>/FixPt Sum1' incorporates:
-             *  Constant: '<S43>/Constant'
-             *  UnitDelay: '<S41>/Output'
+            /* Sum: '<S32>/FixPt Sum1' incorporates:
+             *  Constant: '<S33>/Constant'
+             *  UnitDelay: '<S31>/Output'
              */
             genpath_firmware_DW.Output_DSTATE_d =
               genpath_firmware_P.Constant_Value_h;
           }
 
-          /* End of Switch: '<S43>/FixPt Switch' */
-          /* End of Outputs for SubSystem: '<S36>/Load Balancing' */
+          /* End of Switch: '<S33>/FixPt Switch' */
+          /* End of Outputs for SubSystem: '<S26>/Load Balancing' */
         } else if (rtb_Ifthecurrentispositive && (!rtb_Ifthecurrentisnegative))
         {
-          /* Outputs for IfAction SubSystem: '<S36>/Upper Always On' incorporates:
-           *  ActionPort: '<S40>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S26>/Upper Always On' incorporates:
+           *  ActionPort: '<S30>/Action Port'
            */
           genpath_firmw_UpperAlwaysOn(&genpath_firmware_B.Merge,
             &genpath_firmware_P.UpperAlwaysOn);
 
-          /* End of Outputs for SubSystem: '<S36>/Upper Always On' */
+          /* End of Outputs for SubSystem: '<S26>/Upper Always On' */
         } else if ((!rtb_Ifthecurrentispositive) && rtb_Ifthecurrentisnegative)
         {
-          /* Outputs for IfAction SubSystem: '<S36>/Lower Always On' incorporates:
-           *  ActionPort: '<S39>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S26>/Lower Always On' incorporates:
+           *  ActionPort: '<S29>/Action Port'
            */
           genpath_firmw_UpperAlwaysOn(&genpath_firmware_B.Merge,
             &genpath_firmware_P.LowerAlwaysOn);
 
-          /* End of Outputs for SubSystem: '<S36>/Lower Always On' */
+          /* End of Outputs for SubSystem: '<S26>/Lower Always On' */
         }
 
-        /* End of If: '<S36>/If' */
+        /* End of If: '<S26>/If' */
 
-        /* If: '<S37>/If Enable Two Arm Modulation' incorporates:
+        /* If: '<S27>/If Enable Two Arm Modulation' incorporates:
          *  DataTypeConversion: '<S4>/Data Type Conversion'
          */
         if (genpath_firmware_B.RateTransitionSCIADC[0] != 0.0F) {
-          /* Outputs for IfAction SubSystem: '<S37>/Compute Two Arm Modulation Offset' incorporates:
-           *  ActionPort: '<S44>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S27>/Compute Two Arm Modulation Offset' incorporates:
+           *  ActionPort: '<S34>/Action Port'
            */
-          /* If: '<S44>/If' */
+          /* If: '<S34>/If' */
           if (genpath_firmware_B.Merge) {
-            /* Outputs for IfAction SubSystem: '<S44>/If Upper Switch Always Conduct' incorporates:
-             *  ActionPort: '<S47>/Action Port'
+            /* Outputs for IfAction SubSystem: '<S34>/If Upper Switch Always Conduct' incorporates:
+             *  ActionPort: '<S37>/Action Port'
              */
-            /* Sum: '<S47>/Add' incorporates:
-             *  Gain: '<S47>/Gain'
-             *  MinMax: '<S47>/Max'
+            /* Sum: '<S37>/Add' incorporates:
+             *  Gain: '<S37>/Gain'
+             *  MinMax: '<S37>/Max'
              */
             Findmaxphasevoltageindex_Valdat = genpath_firmware_P.Gain_Gain *
-              genpath_firmware_DW.UnitDelay_DSTATE_k - fmaxf(fmaxf
-              (rtb_Gain1_idx_0, rtb_Gain1_idx_1), rtb_Gain1_idx_2);
+              genpath_firmware_DW.UnitDelay_DSTATE_k - fmaxf(fmaxf(rtb_Sum_idx_0,
+              rtb_Sum_idx_1), rtb_Sum_idx_2);
 
-            /* End of Outputs for SubSystem: '<S44>/If Upper Switch Always Conduct' */
+            /* End of Outputs for SubSystem: '<S34>/If Upper Switch Always Conduct' */
           } else {
-            /* Outputs for IfAction SubSystem: '<S44>/If Lower Switch Always Conduct' incorporates:
-             *  ActionPort: '<S46>/Action Port'
+            /* Outputs for IfAction SubSystem: '<S34>/If Lower Switch Always Conduct' incorporates:
+             *  ActionPort: '<S36>/Action Port'
              */
-            /* Sum: '<S46>/Add' incorporates:
-             *  Gain: '<S46>/Gain'
-             *  MinMax: '<S46>/Max'
+            /* Sum: '<S36>/Add' incorporates:
+             *  Gain: '<S36>/Gain'
+             *  MinMax: '<S36>/Max'
              */
-            Findmaxphasevoltageindex_Valdat = (0.0F - fminf(fminf
-              (rtb_Gain1_idx_0, rtb_Gain1_idx_1), rtb_Gain1_idx_2)) -
-              genpath_firmware_P.Gain_Gain_f *
+            Findmaxphasevoltageindex_Valdat = (0.0F - fminf(fminf(rtb_Sum_idx_0,
+              rtb_Sum_idx_1), rtb_Sum_idx_2)) - genpath_firmware_P.Gain_Gain_f *
               genpath_firmware_DW.UnitDelay_DSTATE_k;
 
-            /* End of Outputs for SubSystem: '<S44>/If Lower Switch Always Conduct' */
+            /* End of Outputs for SubSystem: '<S34>/If Lower Switch Always Conduct' */
           }
 
-          /* End of If: '<S44>/If' */
-          /* End of Outputs for SubSystem: '<S37>/Compute Two Arm Modulation Offset' */
+          /* End of If: '<S34>/If' */
+          /* End of Outputs for SubSystem: '<S27>/Compute Two Arm Modulation Offset' */
         } else {
-          /* Outputs for IfAction SubSystem: '<S37>/Zero Offset' incorporates:
-           *  ActionPort: '<S45>/Action Port'
+          /* Outputs for IfAction SubSystem: '<S27>/Zero Offset' incorporates:
+           *  ActionPort: '<S35>/Action Port'
            */
-          /* SignalConversion generated from: '<S45>/Zero Sequence Offset' */
-          Findmaxphasevoltageindex_Valdat = 0.0F;
+          /* SignalConversion generated from: '<S35>/Zero Sequence Offset' incorporates:
+           *  Constant: '<S35>/Constant'
+           */
+          Findmaxphasevoltageindex_Valdat = genpath_firmware_P.Constant_Value_j;
 
-          /* End of Outputs for SubSystem: '<S37>/Zero Offset' */
+          /* End of Outputs for SubSystem: '<S27>/Zero Offset' */
         }
 
-        /* End of If: '<S37>/If Enable Two Arm Modulation' */
+        /* End of If: '<S27>/If Enable Two Arm Modulation' */
 
-        /* Sum: '<S37>/Add' */
-        rtb_Gain1_idx_0 += Findmaxphasevoltageindex_Valdat;
-        rtb_Gain1_idx_1 += Findmaxphasevoltageindex_Valdat;
-        rtb_Gain1_idx_2 += Findmaxphasevoltageindex_Valdat;
+        /* Sum: '<S27>/Add' */
+        rtb_Sum_idx_0 += Findmaxphasevoltageindex_Valdat;
+        rtb_Sum_idx_1 += Findmaxphasevoltageindex_Valdat;
+        rtb_Sum_idx_2 += Findmaxphasevoltageindex_Valdat;
 
-        /* Saturate: '<S33>/Prevent Division By Zero' */
+        /* Saturate: '<S24>/Prevent Division By Zero' */
         if (genpath_firmware_DW.UnitDelay_DSTATE_k >
             genpath_firmware_P.PreventDivisionByZero_UpperSat) {
           Findmaxphasevoltageindex_Valdat =
@@ -534,162 +519,317 @@ void isr_int1pie1_task_fcn(void)
             genpath_firmware_DW.UnitDelay_DSTATE_k;
         }
 
-        /* End of Saturate: '<S33>/Prevent Division By Zero' */
+        /* End of Saturate: '<S24>/Prevent Division By Zero' */
 
-        /* Bias: '<S33>/Bias' incorporates:
-         *  Product: '<S33>/Normalize Phase Voltage'
+        /* Bias: '<S24>/Bias' incorporates:
+         *  Product: '<S24>/Normalize Phase Voltage'
          */
-        rtb_Gain1_idx_0 = rtb_Gain1_idx_0 / Findmaxphasevoltageindex_Valdat +
+        rtb_Sum_idx_0 = rtb_Sum_idx_0 / Findmaxphasevoltageindex_Valdat +
           genpath_firmware_P.Bias_Bias_a;
 
-        /* Saturate: '<S33>/Prevent Overmodulation' */
-        if (rtb_Gain1_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat)
-        {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
-        } else if (rtb_Gain1_idx_0 <
+        /* Saturate: '<S24>/Prevent Overmodulation' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
+        } else if (rtb_Sum_idx_0 <
                    genpath_firmware_P.PreventOvermodulation_LowerSat) {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
         }
 
-        /* DataTypeConversion: '<S33>/To unsigned int' incorporates:
-         *  Gain: '<S33>/Time Base Period'
-         */
-        rtb_Gain1_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
-        if (rtb_Gain1_idx_0 < 65536.0F) {
-          if (rtb_Gain1_idx_0 >= 0.0F) {
-            qY_e = (uint16_T)rtb_Gain1_idx_0;
-          } else {
-            qY_e = 0U;
-          }
+        /* Gain: '<S24>/Time Base Period' */
+        rtb_Sum_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventPWMCounterOverrun_UpperS)
+        {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
+        } else if (rtb_Sum_idx_0 <
+                   genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
+        }
+
+        rtb_Sum_idx_0 = floorf(rtb_Sum_idx_0);
+        if (rtIsNaNF(rtb_Sum_idx_0)) {
+          rtb_Sum_idx_0 = 0.0F;
         } else {
-          qY_e = MAX_uint16_T;
+          rtb_Sum_idx_0 = fmodf(rtb_Sum_idx_0, 65536.0F);
         }
 
-        /* Saturate: '<S33>/Prevent PWM Counter Overrun' incorporates:
-         *  DataTypeConversion: '<S33>/To unsigned int'
-         */
-        if (qY_e > genpath_firmware_P.PreventPWMCounterOverrun_UpperS) {
-          rtb_PreventPWMCounterOverrun[0] =
-            genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
-        } else if (qY_e < genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
-          rtb_PreventPWMCounterOverrun[0] =
-            genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
-        } else {
-          rtb_PreventPWMCounterOverrun[0] = qY_e;
-        }
+        rtb_PreventPWMCounterOverrun_i = rtb_Sum_idx_0 < 0.0F ? (uint16_T)
+          -(int16_T)(uint16_T)-rtb_Sum_idx_0 : (uint16_T)rtb_Sum_idx_0;
 
-        /* Bias: '<S33>/Bias' incorporates:
-         *  Product: '<S33>/Normalize Phase Voltage'
+        /* DataTypeConversion: '<S24>/Data Type Conversion' */
+        genpath_firmware_B.DataTypeConversion[0] =
+          rtb_PreventPWMCounterOverrun_i;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        rtb_PreventPWMCounterOverrun[0] = rtb_PreventPWMCounterOverrun_i;
+
+        /* Bias: '<S24>/Bias' incorporates:
+         *  Product: '<S24>/Normalize Phase Voltage'
          */
-        rtb_Gain1_idx_0 = rtb_Gain1_idx_1 / Findmaxphasevoltageindex_Valdat +
+        rtb_Sum_idx_0 = rtb_Sum_idx_1 / Findmaxphasevoltageindex_Valdat +
           genpath_firmware_P.Bias_Bias_a;
 
-        /* Saturate: '<S33>/Prevent Overmodulation' */
-        if (rtb_Gain1_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat)
-        {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
-        } else if (rtb_Gain1_idx_0 <
+        /* Saturate: '<S24>/Prevent Overmodulation' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
+        } else if (rtb_Sum_idx_0 <
                    genpath_firmware_P.PreventOvermodulation_LowerSat) {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
         }
 
-        /* DataTypeConversion: '<S33>/To unsigned int' incorporates:
-         *  Gain: '<S33>/Time Base Period'
-         */
-        rtb_Gain1_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
-        if (rtb_Gain1_idx_0 < 65536.0F) {
-          if (rtb_Gain1_idx_0 >= 0.0F) {
-            qY_e = (uint16_T)rtb_Gain1_idx_0;
-          } else {
-            qY_e = 0U;
-          }
+        /* Gain: '<S24>/Time Base Period' */
+        rtb_Sum_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventPWMCounterOverrun_UpperS)
+        {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
+        } else if (rtb_Sum_idx_0 <
+                   genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
+        }
+
+        rtb_Sum_idx_0 = floorf(rtb_Sum_idx_0);
+        if (rtIsNaNF(rtb_Sum_idx_0)) {
+          rtb_Sum_idx_0 = 0.0F;
         } else {
-          qY_e = MAX_uint16_T;
+          rtb_Sum_idx_0 = fmodf(rtb_Sum_idx_0, 65536.0F);
         }
 
-        /* Saturate: '<S33>/Prevent PWM Counter Overrun' incorporates:
-         *  DataTypeConversion: '<S33>/To unsigned int'
-         */
-        if (qY_e > genpath_firmware_P.PreventPWMCounterOverrun_UpperS) {
-          rtb_PreventPWMCounterOverrun[1] =
-            genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
-        } else if (qY_e < genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
-          rtb_PreventPWMCounterOverrun[1] =
-            genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
-        } else {
-          rtb_PreventPWMCounterOverrun[1] = qY_e;
-        }
+        rtb_PreventPWMCounterOverrun_i = rtb_Sum_idx_0 < 0.0F ? (uint16_T)
+          -(int16_T)(uint16_T)-rtb_Sum_idx_0 : (uint16_T)rtb_Sum_idx_0;
 
-        /* Bias: '<S33>/Bias' incorporates:
-         *  Product: '<S33>/Normalize Phase Voltage'
+        /* DataTypeConversion: '<S24>/Data Type Conversion' */
+        genpath_firmware_B.DataTypeConversion[1] =
+          rtb_PreventPWMCounterOverrun_i;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        rtb_PreventPWMCounterOverrun[1] = rtb_PreventPWMCounterOverrun_i;
+
+        /* Bias: '<S24>/Bias' incorporates:
+         *  Product: '<S24>/Normalize Phase Voltage'
          */
-        rtb_Gain1_idx_0 = rtb_Gain1_idx_2 / Findmaxphasevoltageindex_Valdat +
+        rtb_Sum_idx_0 = rtb_Sum_idx_2 / Findmaxphasevoltageindex_Valdat +
           genpath_firmware_P.Bias_Bias_a;
 
-        /* Saturate: '<S33>/Prevent Overmodulation' */
-        if (rtb_Gain1_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat)
-        {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
-        } else if (rtb_Gain1_idx_0 <
+        /* Saturate: '<S24>/Prevent Overmodulation' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventOvermodulation_UpperSat) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_UpperSat;
+        } else if (rtb_Sum_idx_0 <
                    genpath_firmware_P.PreventOvermodulation_LowerSat) {
-          rtb_Gain1_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventOvermodulation_LowerSat;
         }
 
-        /* DataTypeConversion: '<S33>/To unsigned int' incorporates:
-         *  Gain: '<S33>/Time Base Period'
-         */
-        rtb_Gain1_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
-        if (rtb_Gain1_idx_0 < 65536.0F) {
-          if (rtb_Gain1_idx_0 >= 0.0F) {
-            qY_e = (uint16_T)rtb_Gain1_idx_0;
-          } else {
-            qY_e = 0U;
+        /* Gain: '<S24>/Time Base Period' */
+        rtb_Sum_idx_0 *= genpath_firmware_P.TimeBasePeriod_Gain;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        if (rtb_Sum_idx_0 > genpath_firmware_P.PreventPWMCounterOverrun_UpperS)
+        {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
+        } else if (rtb_Sum_idx_0 <
+                   genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
+          rtb_Sum_idx_0 = genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
+        }
+
+        rtb_Sum_idx_0 = floorf(rtb_Sum_idx_0);
+        if (rtIsNaNF(rtb_Sum_idx_0)) {
+          rtb_Sum_idx_0 = 0.0F;
+        } else {
+          rtb_Sum_idx_0 = fmodf(rtb_Sum_idx_0, 65536.0F);
+        }
+
+        rtb_PreventPWMCounterOverrun_i = rtb_Sum_idx_0 < 0.0F ? (uint16_T)
+          -(int16_T)(uint16_T)-rtb_Sum_idx_0 : (uint16_T)rtb_Sum_idx_0;
+
+        /* DataTypeConversion: '<S24>/Data Type Conversion' */
+        genpath_firmware_B.DataTypeConversion[2] =
+          rtb_PreventPWMCounterOverrun_i;
+
+        /* Saturate: '<S24>/Prevent PWM Counter Overrun' */
+        rtb_PreventPWMCounterOverrun[2] = rtb_PreventPWMCounterOverrun_i;
+
+        /* S-Function (any2byte_svd): '<S1>/Byte Pack' */
+
+        /* Pack: <S1>/Byte Pack */
+        {
+          uint32_T MW_outputPortOffset = 0;
+          uint32_T MW_inputPortWidth = 0;
+          uint32_T MW_remainder1 = 0;
+
+          /* Packed output data type - uint16_T */
+          /* Packing the values of Input 1 */
+          /* Input data type - real32_T, size - 3 */
+          {
+            MW_inputPortWidth = 3 * sizeof(real32_T);
+            memcpy((uint8_T*)&genpath_firmware_B.BytePack[0] +
+                   MW_outputPortOffset, (uint8_T*)
+                   &genpath_firmware_B.DataTypeConversion[0], MW_inputPortWidth);
           }
-        } else {
-          qY_e = MAX_uint16_T;
         }
 
-        /* Saturate: '<S33>/Prevent PWM Counter Overrun' incorporates:
-         *  DataTypeConversion: '<S33>/To unsigned int'
+        /* SignalConversion generated from: '<S7>/Avoid Header and Terminator Collision' incorporates:
+         *  Bias: '<S11>/Bias'
+         *  Bias: '<S11>/Bias1'
+         *  Bias: '<S11>/Bias2'
          */
-        if (qY_e > genpath_firmware_P.PreventPWMCounterOverrun_UpperS) {
-          rtb_PreventPWMCounterOverrun[2] =
-            genpath_firmware_P.PreventPWMCounterOverrun_UpperS;
-        } else if (qY_e < genpath_firmware_P.PreventPWMCounterOverrun_LowerS) {
-          rtb_PreventPWMCounterOverrun[2] =
-            genpath_firmware_P.PreventPWMCounterOverrun_LowerS;
-        } else {
-          rtb_PreventPWMCounterOverrun[2] = qY_e;
+        rtb_TmpSignalConversionAtAvoidH[0] = genpath_firmware_B.V_A;
+        rtb_TmpSignalConversionAtAvoidH[1] = genpath_firmware_B.V_B;
+        rtb_TmpSignalConversionAtAvoidH[2] = genpath_firmware_B.V_C;
+        rtb_TmpSignalConversionAtAvoidH[3] = rtb_Merge_p;
+        rtb_TmpSignalConversionAtAvoidH[4] = rtb_Add_p;
+        rtb_TmpSignalConversionAtAvoidH[5] = qY;
+        rtb_TmpSignalConversionAtAvoidH[6] = genpath_firmware_B.DCBusVoltageADC;
+        rtb_TmpSignalConversionAtAvoidH[7] = rtb_PreventPWMCounterOverrun[0];
+        rtb_TmpSignalConversionAtAvoidH[8] = rtb_PreventPWMCounterOverrun[1];
+        rtb_TmpSignalConversionAtAvoidH[9] = rtb_PreventPWMCounterOverrun[2];
+        for (rtb_Findmaxphasevoltageindex = 0; rtb_Findmaxphasevoltageindex < 6;
+             rtb_Findmaxphasevoltageindex++) {
+          rtb_TmpSignalConversionAtAvoidH[rtb_Findmaxphasevoltageindex + 10] =
+            genpath_firmware_B.BytePack[rtb_Findmaxphasevoltageindex];
         }
 
-        /* S-Function (c2802xpwm): '<S34>/SW_A' */
+        /* End of SignalConversion generated from: '<S7>/Avoid Header and Terminator Collision' */
+
+        /* Outputs for Iterator SubSystem: '<S7>/Avoid Header and Terminator Collision' incorporates:
+         *  ForEach: '<S43>/For Each'
+         */
+        for (rtb_Findmaxphasevoltageindex = 0; rtb_Findmaxphasevoltageindex < 16;
+             rtb_Findmaxphasevoltageindex++) {
+          /* ForEachSliceSelector generated from: '<S43>/Data Packet' */
+          rtb_Merge_p =
+            rtb_TmpSignalConversionAtAvoidH[rtb_Findmaxphasevoltageindex];
+
+          /* If: '<S43>/If1' */
+          if (rtb_Merge_p == 61166U) {
+            /* Outputs for IfAction SubSystem: '<S43>/If Action Subsystem' incorporates:
+             *  ActionPort: '<S47>/Action Port'
+             */
+            genpath_f_IfActionSubsystem(&rtb_Merge_p,
+              &genpath_firmware_P.CoreSubsys.IfActionSubsystem);
+
+            /* End of Outputs for SubSystem: '<S43>/If Action Subsystem' */
+          } else if (rtb_Merge_p == MAX_uint16_T) {
+            /* Outputs for IfAction SubSystem: '<S43>/If Action Subsystem1' incorporates:
+             *  ActionPort: '<S48>/Action Port'
+             */
+            genpath_f_IfActionSubsystem(&rtb_Merge_p,
+              &genpath_firmware_P.CoreSubsys.IfActionSubsystem1);
+
+            /* End of Outputs for SubSystem: '<S43>/If Action Subsystem1' */
+          }
+
+          /* End of If: '<S43>/If1' */
+
+          /* ForEachSliceAssignment generated from: '<S43>/Data' */
+          rtb_ImpAsg_InsertedFor_Data_at_[rtb_Findmaxphasevoltageindex] =
+            rtb_Merge_p;
+        }
+
+        /* End of Outputs for SubSystem: '<S7>/Avoid Header and Terminator Collision' */
+
+        /* If: '<S7>/If' incorporates:
+         *  Inport: '<S45>/Data_width'
+         *  UnitDelay: '<S44>/Output'
+         */
+        if (genpath_firmware_DW.Output_DSTATE == 0U) {
+          /* Outputs for IfAction SubSystem: '<S7>/Start' incorporates:
+           *  ActionPort: '<S46>/Action Port'
+           */
+          /* SignalConversion generated from: '<S46>/Data_out' incorporates:
+           *  Constant: '<S46>/End'
+           *  Constant: '<S46>/Start'
+           *  Inport: '<S46>/Data'
+           */
+          rtb_Merge[0] = genpath_firmware_P.End_Value;
+          rtb_Merge[1] = genpath_firmware_P.Start_Value;
+          for (rtb_Findmaxphasevoltageindex = 0; rtb_Findmaxphasevoltageindex <
+               16; rtb_Findmaxphasevoltageindex++) {
+            rtb_Merge[rtb_Findmaxphasevoltageindex + 2] =
+              rtb_ImpAsg_InsertedFor_Data_at_[rtb_Findmaxphasevoltageindex];
+          }
+
+          /* End of SignalConversion generated from: '<S46>/Data_out' */
+
+          /* Bias: '<S46>/Bias' */
+          rtb_Merge_p = genpath_firmware_ConstB.Width +
+            genpath_firmware_P.Bias_Bias_c;
+
+          /* End of Outputs for SubSystem: '<S7>/Start' */
+        } else {
+          /* Outputs for IfAction SubSystem: '<S7>/Data' incorporates:
+           *  ActionPort: '<S45>/Action Port'
+           */
+          /* SignalConversion generated from: '<S45>/Data_out' incorporates:
+           *  Constant: '<S45>/Start'
+           *  Constant: '<S45>/Start1'
+           *  Inport: '<S45>/Data'
+           */
+          for (rtb_Findmaxphasevoltageindex = 0; rtb_Findmaxphasevoltageindex <
+               16; rtb_Findmaxphasevoltageindex++) {
+            rtb_Merge[rtb_Findmaxphasevoltageindex] =
+              rtb_ImpAsg_InsertedFor_Data_at_[rtb_Findmaxphasevoltageindex];
+          }
+
+          rtb_Merge[16] = genpath_firmware_P.Start_Value_i;
+          rtb_Merge[17] = genpath_firmware_P.Start1_Value;
+
+          /* End of SignalConversion generated from: '<S45>/Data_out' */
+          rtb_Merge_p = genpath_firmware_ConstB.Width;
+
+          /* End of Outputs for SubSystem: '<S7>/Data' */
+        }
+
+        /* End of If: '<S7>/If' */
+
+        /* Outputs for Iterator SubSystem: '<S1>/Serial Transmit' incorporates:
+         *  WhileIterator: '<S8>/While Data Available'
+         */
+        /* MultiPortSwitch: '<S8>/Index Vector' */
+        rtb_Findmaxphasevoltageindex = 0;
+        do {
+          genpath_firmware_B.IndexVector =
+            rtb_Merge[rtb_Findmaxphasevoltageindex];
+
+          {
+            scia_xmit((char*)&genpath_firmware_B.IndexVector, 2, 2);
+          }
+
+          rtb_Add_p = (rtb_Merge_p - rtb_Findmaxphasevoltageindex) - 1U;
+          rtb_Findmaxphasevoltageindex++;
+        } while (rtb_Add_p != 0U);
+
+        /* End of Outputs for SubSystem: '<S1>/Serial Transmit' */
+
+        /* S-Function (c2802xpwm): '<S9>/SW_A' */
 
         /*-- Update CMPA value for ePWM1 --*/
         {
           EPwm1Regs.CMPA.bit.CMPA = (uint16_T)(rtb_PreventPWMCounterOverrun[0]);
         }
 
-        /* S-Function (c2802xpwm): '<S34>/SW_B' */
+        /* S-Function (c2802xpwm): '<S9>/SW_B' */
 
         /*-- Update CMPA value for ePWM4 --*/
         {
           EPwm4Regs.CMPA.bit.CMPA = (uint16_T)(rtb_PreventPWMCounterOverrun[1]);
         }
 
-        /* S-Function (c2802xpwm): '<S34>/SW_C' */
+        /* S-Function (c2802xpwm): '<S9>/SW_C' */
 
         /*-- Update CMPA value for ePWM2 --*/
         {
           EPwm2Regs.CMPA.bit.CMPA = (uint16_T)(rtb_PreventPWMCounterOverrun[2]);
         }
 
-        /* Logic: '<S6>/NOT' incorporates:
+        /* Logic: '<S5>/NOT' incorporates:
          *  DataTypeConversion: '<S4>/Data Type Conversion2'
          */
         genpath_firmware_B.NOT = !(genpath_firmware_B.RateTransitionSCIADC[2] !=
           0.0F);
 
-        /* S-Function (c280xgpio_do): '<S6>/Inverter Enable Pin' */
+        /* S-Function (c280xgpio_do): '<S5>/Inverter Enable Pin' */
         {
           if (genpath_firmware_B.NOT)
             GpioDataRegs.GPBSET.bit.GPIO33 = 1;
@@ -697,18 +837,30 @@ void isr_int1pie1_task_fcn(void)
             GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;
         }
 
-        /* Switch: '<S32>/FixPt Switch' */
+        /* Sum: '<S50>/FixPt Sum1' incorporates:
+         *  Constant: '<S50>/FixPt Constant'
+         *  UnitDelay: '<S44>/Output'
+         */
+        genpath_firmware_DW.Output_DSTATE +=
+          genpath_firmware_P.FixPtConstant_Value_j;
+
+        /* Switch: '<S51>/FixPt Switch' */
         if (genpath_firmware_DW.Output_DSTATE >
             genpath_firmware_P.CounterLimited_uplimit_k) {
-          /* Sum: '<S31>/FixPt Sum1' incorporates:
-           *  Constant: '<S32>/Constant'
-           *  UnitDelay: '<S25>/Output'
+          /* Sum: '<S50>/FixPt Sum1' incorporates:
+           *  Constant: '<S51>/Constant'
+           *  UnitDelay: '<S44>/Output'
            */
           genpath_firmware_DW.Output_DSTATE =
             genpath_firmware_P.Constant_Value_m;
         }
 
-        /* End of Switch: '<S32>/FixPt Switch' */
+        /* End of Switch: '<S51>/FixPt Switch' */
+
+        /* Update for UnitDelay: '<S38>/Unit Delay' */
+        genpath_firmware_DW.UnitDelay_DSTATE_g[0] = rtb_Gain2_idx_0;
+        genpath_firmware_DW.UnitDelay_DSTATE_g[1] = rtb_Gain2_idx_1;
+        genpath_firmware_DW.UnitDelay_DSTATE_g[2] = rtb_Gain2;
       }
 
       /* End of Outputs for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt' */
@@ -834,28 +986,28 @@ static void rate_monotonic_scheduler(void)
 
 /*
  * Output and update for action system:
- *    '<S24>/If Action Subsystem'
- *    '<S24>/If Action Subsystem1'
+ *    '<S26>/Upper Always On'
+ *    '<S26>/Lower Always On'
  */
-void genpath_f_IfActionSubsystem(uint16_T *rty_Out1,
-  P_IfActionSubsystem_genpath_f_T *localP)
+void genpath_firmw_UpperAlwaysOn(boolean_T *rty_Out1,
+  P_UpperAlwaysOn_genpath_firmw_T *localP)
 {
-  /* SignalConversion generated from: '<S28>/Out1' incorporates:
-   *  Constant: '<S28>/Constant'
+  /* SignalConversion generated from: '<S30>/Out1' incorporates:
+   *  Constant: '<S30>/Constant'
    */
   *rty_Out1 = localP->Constant_Value;
 }
 
 /*
  * Output and update for action system:
- *    '<S36>/Upper Always On'
- *    '<S36>/Lower Always On'
+ *    '<S43>/If Action Subsystem'
+ *    '<S43>/If Action Subsystem1'
  */
-void genpath_firmw_UpperAlwaysOn(boolean_T *rty_Out1,
-  P_UpperAlwaysOn_genpath_firmw_T *localP)
+void genpath_f_IfActionSubsystem(uint16_T *rty_Out1,
+  P_IfActionSubsystem_genpath_f_T *localP)
 {
-  /* SignalConversion generated from: '<S40>/Out1' incorporates:
-   *  Constant: '<S40>/Constant'
+  /* SignalConversion generated from: '<S47>/Out1' incorporates:
+   *  Constant: '<S47>/Constant'
    */
   *rty_Out1 = localP->Constant_Value;
 }
@@ -882,6 +1034,11 @@ void genpath_firmware_step1(void)      /* Sample time: [1.0s, 0.0s] */
 /* Model initialize function */
 void genpath_firmware_initialize(void)
 {
+  /* Registration code */
+
+  /* initialize non-finites */
+  rt_InitInfAndNaN(sizeof(real_T));
+
   /* Start for S-Function (c280xgpio_do): '<Root>/Heartbeat LED' incorporates:
    *  Constant: '<Root>/Constant'
    */
@@ -903,7 +1060,7 @@ void genpath_firmware_initialize(void)
    */
   /* System initialize for function-call system: '<Root>/ADC Interrupt Callback' */
 
-  /* Start for S-Function (c2802xadc): '<S11>/V_A' */
+  /* Start for S-Function (c2802xadc): '<S13>/V_A' */
   if (MW_adcBInitFlag == 0) {
     InitAdcB();
     MW_adcBInitFlag = 1;
@@ -911,7 +1068,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCB_SOC0 ();
 
-  /* Start for S-Function (c2802xadc): '<S11>/V_B' */
+  /* Start for S-Function (c2802xadc): '<S13>/V_B' */
   if (MW_adcCInitFlag == 0) {
     InitAdcC();
     MW_adcCInitFlag = 1;
@@ -919,7 +1076,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCC_SOC1 ();
 
-  /* Start for S-Function (c2802xadc): '<S11>/V_C' */
+  /* Start for S-Function (c2802xadc): '<S13>/V_C' */
   if (MW_adcCInitFlag == 0) {
     InitAdcC();
     MW_adcCInitFlag = 1;
@@ -927,7 +1084,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCC_SOC2 ();
 
-  /* Start for S-Function (c2802xadc): '<S9>/I_A' */
+  /* Start for S-Function (c2802xadc): '<S11>/I_A' */
   if (MW_adcCInitFlag == 0) {
     InitAdcC();
     MW_adcCInitFlag = 1;
@@ -935,7 +1092,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCC_SOC3 ();
 
-  /* Start for S-Function (c2802xadc): '<S9>/I_B' */
+  /* Start for S-Function (c2802xadc): '<S11>/I_B' */
   if (MW_adcCInitFlag == 0) {
     InitAdcC();
     MW_adcCInitFlag = 1;
@@ -943,7 +1100,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCC_SOC4 ();
 
-  /* Start for S-Function (c2802xadc): '<S9>/I_C' */
+  /* Start for S-Function (c2802xadc): '<S11>/I_C' */
   if (MW_adcAInitFlag == 0) {
     InitAdcA();
     MW_adcAInitFlag = 1;
@@ -959,7 +1116,7 @@ void genpath_firmware_initialize(void)
 
   config_ADCA_SOC6 ();
 
-  /* Start for S-Function (c2802xpwm): '<S34>/SW_A' */
+  /* Start for S-Function (c2802xpwm): '<S9>/SW_A' */
 
   /*** Initialize ePWM1 modules ***/
   {
@@ -1181,7 +1338,7 @@ void genpath_firmware_initialize(void)
     EDIS;
   }
 
-  /* Start for S-Function (c2802xpwm): '<S34>/SW_B' */
+  /* Start for S-Function (c2802xpwm): '<S9>/SW_B' */
 
   /*** Initialize ePWM4 modules ***/
   {
@@ -1403,7 +1560,7 @@ void genpath_firmware_initialize(void)
     EDIS;
   }
 
-  /* Start for S-Function (c2802xpwm): '<S34>/SW_C' */
+  /* Start for S-Function (c2802xpwm): '<S9>/SW_C' */
 
   /*** Initialize ePWM2 modules ***/
   {
@@ -1630,42 +1787,70 @@ void genpath_firmware_initialize(void)
     EDIS;
   }
 
-  /* Start for S-Function (c280xgpio_do): '<S6>/Inverter Enable Pin' */
+  /* Start for S-Function (c280xgpio_do): '<S5>/Inverter Enable Pin' */
   EALLOW;
   GpioCtrlRegs.GPBMUX1.all &= 0xFFFFFFF3;
   GpioCtrlRegs.GPBDIR.all |= 0x2;
   EDIS;
 
-  /* InitializeConditions for Sum: '<S31>/FixPt Sum1' incorporates:
-   *  UnitDelay: '<S25>/Output'
+  /* InitializeConditions for Sum: '<S50>/FixPt Sum1' incorporates:
+   *  UnitDelay: '<S44>/Output'
    */
   genpath_firmware_DW.Output_DSTATE =
     genpath_firmware_P.Output_InitialCondition_a;
 
-  /* InitializeConditions for UnitDelay: '<S18>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
   genpath_firmware_DW.UnitDelay_DSTATE[0] =
     genpath_firmware_P.UnitDelay_InitialCondition;
+
+  /* InitializeConditions for UnitDelay: '<S38>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_g[0] =
+    genpath_firmware_P.UnitDelay_InitialCondition_j;
+
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_m[0] =
+    genpath_firmware_P.UnitDelay_InitialCondition_i;
+
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
   genpath_firmware_DW.UnitDelay_DSTATE[1] =
     genpath_firmware_P.UnitDelay_InitialCondition;
+
+  /* InitializeConditions for UnitDelay: '<S38>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_g[1] =
+    genpath_firmware_P.UnitDelay_InitialCondition_j;
+
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_m[1] =
+    genpath_firmware_P.UnitDelay_InitialCondition_i;
+
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
   genpath_firmware_DW.UnitDelay_DSTATE[2] =
     genpath_firmware_P.UnitDelay_InitialCondition;
 
-  /* InitializeConditions for Sum: '<S15>/Add1' incorporates:
-   *  UnitDelay: '<S15>/Unit Delay'
+  /* InitializeConditions for UnitDelay: '<S38>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_g[2] =
+    genpath_firmware_P.UnitDelay_InitialCondition_j;
+
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  genpath_firmware_DW.UnitDelay_DSTATE_m[2] =
+    genpath_firmware_P.UnitDelay_InitialCondition_i;
+
+  /* InitializeConditions for Sum: '<S17>/Add1' incorporates:
+   *  UnitDelay: '<S17>/Unit Delay'
    */
   genpath_firmware_DW.UnitDelay_DSTATE_k =
     genpath_firmware_P.UnitDelay_InitialCondition_b;
 
-  /* SystemInitialize for IfAction SubSystem: '<S36>/Load Balancing' */
-  /* InitializeConditions for Sum: '<S42>/FixPt Sum1' incorporates:
-   *  UnitDelay: '<S41>/Output'
+  /* SystemInitialize for IfAction SubSystem: '<S26>/Load Balancing' */
+  /* InitializeConditions for Sum: '<S32>/FixPt Sum1' incorporates:
+   *  UnitDelay: '<S31>/Output'
    */
   genpath_firmware_DW.Output_DSTATE_d =
     genpath_firmware_P.Output_InitialCondition;
 
-  /* End of SystemInitialize for SubSystem: '<S36>/Load Balancing' */
+  /* End of SystemInitialize for SubSystem: '<S26>/Load Balancing' */
 
-  /* SystemInitialize for Merge: '<S36>/Merge' */
+  /* SystemInitialize for Merge: '<S26>/Merge' */
   genpath_firmware_B.Merge = genpath_firmware_P.Merge_InitialOutput;
 
   /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt' incorporates:

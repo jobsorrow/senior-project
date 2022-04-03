@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.40
+ * Model version                  : 1.46
  * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Wed Mar  2 20:58:00 2022
+ * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -89,10 +89,10 @@ extern uint16_T MW_adcAInitFlag;
 void isr_int1pie1_task_fcn(void);
 void isr_int9pie1_task_fcn(void);
 extern void configureGPIOExtInterrupt(void);
-extern void genpath_f_IfActionSubsystem(uint16_T *rty_Out1,
-  P_IfActionSubsystem_genpath_f_T *localP);
 extern void genpath_firmw_UpperAlwaysOn(boolean_T *rty_Out1,
   P_UpperAlwaysOn_genpath_firmw_T *localP);
+extern void genpath_f_IfActionSubsystem(uint16_T *rty_Out1,
+  P_IfActionSubsystem_genpath_f_T *localP);
 void isr_int1pie1_task_fcn(void);
 
 #endif                              /* RTW_HEADER_genpath_firmware_private_h_ */

@@ -73,6 +73,21 @@
 <location>C:/Users/61301765/senior-project/Source and Simulink File/Main/genpath_firmware_ert_rtw/genpath_firmware_data.c</location>
 </link>
 <link>
+<name>rtGetInf.c</name>
+<type>1</type>
+<location>C:/Users/61301765/senior-project/Source and Simulink File/Main/genpath_firmware_ert_rtw/rtGetInf.c</location>
+</link>
+<link>
+<name>rtGetNaN.c</name>
+<type>1</type>
+<location>C:/Users/61301765/senior-project/Source and Simulink File/Main/genpath_firmware_ert_rtw/rtGetNaN.c</location>
+</link>
+<link>
+<name>rt_nonfinite.c</name>
+<type>1</type>
+<location>C:/Users/61301765/senior-project/Source and Simulink File/Main/genpath_firmware_ert_rtw/rt_nonfinite.c</location>
+</link>
+<link>
 <name>c28004xBoard_Realtime_Support.c</name>
 <type>1</type>
 <location>C:/ProgramData/MATLAB/SupportPackages/R2021a/toolbox/target/supportpackages/tic2000/src/c28004xBoard_Realtime_Support.c</location>

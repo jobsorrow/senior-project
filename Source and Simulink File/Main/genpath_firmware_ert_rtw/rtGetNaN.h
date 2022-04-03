@@ -3,7 +3,7 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * File: rtmodel.h
+ * File: rtGetNaN.h
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
@@ -20,15 +20,16 @@
  * Validation result: Not run
  */
 
-#ifndef RTW_HEADER_rtmodel_h_
-#define RTW_HEADER_rtmodel_h_
-#include "genpath_firmware.h"
+#ifndef RTW_HEADER_rtGetNaN_h_
+#define RTW_HEADER_rtGetNaN_h_
+#include <stddef.h>
+#include "rtwtypes.h"
+#include "rt_nonfinite.h"
 
-/* Macros generated for backwards compatibility  */
-#ifndef rtmGetStopRequested
-#define rtmGetStopRequested(rtm)       ((void*) 0)
-#endif
-#endif                                 /* RTW_HEADER_rtmodel_h_ */
+extern real_T rtGetNaN(void);
+extern real32_T rtGetNaNF(void);
+
+#endif                                 /* RTW_HEADER_rtGetNaN_h_ */
 
 /*
  * File trailer for generated code.
