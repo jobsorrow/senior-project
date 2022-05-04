@@ -1,7 +1,5 @@
 #include "c2000BoardSupport.h"
-#include "f28004x_device.h"
-#include "f28004x_examples.h"
-#include "f28004x_globalprototypes.h"
+#include "MW_f28004x_includes.h"
 #include "rtwtypes.h"
 #include "genpath_firmware.h"
 #include "genpath_firmware_private.h"
@@ -53,8 +51,13 @@ void enable_interrupts()
   ERTM;                               /* Enable Global realtime interrupt DBGM*/
 }
 
+int checkSCITransmitInprogress;
 void init_SCI(void)
-{                                      /* initialize SCI & FIFO registers */
+{
+  // to prevent re-entrancy in SCI transmit function
+  checkSCITransmitInprogress = 0;
+
+  /* initialize SCI & FIFO registers */
   EALLOW;
 
   /*

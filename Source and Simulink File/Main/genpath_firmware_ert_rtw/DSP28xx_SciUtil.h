@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -22,6 +22,7 @@
 
 #ifndef RTW_HEADER_DSP28xx_SciUtil_h_
 #define RTW_HEADER_DSP28xx_SciUtil_h_
+#include "MW_f28004x_includes.h"
 #include "f28004x_device.h"
 #include <string.h>
 #define NOERROR                        0                         /* no error*/
@@ -31,14 +32,14 @@
 #define FRAMERR                        4                         /* frame error*/
 #define OVRNERR                        5                         /* overrun error*/
 #define BRKDTERR                       6                         /* brake-detect error*/
-#define RCVMAXRETRY                    10
-#define RCVMAXCNTS                     1000
-#define RCVMAXCNTL                     50000
-#define SHORTLOOP                      0
-#define LONGLOOP                       1
+#define DATANOTAVAILABLE               7                         /* Data not available */
+#define PARTIALDATA                    8                         /* Partial Data available */
 
-void scia_xmit(char* pmsg, int msglen, int typeLen);
-int scia_rcv(unsigned int *rcvBuff, int buffLen, int loopMode, int typeLen);
+extern int checkSCITransmitInprogress;
+int scia_xmit(char* pmsg, int msglen, int typeLen);
+int scia_rcv(unsigned int *rcvBuff, int buffLen, int typeLen);
+int scia_rcv_varsize(unsigned int *rcvBuff, int buffLen, int typeLen, char
+                     *expTail, int tailsize, int *rcvBufferLen);
 int byteswap_L8cmp(unsigned int* outdata, char* recdata, int inportWidth, int
                    typeLen);
 

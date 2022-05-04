@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -23,7 +23,8 @@
 #include "DSP28xx_SciUtil.h"
 
 /* Transmit character(s) from the SCIa*/
-void scia_xmit(char* pmsg, int msglen, int typeLen)
+int scia_xmit(char* pmsg, int msglen, int typeLen)
+/*Blocking mode*/
 {
   int i,j;
   if (typeLen==1) {
@@ -33,8 +34,6 @@ void scia_xmit(char* pmsg, int msglen, int typeLen)
 
       SciaRegs.SCITXBUF.bit.TXDT = pmsg[i];
     }
-
-    //while(SciaRegs.SCIFFTX.bit.TXFFST != 0){}
   } else {
     for (i = 0; i < (msglen/2); i++) {
       for (j = 0; j<=1; j++) {
@@ -44,9 +43,9 @@ void scia_xmit(char* pmsg, int msglen, int typeLen)
         SciaRegs.SCITXBUF.bit.TXDT = pmsg[i]>>(8*j);
       }
     }
-
-    //while(SciaRegs.SCIFFTX.bit.TXFFST != 0){}
   }
+
+  return 0;
 }
 
 /*
@@ -58,28 +57,27 @@ void scia_xmit(char* pmsg, int msglen, int typeLen)
  * Return 3 if a parity error occured.
  * Return 4 if a frame error occured.
  */
-int scia_rcv(unsigned int *rcvBuff, int buffLen, int loopMode, int typeLen)
+int scia_rcv(unsigned int *rcvBuff, int buffLen, int typeLen)
 {
   int i;
   int errorVal = NOERROR;
   unsigned int byte_cnt = 0;
-  unsigned int cnt = 0;
-  unsigned int maxcnt;
-  if (loopMode == LONGLOOP) {
-    maxcnt = RCVMAXCNTL;
-  } else {
-    maxcnt = RCVMAXCNTS;
-  }
-
+  Uint32 elapsedTimeCnt, startTimeCnt, currentTimeCnt;
+  unsigned int BlockingModeTimeoutCnt = 1.75E+6;
   for (i = 0; i<buffLen; i++) {
-    cnt = 0;
-    while (SciaRegs.SCIFFRX.bit.RXFFST == 0) {/* wait until data received */
-      if (i == 0) {
-        if (cnt++ > maxcnt)
-          return TIMEOUT;
+    startTimeCnt = ReadCpuTimer2Counter();
+    elapsedTimeCnt = 0;
+    while (SciaRegs.SCIFFRX.bit.RXFFST == 0) {
+      /* wait until data received */
+      currentTimeCnt = (ReadCpuTimer2Counter());
+      if (currentTimeCnt <= startTimeCnt) {
+        elapsedTimeCnt = (Uint32)(startTimeCnt - currentTimeCnt);
       } else {
-        if (cnt++ > RCVMAXCNTL)
-          return TIMEOUT;
+        elapsedTimeCnt = (Uint32)(0xFFFFFFFF + startTimeCnt - currentTimeCnt);
+      }
+
+      if (elapsedTimeCnt >= BlockingModeTimeoutCnt) {
+        return TIMEOUT;
       }
     }
 
@@ -95,6 +93,7 @@ int scia_rcv(unsigned int *rcvBuff, int buffLen, int loopMode, int typeLen)
       rcvBuff[i] = SciaRegs.SCIRXBUF.all;
     }
 
+    //check flags
     if (SciaRegs.SCIFFRX.bit.RXFFOVF == 1)/* detect FIFO overflow*/
     {
       SciaRegs.SCIFFRX.bit.RXFFOVRCLR = 1;
@@ -116,6 +115,120 @@ int scia_rcv(unsigned int *rcvBuff, int buffLen, int loopMode, int typeLen)
       SciaRegs.SCICTL1.bit.SWRESET = 1;
       SciaRegs.SCICTL1.bit.SWRESET = 0;
       SciaRegs.SCICTL1.bit.SWRESET = 1;
+    }
+  }
+
+  return errorVal;
+}
+
+/*
+ * Receive character(s) from the SCIa
+ * Received character(s) will be write to rcvBuff.
+ * Receive data until tail is receives.
+ * Once first byte of tail matches with received byte start tailCount
+ * If in between tail byte is not matching with received byte then reset tailCount
+ * When tailCount becomes equal to tailSize then update rcvBufferLen with received number of bytes, check forFlags and exit.
+ *
+ *
+ * Return 0 if characters are received with no error.
+ * Return 1 if waiting timeout.
+ * Return 2 if data error.(receiving timout or checksum error)
+ * Return 3 if a parity error occured.
+ * Return 4 if a frame error occured.
+ */
+int scia_rcv_varsize(unsigned int *rcvBuff, int buffLen, int typeLen, char
+                     *expTail, int tailsize, int *rcvBufferLen)
+{
+  int i = 0;
+  int errorVal = NOERROR;
+  unsigned int byte_cnt = 0;
+  int tailCount = 0;
+  int totalLen = buffLen + tailsize;
+  *rcvBufferLen = 0;
+  while (i < totalLen) {
+    if (SciaRegs.SCIFFRX.bit.RXFFST > 0) {/*Check if receive FIFO has data*/
+      if (typeLen > 1) {
+        if (byte_cnt == 0) {
+          rcvBuff[i/2] = (SciaRegs.SCIRXBUF.all & 0x00FF);
+          byte_cnt = 1;
+        } else {
+          rcvBuff[i/2] |= SciaRegs.SCIRXBUF.all << 8;
+          byte_cnt = 0;
+        }
+
+        if (tailsize != 0) {
+          // Do not check tail if tail is not provided
+          if (rcvBuff[i/2] == expTail[tailCount]) {
+            tailCount++;
+            if (tailCount == tailsize) {
+              *rcvBufferLen = i - tailsize + 1;
+              break;
+            }
+          } else {
+            tailCount = 0;
+          }
+        }
+      } else {
+        rcvBuff[i] = SciaRegs.SCIRXBUF.all;
+        if (tailsize != 0) {
+          // Do not check tail if tail is not provided
+          if (rcvBuff[i] == expTail[tailCount]) {
+            tailCount++;
+            if (tailCount == tailsize) {
+              *rcvBufferLen = i - tailsize + 1;
+              break;
+            }
+          }
+        } else {
+          tailCount = 0;
+        }
+      }
+    } else {
+      if (i == 0) {
+        return DATANOTAVAILABLE;
+      } else {
+        *rcvBufferLen = i;
+        errorVal = PARTIALDATA;
+        break;
+      }
+    }
+
+    i = i+1;
+
+    //Check flags
+    if (SciaRegs.SCIFFRX.bit.RXFFOVF == 1)/* detect FIFO overflow*/
+    {
+      SciaRegs.SCIFFRX.bit.RXFFOVRCLR = 1;
+
+      /*SciaRegs.SCIFFRX.bit.RXFIFORESET = 0;    Reset the FIFO pointer to zero.
+       * SciaRegs.SCIFFRX.bit.RXFIFORESET = 1;   Re-enable receive FIFO operation.
+       */
+    }
+
+    if (SciaRegs.SCIRXST.bit.FE)
+      errorVal = FRAMERR;
+    if (SciaRegs.SCIRXST.bit.PE)
+      errorVal = PRTYERR;
+    if (SciaRegs.SCIRXST.bit.OE)
+      errorVal = OVRNERR;
+    if (SciaRegs.SCIRXST.bit.BRKDT)
+      errorVal = BRKDTERR;
+    if (SciaRegs.SCIRXST.bit.RXERROR == 1) {
+      SciaRegs.SCICTL1.bit.SWRESET = 1;
+      SciaRegs.SCICTL1.bit.SWRESET = 0;
+      SciaRegs.SCICTL1.bit.SWRESET = 1;
+    }
+  }
+
+  if (0 == tailsize) {
+    if (errorVal != PARTIALDATA) {
+      //In case of tail not provided, error flag will NOERROR if data received is of max length
+      *rcvBufferLen = totalLen;
+    }
+  } else {
+    // error out as data not available if tail is provided and not found till maximum length
+    if (*rcvBufferLen == 0) {
+      return DATANOTAVAILABLE;
     }
   }
 

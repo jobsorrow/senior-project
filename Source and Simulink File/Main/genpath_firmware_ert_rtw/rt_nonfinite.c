@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -20,14 +20,11 @@
  * Validation result: Not run
  */
 
-/*
- * Abstract:
- *      Function to initialize non-finites,
- *      (Inf, NaN and -Inf).
- */
-#include "rt_nonfinite.h"
 #include "rtGetNaN.h"
 #include "rtGetInf.h"
+#include <stddef.h>
+#include "rtwtypes.h"
+#include "rt_nonfinite.h"
 #define NumBitsPerChar                 16U
 
 real_T rtInf;

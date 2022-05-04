@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -21,7 +21,10 @@
  */
 
 #include "genpath_firmware.h"
+#include "rtwtypes.h"
 #include "genpath_firmware_private.h"
+#include <math.h>
+#include "rt_nonfinite.h"
 
 /* Block signals (default storage) */
 B_genpath_firmware_T genpath_firmware_B;
@@ -33,9 +36,24 @@ DW_genpath_firmware_T genpath_firmware_DW;
 static RT_MODEL_genpath_firmware_T genpath_firmware_M_;
 RT_MODEL_genpath_firmware_T *const genpath_firmware_M = &genpath_firmware_M_;
 static void rate_monotonic_scheduler(void);
+
+#ifndef __TMS320C28XX_CLA__
+
 uint16_T MW_adcBInitFlag = 0;
+
+#endif
+
+#ifndef __TMS320C28XX_CLA__
+
 uint16_T MW_adcCInitFlag = 0;
+
+#endif
+
+#ifndef __TMS320C28XX_CLA__
+
 uint16_T MW_adcAInitFlag = 0;
+
+#endif
 
 /* Hardware Interrupt Block: '<Root>/C28x Hardware Interrupt' */
 void isr_int1pie1_task_fcn(void)
@@ -730,7 +748,6 @@ void isr_int1pie1_task_fcn(void)
         /* End of Outputs for SubSystem: '<S7>/Avoid Header and Terminator Collision' */
 
         /* If: '<S7>/If' incorporates:
-         *  Inport: '<S45>/Data_width'
          *  UnitDelay: '<S44>/Output'
          */
         if (genpath_firmware_DW.Output_DSTATE == 0U) {
@@ -740,7 +757,7 @@ void isr_int1pie1_task_fcn(void)
           /* SignalConversion generated from: '<S46>/Data_out' incorporates:
            *  Constant: '<S46>/End'
            *  Constant: '<S46>/Start'
-           *  Inport: '<S46>/Data'
+           *  SignalConversion generated from: '<S46>/Data'
            */
           rtb_Merge[0] = genpath_firmware_P.End_Value;
           rtb_Merge[1] = genpath_firmware_P.Start_Value;
@@ -764,7 +781,7 @@ void isr_int1pie1_task_fcn(void)
           /* SignalConversion generated from: '<S45>/Data_out' incorporates:
            *  Constant: '<S45>/Start'
            *  Constant: '<S45>/Start1'
-           *  Inport: '<S45>/Data'
+           *  SignalConversion generated from: '<S45>/Data'
            */
           for (rtb_Findmaxphasevoltageindex = 0; rtb_Findmaxphasevoltageindex <
                16; rtb_Findmaxphasevoltageindex++) {
@@ -776,6 +793,8 @@ void isr_int1pie1_task_fcn(void)
           rtb_Merge[17] = genpath_firmware_P.Start1_Value;
 
           /* End of SignalConversion generated from: '<S45>/Data_out' */
+
+          /* SignalConversion generated from: '<S45>/Data_width' */
           rtb_Merge_p = genpath_firmware_ConstB.Width;
 
           /* End of Outputs for SubSystem: '<S7>/Data' */
@@ -793,7 +812,15 @@ void isr_int1pie1_task_fcn(void)
             rtb_Merge[rtb_Findmaxphasevoltageindex];
 
           {
-            scia_xmit((char*)&genpath_firmware_B.IndexVector, 2, 2);
+            if (checkSCITransmitInprogress != 1) {
+              checkSCITransmitInprogress = 1;
+              int errFlgHeader = NOERROR;
+              int errFlgData = NOERROR;
+              int errFlgTail = NOERROR;
+              errFlgData = scia_xmit((char*)&genpath_firmware_B.IndexVector, 2,
+                2);
+              checkSCITransmitInprogress = 0;
+            }
           }
 
           rtb_Add_p = (rtb_Merge_p - rtb_Findmaxphasevoltageindex) - 1U;
@@ -882,6 +909,8 @@ void isr_int9pie1_task_fcn(void)
       {
         int i;
         int errFlg = NOERROR;
+
+        //get data as uint16 in recBuff
         unsigned int recbuff[6];
         for (i = 0; i < 6; i++)
           recbuff[i] = 0;
@@ -893,14 +922,14 @@ void isr_int9pie1_task_fcn(void)
           int i = 0;
           char *expHead = "S";
           while (i < 1) {
-            scia_rcv(&recHead, 1, SHORTLOOP, 1);
+            scia_rcv(&recHead, 1, 1);
             if (recHead == expHead[i]) {
               i++;
             } else {
               i = 0;
             }
 
-            if (cnt++ > 16) {
+            if (cnt++ > 16U) {
               errFlg = TIMEOUT;
               goto RXERRA;
             }
@@ -909,8 +938,8 @@ void isr_int9pie1_task_fcn(void)
 
         /* End of Getting Data Head */
 
-        /* Receiving data */
-        errFlg = scia_rcv(recbuff, 12, LONGLOOP, 4);
+        /* Receiving data: For uint32 and uint16, rcvBuff will contain uint16 data */
+        errFlg = scia_rcv(recbuff, 12, 4);
         if (errFlg != NOERROR)
           goto RXERRA;
 
@@ -919,7 +948,7 @@ void isr_int9pie1_task_fcn(void)
           int i;
           char *expTail = "E";
           unsigned int recTail[1];
-          scia_rcv(recTail, 1, LONGLOOP, 1);
+          scia_rcv(recTail, 1, 1);
           for (i = 0; i< 1; i++) {
             if (expTail[i] != recTail[i]) {
               errFlg = DATAERR;
@@ -929,7 +958,7 @@ void isr_int9pie1_task_fcn(void)
         }
 
         /* End of Getting Data Tail */
-        memcpy( &genpath_firmware_B.SCIAReceive[0], recbuff, 6);
+        memcpy( &genpath_firmware_B.SCIAReceive[0], recbuff,6);
        RXERRA:
         asm(" NOP");
       }
@@ -955,7 +984,7 @@ void isr_int9pie1_task_fcn(void)
 /*
  * Set which subrates need to run this base step (base rate always runs).
  * This function must be called prior to calling the model step function
- * in order to "remember" which rates need to run this base step.  The
+ * in order to remember which rates need to run this base step.  The
  * buffering of events allows for overlapping preemption.
  */
 void genpath_firmware_SetEventsForThisBaseStep(boolean_T *eventFlags)
@@ -965,12 +994,12 @@ void genpath_firmware_SetEventsForThisBaseStep(boolean_T *eventFlags)
 }
 
 /*
- *   This function updates active task flag for each subrate
- * and rate transition flags for tasks that exchange data.
- * The function assumes rate-monotonic multitasking scheduler.
- * The function must be called at model base rate so that
- * the generated code self-manages all its subrates and rate
- * transition flags.
+ *         This function updates active task flag for each subrate
+ *         and rate transition flags for tasks that exchange data.
+ *         The function assumes rate-monotonic multitasking scheduler.
+ *         The function must be called at model base rate so that
+ *         the generated code self-manages all its subrates and rate
+ *         transition flags.
  */
 static void rate_monotonic_scheduler(void)
 {
@@ -1799,7 +1828,9 @@ void genpath_firmware_initialize(void)
   genpath_firmware_DW.Output_DSTATE =
     genpath_firmware_P.Output_InitialCondition_a;
 
-  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' incorporates:
+   *  Sum: '<S20>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE[0] =
     genpath_firmware_P.UnitDelay_InitialCondition;
 
@@ -1807,11 +1838,15 @@ void genpath_firmware_initialize(void)
   genpath_firmware_DW.UnitDelay_DSTATE_g[0] =
     genpath_firmware_P.UnitDelay_InitialCondition_j;
 
-  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' incorporates:
+   *  Sum: '<S42>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE_m[0] =
     genpath_firmware_P.UnitDelay_InitialCondition_i;
 
-  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' incorporates:
+   *  Sum: '<S20>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE[1] =
     genpath_firmware_P.UnitDelay_InitialCondition;
 
@@ -1819,11 +1854,15 @@ void genpath_firmware_initialize(void)
   genpath_firmware_DW.UnitDelay_DSTATE_g[1] =
     genpath_firmware_P.UnitDelay_InitialCondition_j;
 
-  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' incorporates:
+   *  Sum: '<S42>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE_m[1] =
     genpath_firmware_P.UnitDelay_InitialCondition_i;
 
-  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' incorporates:
+   *  Sum: '<S20>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE[2] =
     genpath_firmware_P.UnitDelay_InitialCondition;
 
@@ -1831,7 +1870,9 @@ void genpath_firmware_initialize(void)
   genpath_firmware_DW.UnitDelay_DSTATE_g[2] =
     genpath_firmware_P.UnitDelay_InitialCondition_j;
 
-  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+  /* InitializeConditions for UnitDelay: '<S42>/Unit Delay' incorporates:
+   *  Sum: '<S42>/Add1'
+   */
   genpath_firmware_DW.UnitDelay_DSTATE_m[2] =
     genpath_firmware_P.UnitDelay_InitialCondition_i;
 
@@ -1852,6 +1893,7 @@ void genpath_firmware_initialize(void)
 
   /* SystemInitialize for Merge: '<S26>/Merge' */
   genpath_firmware_B.Merge = genpath_firmware_P.Merge_InitialOutput;
+  ;
 
   /* SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt' incorporates:
    *  SubSystem: '<Root>/SCI Receive Interrupt Callback'
@@ -1868,12 +1910,21 @@ void genpath_firmware_initialize(void)
     genpath_firmware_B.SCIAReceive[2] = (real32_T)0.0;
   }
 
+  /*Configure Timer2 when blocking mode enbled And Timeout is not inf*/
+  {
+    CpuTimer2Regs.PRD.all = 0xFFFFFFFF;/* max Period*/
+    CpuTimer2Regs.TIM.all = 0xFFFFFFFF;/* set Ctr*/
+    CpuTimer2Regs.TPR.all = 0x00;      /* no prescaler    */
+    StartCpuTimer2();
+  }
+
   /* SystemInitialize for S-Function (c28xsci_rx): '<S2>/SCIA Receive' incorporates:
    *  Outport: '<S2>/Commanded Signal'
    */
   genpath_firmware_B.SCIAReceive[0] = genpath_firmware_P.CommandedSignal_Y0;
   genpath_firmware_B.SCIAReceive[1] = genpath_firmware_P.CommandedSignal_Y0;
   genpath_firmware_B.SCIAReceive[2] = genpath_firmware_P.CommandedSignal_Y0;
+  ;
 
   /* End of SystemInitialize for S-Function (c28xisr_c2000): '<Root>/C28x Hardware Interrupt' */
 }

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -22,23 +22,20 @@
 
 #ifndef RTW_HEADER_genpath_firmware_h_
 #define RTW_HEADER_genpath_firmware_h_
-#include <math.h>
-#include <stddef.h>
 #ifndef genpath_firmware_COMMON_INCLUDES_
 #define genpath_firmware_COMMON_INCLUDES_
 #include "rtwtypes.h"
 #include "c2000BoardSupport.h"
-#include "f28004x_device.h"
+#include "MW_f28004x_includes.h"
 #include "DSP28xx_SciUtil.h"
-#include "f28004x_examples.h"
 #include "IQmathLib.h"
-#include "f28004x_gpio.h"
 #endif                                 /* genpath_firmware_COMMON_INCLUDES_ */
 
 #include "genpath_firmware_types.h"
-#include "MW_target_hardware_resources.h"
-#include "rt_nonfinite.h"
 #include "rtGetInf.h"
+#include "rt_nonfinite.h"
+#include <stddef.h>
+#include "MW_target_hardware_resources.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
@@ -65,7 +62,6 @@ extern void initializeOverrunService();
 extern void executeOverrunService();
 extern void config_ePWM_GPIO (void);
 extern void config_ePWM_XBAR(void);
-extern void configureIXbar(void);
 
 /* Block signals (default storage) */
 typedef struct {
@@ -326,7 +322,7 @@ struct P_genpath_firmware_T_ {
 
 /* Real-time Model Data Structure */
 struct tag_RTM_genpath_firmware_T {
-  const char_T *errorStatus;
+  const char_T * volatile errorStatus;
 
   /*
    * Timing:

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'genpath_firmware'.
  *
- * Model version                  : 1.46
- * Simulink Coder version         : 9.5 (R2021a) 14-Nov-2020
- * C/C++ source code generated on : Thu Mar 24 12:49:35 2022
+ * Model version                  : 1.47
+ * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+ * C/C++ source code generated on : Thu Apr  7 11:34:15 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Texas Instruments->C2000
@@ -44,9 +44,8 @@ void rt_OneStep(void)
    * For a bare-board target (i.e., no operating system), the rates
    * that execute this base step are buffered locally to allow for
    * overlapping preemption.  The generated code includes function
-   * writeCodeInfoFcn() which sets the rates
-   * that need to run this time step.  The return values are 1 and 0
-   * for true and false, respectively.
+   * writeCodeInfoFcn() which sets the rates that need to run this time step.
+   * The return values are 1 and 0 for true and false, respectively.
    */
   genpath_firmware_SetEventsForThisBaseStep(eventFlags);
   enableTimer0Interrupt();
@@ -105,9 +104,9 @@ int main(void)
   c2000_flash_init();
   init_board();
 
-#ifdef MW_EXEC_PROFILER_ON
+#if defined(MW_EXEC_PROFILER_ON) || defined(MW_EXTMODE_RUNNING)
 
-  config_profilerTimer();
+  hardwareTimer1Init();
 
 #endif
 
@@ -117,17 +116,13 @@ int main(void)
   initializeOverrunService();
   globalInterruptDisable();
   configureTimer0(modelBaseRate, systemClock);
-  runModel =
-    rtmGetErrorStatus(genpath_firmware_M) == (NULL);
+  runModel = rtmGetErrorStatus(genpath_firmware_M) == (NULL);
   enableTimer0Interrupt();
   enable_interrupts();
   globalInterruptEnable();
   while (runModel) {
-    stopRequested = !(
-                      rtmGetErrorStatus(genpath_firmware_M) == (NULL));
+    stopRequested = !(rtmGetErrorStatus(genpath_firmware_M) == (NULL));
   }
-
-  /* Disable rt_OneStep() here */
 
   /* Terminate model */
   genpath_firmware_terminate();

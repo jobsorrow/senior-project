@@ -1,7 +1,7 @@
 
 cd .
 
-if "%1"=="" ("C:\PROGRA~1\MATLAB\R2021a\bin\win64\gmake"  -B DEPRULES=0 -j7  -f genpath_firmware.mk all) else ("C:\PROGRA~1\MATLAB\R2021a\bin\win64\gmake"  -B DEPRULES=0 -j7  -f genpath_firmware.mk %1)
+if "%1"=="" ("C:\PROGRA~1\MATLAB\R2022a\bin\win64\gmake"  DEPRULES=1 -j3  -f genpath_firmware.mk all) else ("C:\PROGRA~1\MATLAB\R2022a\bin\win64\gmake"  DEPRULES=1 -j3  -f genpath_firmware.mk %1)
 @if errorlevel 1 goto error_exit
 
 exit /B 0
