@@ -1205,7 +1205,7 @@ $k_{T}$      คือ ค่าคงที่มอเตอร์
     \begin{center}
         \includegraphics[width=0.6\textwidth]{spectrum_foot_step.jpg}
     \end{center}
-    \caption{แรงเท้าเหยียบขาเข้า และสเปกตรัมเท้าเหยียบ}
+    \caption{แรงดันเปิดวงจรของแผ่นพื้นเก็บพลังงานของรูปที่ (บน) และ สเปกตรัมของสัญญาณเปิดวงจรของแผ่นพื้นเก็บพลังงาน (ล่าง)}
     \label{spectrum_foot_step}
 \end{figure}
 
@@ -1437,7 +1437,6 @@ $C_{m} = \frac{aml}{2\pi} + J_{1} + J_{2}$
 \end{equation}
 จากนั้นสร้างอินเวอร์เตอร์ควบคุมกระแส (current controlled inverter) มาควบคุมกระแส $i_{sq}$ เพื่อเป็นการควบคุมแรงบิดโดยตรง และหาอัลกอริทึมการติดตามจุดสูงสุด เพื่อทำการชดเชยกำลังสูญเสียทางไฟฟ้าและทางกลให้น้อยที่สุด ทำให้ได้กำลังไฟฟ้าขาออกของเครื่องจักรไฟฟ้าซิงโครนัสชนิดแม่เหล็กถาวรสูงขึ้น ซึ่งสามารถนำไปพัฒนาได้ในอนาคต 
 
-
 % \subsection{ปัญหา อุปสรรค และแนวทางแก้ไข (ถ้ามี)}
 % ในหัวข้อนี้ ให้นิสิตกล่าวถึง ปัญหาและอุปสรรคที่ได้พบระหว่างการดำเนินงานมาจนถึงปัจจุบัน และให้อธิบายว่านิสิตได้หลบเลี่ยงหรือแก้ไขปัญหาอย่างไรบ้าง เช่น ถ้าต้องมีการเปลี่ยนแปลงวิธีการ เงื่อนไข หรือผลลัพธ์ที่ตั้งใจไว้แต่แรก ควรบอกว่าด้วยเหตุผลอะไร และควรมีข้อมูลมารองรับการตัดสินใจนั้นๆ ด้วย
 
@@ -1602,11 +1601,58 @@ $C_{m} = \frac{aml}{2\pi} + J_{1} + J_{2}$
     \caption{ชั้นที่ 3: การจำลองตัวตั้งเวลาของระบบฝังตัว}
 \end{figure}
 
-\subsection{Simulink model ของการแปลงผกผันของคลาก(Inverse Clarke's Transformation)}
+\subsection{Simulink model ของแบบจำลองของแผ่นพื้นเก็บพลังงาน และอัลกอริทึมการติดตามจุดสูงสุด}
+ส่วนต่อไปจะเป็นการแสดงแบบจำลองของแผ่นพื้นเก็บพลังงานในโปรแกรม MATLAB/Simulink เพื่อศึกษาแบบจำลองแผ่นพื้นเก็บพลังงานที่ใช้เครื่องจักรกลไฟฟ้ากระแสตรง
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mech_model_dc.png}
+    \caption{แบบจำลองกลไกทางกลของแผ่นพื้นเก็บพลังงาน กรณีเครื่องจักรกลไฟฟ้ากระแสตรง}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{condition_mech.png}
+    \caption{แบบจำลองเงื่อนไขภายในส่วนที่เป็นทางกลของแผ่นพื้นเก็บพลังงาน}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{elec_model_dc.png}
+    \caption{แบบจำลองทางไฟฟ้าของแผ่นพื้นเก็บพลังงาน กรณีเครื่องจักรกลไฟฟ้ากระแสตรง}
+\end{figure}
+ส่วนต่อไปเป็นบล็อกไดอะแกรมของแบบจำลองของระบบแผ่นพื้นพื้นเก็บพลังงานที่ใช้เครื่องจักรกลไฟฟ้าซิงโครนัสชนิดแม่เหล็กถาวรในโปรแกรม MATLAB/Simulink 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mech_model_ac.png}
+    \caption{แบบจำลองกลไกทางกลของแผ่นพื้นเก็บพลังงาน กรณีเครื่องจักรกลไฟฟ้าซิงโครนัสชนิดแม่เหล็กถาวร}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{elec_model_ac.png}
+    \caption{แบบจำลองพลวัตทางไฟฟ้าของเครื่องจักรกลไฟฟ้าซิงโครนัสชนิดแม่เหล็กถาวร}  
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mech_ac_coupling_model.png}
+    \caption{แบบจำลองเชิงกลของระบบคู่ควบระหว่างแผ่นพื้นเก็บพลังงาน และเครื่องจักรกลไฟฟ้าซิงโครนัสชนิดแม่เหล็กถาวร}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{clarke_trans.png}
+    \caption{แผนภาพไดอะแกรมของการแปลงภาพของคลาก}
+\end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{inverse_clarke.png}
     \caption{การแปลงผกผันของคลาก(Inverse Clarke's Transformation)}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{park_trans.png}
+    \caption{แผนภาพไดอะแกรมของการแปลงภาพของปาร์ค}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{park_inverse_trans.png}
+    \caption{แผนภาพไดอะแกรมของการแปลงภาพผกผันของปาร์ค}
 \end{figure}
 
 % \subsection{รูปอุปกรณ์ที่ใช้}
